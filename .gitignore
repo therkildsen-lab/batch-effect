@@ -37,3 +37,8 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+bam/
+qual_filtered/
+angsd/
+polyg_trimmed/
+nohups/

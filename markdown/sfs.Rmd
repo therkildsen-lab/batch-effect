@@ -1,0 +1,93 @@
+---
+title: "SFS-based analyses"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval=F, message=F, warning=F)
+```
+
+```{r eval=T}
+library(tidyverse)
+library(cowplot)
+```
+
+## Heterozygosity
+
+#### With transitions
+
+```{bash eval=F}
+nohup bash /workdir/genomic-data-analysis/scripts/get_heterozygosity.sh \
+/workdir/batch-effect/ \
+/workdir/batch-effect/sample_lists/bam_list_realigned.txt \
+/workdir/cod/reference_seqs/gadMor3.fasta \
+2 \
+10000 \
+20 \
+30 \
+> /workdir/batch-effect/nohups/get_heterozygosity_notrans.nohup &
+```
+
+#### Without transitions
+
+```{bash eval=F}
+nohup bash /workdir/cod/greenland-cod/scripts/get_heterozygosity_notrans.sh \
+/workdir/batch-effect/ \
+/workdir/batch-effect/sample_lists/bam_list_realigned.txt \
+/workdir/cod/reference_seqs/gadMor3.fasta \
+2 \
+10000 \
+20 \
+30 \
+> /workdir/batch-effect/nohups/get_heterozygosity_notrans.nohup &
+```
+
+#### Summarize and plot
+
+```{r eval=F}
+sample_table <- read_tsv("../sample_lists/sample_table_merged.tsv")
+for (i in 1:nrow(sample_table)){
+  sample_seq_id <- sample_table$sample_seq_id[i]
+  sample_id <- sample_table$sample_id_corrected[i]
+  population <- sample_table$population[i]
+  data_type <- sample_table$data_type[i]
+  island_shore <- sample_table$island_shore[i]
+  if (str_detect(data_type,"pe")){
+    path <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_minq20_sorted_dedup_overlapclipped_realigned_mindp2_maxdp10000_minq20_minmapq30")
+  } else {
+    path <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_minq20_sorted_dedup_realigned_mindp2_maxdp10000_minq20_minmapq30")
+  }
+  theta <- read_tsv(str_c(path, ".average_thetas.tsv.pestPG")) %>% 
+    janitor::clean_names() %>%
+    dplyr::select(chr, t_w, n_sites) %>%
+    filter(str_detect(chr, "LG")) %>%
+    mutate(sample_id=sample_id, population=population, island_shore=island_shore, type="Including transitions")
+  theta_notrans <- read_tsv(str_c(path, "_notrans.average_thetas.tsv.pestPG")) %>% 
+    janitor::clean_names() %>%
+    dplyr::select(chr, t_w, n_sites) %>%
+    filter(str_detect(chr, "LG")) %>%
+    mutate(sample_id=sample_id, population=population, island_shore=island_shore, type="Excluding transitions")
+  theta_combined <- bind_rows(theta, theta_notrans)
+  if(i==1){
+    theta_final <- theta_combined
+  } else {
+    theta_final <- bind_rows(theta_final, theta_combined)
+  }
+}
+## Calculate average heterozygosity while filtering out inversions
+het <- theta_final %>%
+  filter(! is.na(chr)) %>% 
+  filter(! chr %in% c("LG01", "LG02", "LG07", "LG12")) %>%
+  group_by(sample_id, population, island_shore, type) %>%
+  summarise(sum_t_w=sum(t_w), sum_n_sites=sum(n_sites), heterozygosity=sum_t_w/sum_n_sites)
+set.seed(42)
+het %>%
+  ggplot(aes(x=population, y=heterozygosity, color=island_shore)) +
+  geom_boxplot(outlier.alpha = 0) +
+  geom_jitter(height = 0) +
+  facet_wrap(~type) +
+  coord_flip() +
+  theme_cowplot() +
+  theme(legend.position = "none")
+
+```

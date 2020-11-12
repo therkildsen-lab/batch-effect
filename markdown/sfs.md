@@ -192,3 +192,121 @@ het_final %>%
 ```
 
 ![](sfs_files/figure-gfm/unnamed-chunk-5-2.png)<!-- -->
+
+###### Effect of excluding transitions
+
+``` r
+set.seed(42)
+delta_het <- het_final %>%
+  dplyr::select(het, sample_id, population, data_type, tran, filter) %>%
+  pivot_wider(names_from = tran,  values_from = het) %>%
+  mutate(delta = `Excluding transitions`-`Including transitions`) 
+delta_het %>%
+  ggplot(aes(x=data_type, y=delta)) +
+  geom_boxplot(outlier.alpha = 0) +
+  geom_jitter(height = 0) +
+  facet_wrap(~filter) +
+  theme_cowplot()
+```
+
+![](sfs_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+
+``` r
+t.test(filter(delta_het, filter=="relaxed", data_type=="se")$delta,
+       filter(delta_het, filter=="relaxed", data_type=="pe")$delta)$p.value
+```
+
+    ## [1] 0.1690388
+
+``` r
+t.test(filter(delta_het, filter=="stringent", data_type=="se")$delta,
+       filter(delta_het, filter=="stringent", data_type=="pe")$delta)$p.value
+```
+
+    ## [1] 0.02245627
+
+This shows that DNA damage has an stronger effect on SE samples (which
+are more degraded).
+
+###### Effect of having a stringent filter
+
+``` r
+set.seed(42)
+delta_het_filter <- het_final %>%
+  dplyr::select(het, sample_id, population, data_type, tran, filter) %>%
+  pivot_wider(names_from = filter,  values_from = het) %>%
+  mutate(delta = `stringent`- `relaxed`) 
+delta_het_filter %>%
+  ggplot(aes(x=data_type, y=delta)) +
+  geom_boxplot(outlier.alpha = 0) +
+  geom_jitter(height = 0) +
+  facet_wrap(~tran) +
+  theme_cowplot()
+```
+
+![](sfs_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
+``` r
+t.test(filter(delta_het_filter, tran=="Including transitions", data_type=="pe")$delta,
+       filter(delta_het_filter, tran=="Including transitions", data_type=="se")$delta)$p.value
+```
+
+    ## [1] 0.08840805
+
+``` r
+t.test(filter(delta_het_filter, tran=="Excluding transitions", data_type=="pe")$delta,
+       filter(delta_het_filter, tran=="Excluding transitions", data_type=="se")$delta)$p.value
+```
+
+    ## [1] 0.08767987
+
+A more stringent filter decreases heterozygosity estimate of PE samples
+but increases that of the the SE samples (very slightly). The difference
+is not statistically significant, but it is likely due to several
+outliers mostly in PE samples. Using more of the genome to estimate He
+might make the signal clearer.
+
+###### PE vs. SE
+
+``` r
+## Within KNG2011 only
+set.seed(42)
+het_final %>%
+  filter(str_detect(sample_id, "KNG2011")) %>%
+  ggplot(aes(x=data_type, y=het)) +
+  geom_boxplot(outlier.alpha = 0) +
+  geom_jitter(height = 0) +
+  facet_grid(filter~tran, scales = "free") +
+  theme_cowplot() +
+  theme(panel.background=element_rect(colour="black", size=0.8))
+```
+
+![](sfs_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+
+``` r
+## PE vs SE before filtering and excluding transitions
+t.test(filter(het_final, str_detect(sample_id, "KNG2011"), filter=="relaxed", tran == "Including transitions", data_type=="se")$het,
+       filter(het_final, str_detect(sample_id, "KNG2011"), filter=="relaxed", tran == "Including transitions", data_type=="pe")$het)$p.value
+```
+
+    ## [1] 0.004913353
+
+``` r
+## PE vs SE after filtering and excluding transitions
+t.test(filter(het_final, str_detect(sample_id, "KNG2011"), filter=="stringent", tran == "Excluding transitions", data_type=="se")$het,
+       filter(het_final, str_detect(sample_id, "KNG2011"), filter=="stringent", tran == "Excluding transitions", data_type=="pe")$het)$p.value
+```
+
+    ## [1] 0.4174047
+
+``` r
+## With all populations, controlling for population
+##lm(`Including transitions`~population + data_type, data = filter(delta_het, filter=="relaxed")) %>% summary()
+##lm(`Including transitions`~population + data_type, data = filter(delta_het, filter=="stringent")) %>% summary()
+##lm(`Excluding transitions`~population + data_type, data = filter(delta_het, filter=="relaxed")) %>% summary()
+##lm(`Excluding transitions`~population + data_type, data = filter(delta_het, filter=="stringent")) %>% summary()
+```
+
+This shows that after excluding transitions and using stringent depth
+and quality filters, batch effect on heterozygosity estimate is
+significantly reduced.

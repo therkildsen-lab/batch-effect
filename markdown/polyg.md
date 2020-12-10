@@ -1,4 +1,4 @@
-Fastqc results
+PolyG Trimming
 ================
 
 ## Load packages
@@ -98,3 +98,58 @@ per_base_seq_content_polyg_trimmed_final %>%
 ```
 
 ![](polyg_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+
+## Example of one read
+
+#### Extract the read and trim it
+
+``` bash
+## Save the read as a separate file
+zcat /workdir/backup/cod/greenland_cod/fastq/8467_3270_55085_HMK3YBGX2_NAR2008_006_GCTACGCT_CTCTCTAT_R1.fastq.gz | grep ATCCCGCACCCTCCCATTTCTCTTCAACAACAACAACCTCCGCCGCCCATCCCGTGTCACACACGGGCGCGCGGGGGGGGGGGGGGGGGGTGGCGCGGGGC -A2 -B1 > /workdir/batch-effect/misc/polyg_example.fastq
+## Trim polyG tail
+/workdir/programs/fastp --trim_poly_g -L -A -i /workdir/batch-effect/misc/polyg_example.fastq -o /workdir/batch-effect/misc/polyg_example_trim_polyg.fastq
+## Window trim
+/workdir/programs/fastp --trim_poly_g -L -A --cut_right -i /workdir/batch-effect/misc/polyg_example.fastq -o /workdir/batch-effect/misc/polyg_example_polyg_cut_right.fastq
+```
+
+#### Visualization
+
+``` r
+for (file in c("../misc/polyg_example.fastq", "../misc/polyg_example_trim_polyg.fastq", "../misc/polyg_example_polyg_cut_right.fastq")){
+  sequence_vector <- read_lines(file)[2] %>%
+    str_split(pattern = "") %>%
+    .[[1]]
+  p <- tibble(base=sequence_vector) %>%
+    {mutate(., id=seq(nrow(.)))} %>%
+    ggplot(aes(x=id, y=0, fill=base)) +
+    geom_tile(color="black", size=0.3) +
+    scale_fill_viridis_d(begin = 0.15) +
+    theme_void() +
+    theme(legend.position = "top")
+  print(p)
+}
+```
+
+![](polyg_files/figure-gfm/unnamed-chunk-8-1.svg)<!-- -->![](polyg_files/figure-gfm/unnamed-chunk-8-2.svg)<!-- -->![](polyg_files/figure-gfm/unnamed-chunk-8-3.svg)<!-- -->
+
+``` r
+for (file in c("../misc/polyg_example.fastq", "../misc/polyg_example_trim_polyg.fastq", "../misc/polyg_example_polyg_cut_right.fastq")){
+  quality_vector <- read_lines(file)[4] %>%
+    charToRaw() %>%
+    as.integer() %>% 
+    {.-33}
+  p <- tibble(quality=quality_vector) %>%
+    {mutate(., id=seq(nrow(.)))} %>%
+    ggplot(aes(x=id, y=0, fill=quality)) +
+    geom_tile(color="black", size=0.3) +
+    scale_fill_viridis_c(option = "A", begin = 0.4) +
+    theme_void() +
+    theme(legend.position = "bottom")
+  print(p)
+}
+```
+
+![](polyg_files/figure-gfm/unnamed-chunk-9-1.svg)<!-- -->![](polyg_files/figure-gfm/unnamed-chunk-9-2.svg)<!-- -->![](polyg_files/figure-gfm/unnamed-chunk-9-3.svg)<!-- -->
+
+The rest of the plotting was done by exporting the svg files into
+PowerPoint and adding some text and arrows there.

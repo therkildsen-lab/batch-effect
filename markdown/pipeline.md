@@ -52,13 +52,39 @@ fastq_list_se <- filter(sample_table_unmerged, lane_number != 7)$prefix
 
 ## Sample distribution
 sample_table_merged %>%
-  ggplot(aes(x=population_new, fill=data_type)) +
+  mutate(sample_id_corrected=fct_reorder(sample_id_corrected, data_type)) %>%
+  ggplot(aes(x=population_new, fill=data_type, group=sample_id_corrected)) +
   geom_bar(color="black") +
   theme_cowplot() +
   coord_flip()
 ```
 
 ![](pipeline_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+
+``` r
+## Number of bases
+base_count <- read_tsv("/workdir/cod/greenland-cod/sample_lists/count_merged.tsv") %>%
+  dplyr::select(sample_id_corrected, final_mapped_bases)
+sample_table_merged %>%
+  left_join(base_count) %>%
+  mutate(sample_id_corrected=fct_reorder(sample_id_corrected, data_type)) %>%
+  ggplot(aes(x=population_new, y=final_mapped_bases, fill=data_type, group=sample_id_corrected)) +
+  geom_col(color="black") +
+  theme_cowplot() +
+  coord_flip()
+```
+
+![](pipeline_files/figure-gfm/unnamed-chunk-2-2.png)<!-- -->
+
+``` r
+sample_table_merged %>%
+  left_join(base_count) %>%
+  ggplot(aes(x=final_mapped_bases, fill=data_type)) +
+  geom_histogram(position="dodge") +
+  theme_cowplot()
+```
+
+![](pipeline_files/figure-gfm/unnamed-chunk-2-3.png)<!-- -->
 
 ``` r
 # Write the objects created above
@@ -86,10 +112,7 @@ write_lines(fastq_list_se, "../sample_lists/fastq_list_se.txt")
 
 ## Process the PE data
 
-#### polyG trimming
-
-This is run for comparison’s sake. The resulting fastq files will not be
-used in downstream analyses.
+#### polyG trimming (`--trim_poly_g`)
 
 ``` bash
 echo 'BASEDIR=/workdir/batch-effect/
@@ -102,9 +125,6 @@ for SAMPLEFILE in `cat $SAMPLELIST`; do
   SEQ_ID=`grep -P "${SAMPLEFILE}\t" $SAMPLETABLE | cut -f 3`
   LANE_ID=`grep -P "${SAMPLEFILE}\t" $SAMPLETABLE | cut -f 2`
   SAMPLE_SEQ_ID=$SAMPLE_ID"_"$SEQ_ID"_"$LANE_ID
-  
-  ## Extract data type from the sample table
-  DATATYPE=`grep -P "${SAMPLEFILE}\t" $SAMPLETABLE | cut -f 6`
   
   ## The input and output path and file prefix
   SAMPLEADAPT=$INPUTDIR$SAMPLE_SEQ_ID
@@ -121,12 +141,13 @@ done' > /workdir/batch-effect/scripts/trim_polyg_batch_effect.sh
 nohup bash /workdir/batch-effect/scripts/trim_polyg_batch_effect.sh > /workdir/batch-effect/nohups/cut_right_batch_effect.nohups &
 ```
 
-#### Sliding window trimming
+#### Sliding window trimming (`--cut_right`)
 
 ``` bash
 echo 'SAMPLELIST=/workdir/cod/greenland-cod/sample_lists/sample_list_pe_1.tsv 
 SAMPLETABLE=/workdir/cod/greenland-cod/sample_lists/sample_table_pe.tsv
-BASEDIR=/workdir/cod/greenland-cod/
+BASEDIR=/workdir/batch-effect/
+INPUTDIR=/workdir/cod/greenland-cod/adapter_clipped/
 
 for SAMPLEFILE in `cat $SAMPLELIST`; do
   SAMPLE_ID=`grep -P "${SAMPLEFILE}\t" $SAMPLETABLE | cut -f 4`
@@ -134,12 +155,9 @@ for SAMPLEFILE in `cat $SAMPLELIST`; do
   LANE_ID=`grep -P "${SAMPLEFILE}\t" $SAMPLETABLE | cut -f 2`
   SAMPLE_SEQ_ID=$SAMPLE_ID"_"$SEQ_ID"_"$LANE_ID
   
-  ## Extract data type from the sample table
-  DATATYPE=`grep -P "${SAMPLEFILE}\t" $SAMPLETABLE | cut -f 6`
-  
   ## The input and output path and file prefix
-  SAMPLEADAPT=$BASEDIR"adapter_clipped/"$SAMPLE_SEQ_ID
-  SAMPLEQUAL=$BASEDIR"qual_filtered/"$SAMPLE_SEQ_ID
+  SAMPLEADAPT=$INPUTDIR$SAMPLE_SEQ_ID
+  SAMPLEQUAL=$BASEDIR"cut_right/"$SAMPLE_SEQ_ID
 
   /workdir/programs/fastp --trim_poly_g -L -A --cut_right \
   -i $SAMPLEADAPT"_adapter_clipped_f_paired.fastq.gz" \
@@ -147,10 +165,9 @@ for SAMPLEFILE in `cat $SAMPLELIST`; do
   -o $SAMPLEQUAL"_adapter_clipped_qual_filtered_f_paired.fastq.gz" \
   -O $SAMPLEQUAL"_adapter_clipped_qual_filtered_r_paired.fastq.gz" \
   -h $SAMPLEQUAL"_adapter_clipped_qual_filtered_fastp.html"
-done' > /workdir/cod/greenland-cod/scripts/cut_right_batch_effect.sh
+done' > /workdir/batch-effect/scripts/cut_right_batch_effect.sh
 
-nohup bash /workdir/cod/greenland-cod/scripts/cut_right_batch_effect.sh > /workdir/cod/greenland-cod/nohups/cut_right_batch_effect.nohups &
-mv /workdir/cod/greenland-cod/qual_filtered/* /workdir/batch_effect/qual_filtered/
+nohup bash /workdir/batch-effect/scripts/cut_right_batch_effect.sh > /workdir/batch-effect/nohups/cut_right_batch_effect.nohups &
 ```
 
 #### Map to reference genome
@@ -163,7 +180,7 @@ PE and SE data.
 nohup bash /workdir/data-processing/scripts/low_coverage_mapping.sh \
 /workdir/batch-effect/sample_lists/fastq_list_pe.txt \
 /workdir/batch-effect/sample_lists/sample_table_unmerged.tsv \
-/workdir/batch-effect/qual_filtered/ \
+/workdir/batch-effect/cut_right/ \
 /workdir/batch-effect/ \
 _adapter_clipped_qual_filtered_f_paired.fastq.gz \
 _adapter_clipped_qual_filtered_r_paired.fastq.gz \
@@ -175,7 +192,7 @@ gadMor3 \
 
 ## Process the PE and SE data together
 
-These steps are necessary for the SE data becasue intermediate bam files
+These steps are necessary for the SE data because intermediate bam files
 were deleted.
 
 #### Sort the raw bam files
@@ -299,17 +316,41 @@ project
 
 ``` bash
 cd /workdir/batch-effect/
+## Run ANGSD as usual (with a minMapQ filter of 20)
 nohup /workdir/programs/angsd0.931/angsd/angsd \
 -b sample_lists/bam_list_realigned.txt \
 -anc /workdir/cod/reference_seqs/gadMor3.fasta \
 -out angsd/bam_list_realigned \
 -GL 1 -doGlf 2 -doMaf 1 -doMajorMinor 3 -doCounts 1 -doDepth 1 -dumpCounts 1 \
--P 16 -setMinDepth 2 -setMaxDepth 661 -minInd 2 -minQ 20 -minMaf 0.01 \
--doIBS 1 -makematrix 1 -doCov 1 \
+-P 16 -setMinDepth 2 -setMaxDepth 661 -minInd 2 -minQ 20 -minMapQ 20 -minMaf 0.01 \
+-doIBS 2 -makematrix 1 -doCov 1 \
 -sites /workdir/cod/greenland-cod/angsd/global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked.txt \
 -rf /workdir/cod/greenland-cod/angsd/global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked.chrs \
 >& nohups/get_gl_bam_list_realigned.log &
+## Get the matrices with more stringent filtering
+nohup /workdir/programs/angsd0.931/angsd/angsd \
+-b sample_lists/bam_list_realigned.txt \
+-anc /workdir/cod/reference_seqs/gadMor3.fasta \
+-out angsd/bam_list_realigned_stringent \
+-doMajorMinor 3 -doCounts 1 -doDepth 1 -dumpCounts 1 \
+-P 16 -setMinDepth 40 -setMaxDepth 326 -minInd 20 -minQ 33 -minMapQ 30 \
+-doIBS 2 -makematrix 1 -doCov 1 \
+-sites /workdir/cod/greenland-cod/angsd/global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked.txt \
+-rf /workdir/cod/greenland-cod/angsd/global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked.chrs \
+>& nohups/get_matrix_stringent_bam_list_realigned.log &
+## Get depth count without mapping quality filter
+nohup /workdir/programs/angsd0.931/angsd/angsd \
+-b sample_lists/bam_list_realigned.txt \
+-anc /workdir/cod/reference_seqs/gadMor3.fasta \
+-out angsd/bam_list_realigned_anymapq \
+-doCounts 1 -doDepth 1 -dumpCounts 1 \
+-P 16 -setMinDepth 2 -minInd 2 -minQ 20 \
+-sites /workdir/cod/greenland-cod/angsd/global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked.txt \
+-rf /workdir/cod/greenland-cod/angsd/global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked.chrs \
+>& nohups/get_depth_anymapq_bam_list_realigned.log &
 ```
+
+## Run PCAngsd
 
 #### Sliding window trimmed PE samples (new)
 

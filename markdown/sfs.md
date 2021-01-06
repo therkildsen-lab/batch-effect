@@ -12,28 +12,28 @@ library(cowplot)
 
 ``` bash
 ## Original setup
-nohup bash /workdir/genomic-data-analysis/scripts/get_heterozygosity.sh \
+nohup nice -n 19 bash /workdir/genomic-data-analysis/scripts/get_heterozygosity.sh \
 /workdir/batch-effect/ \
 /workdir/batch-effect/sample_lists/bam_list_realigned.txt \
 /workdir/cod/reference_seqs/gadMor3.fasta \
 2 \
-10000 \
+10 \
 20 \
 30 \
 > /workdir/batch-effect/nohups/get_heterozygosity.nohup &
 ## Relaxed filter, LG03 only
-nohup bash /workdir/batch-effect/scripts/get_heterozygosity_per_lg.sh \
-/workdir/batch-effect/ \
-/workdir/batch-effect/sample_lists/bam_list_realigned.txt \
-/workdir/cod/reference_seqs/gadMor3.fasta \
-2 \
-10000 \
-20 \
-30 \
-LG03 \
-> /workdir/batch-effect/nohups/get_heterozygosity_lg03_relaxed.nohup &
+#nohup bash /workdir/batch-effect/scripts/get_heterozygosity_per_lg.sh \
+#/workdir/batch-effect/ \
+#/workdir/batch-effect/sample_lists/bam_list_realigned.txt \
+#/workdir/cod/reference_seqs/gadMor3.fasta \
+#2 \
+#10 \
+#20 \
+#30 \
+#LG03 \
+#> /workdir/batch-effect/nohups/get_heterozygosity_lg03_relaxed.nohup &
 ## More stringent quality and depth filter, LG03 only
-nohup bash /workdir/batch-effect/scripts/get_heterozygosity_per_lg.sh \
+nohup nice -n 19 bash /workdir/genomic-data-analysis/scripts/get_heterozygosity.sh \
 /workdir/batch-effect/ \
 /workdir/batch-effect/sample_lists/bam_list_realigned.txt \
 /workdir/cod/reference_seqs/gadMor3.fasta \
@@ -41,8 +41,7 @@ nohup bash /workdir/batch-effect/scripts/get_heterozygosity_per_lg.sh \
 10 \
 33 \
 30 \
-LG03 \
-> /workdir/batch-effect/nohups/get_heterozygosity_lg03_stringent.nohup &
+> /workdir/batch-effect/nohups/get_heterozygosity_stringent.nohup &
 ```
 
 #### Without transitions
@@ -54,23 +53,23 @@ nohup bash /workdir/cod/greenland-cod/scripts/get_heterozygosity_notrans.sh \
 /workdir/batch-effect/sample_lists/bam_list_realigned.txt \
 /workdir/cod/reference_seqs/gadMor3.fasta \
 2 \
-10000 \
+10 \
 20 \
 30 \
 > /workdir/batch-effect/nohups/get_heterozygosity_notrans.nohup &
 ## Relaxed filter, LG03 only
-nohup bash /workdir/batch-effect/scripts/get_heterozygosity_notrans_per_lg.sh \
-/workdir/batch-effect/ \
-/workdir/batch-effect/sample_lists/bam_list_realigned.txt \
-/workdir/cod/reference_seqs/gadMor3.fasta \
-2 \
-10000 \
-20 \
-30 \
-LG03 \
-> /workdir/batch-effect/nohups/get_heterozygosity_notrans_lg03_relaxed.nohup &
-## More stringent quality and depth filter, LG03 only
-nohup bash /workdir/batch-effect/scripts/get_heterozygosity_notrans_per_lg.sh \
+#nohup bash /workdir/batch-effect/scripts/get_heterozygosity_notrans_per_lg.sh \
+#/workdir/batch-effect/ \
+#/workdir/batch-effect/sample_lists/bam_list_realigned.txt \
+#/workdir/cod/reference_seqs/gadMor3.fasta \
+#2 \
+#10 \
+#20 \
+#30 \
+#LG03 \
+#> /workdir/batch-effect/nohups/get_heterozygosity_notrans_lg03_relaxed.nohup &
+## More stringent quality and depth filter
+nohup nice -n 19 bash /workdir/cod/greenland-cod/scripts/get_heterozygosity_notrans.sh \
 /workdir/batch-effect/ \
 /workdir/batch-effect/sample_lists/bam_list_realigned.txt \
 /workdir/cod/reference_seqs/gadMor3.fasta \
@@ -78,13 +77,12 @@ nohup bash /workdir/batch-effect/scripts/get_heterozygosity_notrans_per_lg.sh \
 10 \
 33 \
 30 \
-LG03 \
-> /workdir/batch-effect/nohups/get_heterozygosity_notrans_lg03_stringent.nohup &
+> /workdir/batch-effect/nohups/get_heterozygosity_notrans_stringent.nohup &
 ```
 
 #### Summarize and plot
 
-###### Genome wide, relaxed depth and mapping quality filter
+###### Genome wide, relaxed mapping quality filter excluding inversions
 
 ``` r
 sample_table <- read_tsv("../sample_lists/sample_table_merged.tsv")
@@ -94,9 +92,9 @@ for (i in 1:nrow(sample_table)){
   population <- sample_table$population[i]
   data_type <- sample_table$data_type[i]
   if (str_detect(data_type,"pe")){
-    path <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_minq20_sorted_dedup_overlapclipped_realigned_mindp2_maxdp10000_minq20_minmapq30")
+    path <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_overlapclipped_realigned_mindp2_maxdp10_minq20_minmapq30")
   } else {
-    path <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_minq20_sorted_dedup_realigned_mindp2_maxdp10000_minq20_minmapq30")
+    path <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_realigned_mindp2_maxdp10_minq20_minmapq30")
   }
   theta <- read_tsv(str_c(path, ".average_thetas.tsv.pestPG")) %>% 
     janitor::clean_names() %>%
@@ -133,7 +131,7 @@ het %>%
 
 ![](sfs_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
-###### LG03 only, relaxed vs. stringent depth and mapping quality filter
+###### Genome-wide, relaxed vs. stringent mapping quality filter and including vs. excluding transitions
 
 ``` r
 for (i in 1:nrow(sample_table)){
@@ -142,22 +140,22 @@ for (i in 1:nrow(sample_table)){
   population <- sample_table$population[i]
   data_type <- sample_table$data_type[i]
   if (str_detect(data_type,"pe")){
-    path <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_overlapclipped_realigned_mindp2_maxdp10000_minq20_minmapq30")
+    path <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_overlapclipped_realigned_mindp2_maxdp10_minq20_minmapq30")
     path_stringent <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_overlapclipped_realigned_mindp2_maxdp10_minq33_minmapq30")
   } else {
-    path <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_realigned_mindp2_maxdp10000_minq20_minmapq30")
+    path <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_realigned_mindp2_maxdp10_minq20_minmapq30")
     path_stringent <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_realigned_mindp2_maxdp10_minq33_minmapq30")
   }
-  het_relaxed <- read_delim(str_c(path, "_LG03.ml"), col_names = F, delim = " ") %>% 
+  het_relaxed <- read_delim(str_c(path, ".ml"), col_names = F, delim = " ") %>% 
     transmute(n_sites=(X1+X2+X3), n_snp=X2, het=n_snp/n_sites) %>%
     mutate(sample_id=sample_id, population=population, data_type=data_type, tran="Including transitions", filter="relaxed")
-  het_relaxed_notrans <- read_delim(str_c(path, "_notrans_LG03.ml"), col_names = F, delim = " ") %>% 
+  het_relaxed_notrans <- read_delim(str_c(path, "_notrans.ml"), col_names = F, delim = " ") %>% 
     transmute(n_sites=(X1+X2+X3), n_snp=X2, het=n_snp/n_sites) %>%
     mutate(sample_id=sample_id, population=population, data_type=data_type, tran="Excluding transitions", filter="relaxed")
-  het_stringent <- read_delim(str_c(path_stringent, "_LG03.ml"), col_names = F, delim = " ") %>% 
+  het_stringent <- read_delim(str_c(path_stringent, ".ml"), col_names = F, delim = " ") %>% 
     transmute(n_sites=(X1+X2+X3), n_snp=X2, het=n_snp/n_sites) %>%
     mutate(sample_id=sample_id, population=population, data_type=data_type, tran="Including transitions", filter="stringent")
-  het_stringent_notrans <- read_delim(str_c(path_stringent, "_notrans_LG03.ml"), col_names = F, delim = " ") %>% 
+  het_stringent_notrans <- read_delim(str_c(path_stringent, "_notrans.ml"), col_names = F, delim = " ") %>% 
     transmute(n_sites=(X1+X2+X3), n_snp=X2, het=n_snp/n_sites) %>%
     mutate(sample_id=sample_id, population=population, data_type=data_type, tran="Excluding transitions", filter="stringent")
   het_combined <- bind_rows(het_relaxed, het_relaxed_notrans, het_stringent, het_stringent_notrans)
@@ -167,6 +165,10 @@ for (i in 1:nrow(sample_table)){
     het_final <- bind_rows(het_final, het_combined)
   }
 }
+het_per_ind <- het_final %>%
+  unite(col = type, tran, filter, sep = " ") %>%
+  dplyr::select(sample_id, population, data_type, type, het) %>%
+  pivot_wider(names_from = type, values_from = het)
 ## Calculate average heterozygosity while filtering out inversions
 set.seed(42)
 het_final %>%
@@ -212,18 +214,32 @@ delta_het %>%
 ![](sfs_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
 ``` r
+delta_het %>%
+  filter(filter=="stringent") %>%
+  ggplot(aes(x=data_type, y=delta)) +
+  geom_boxplot(outlier.alpha = 0) +
+  geom_jitter(height = 0) +
+  annotate(geom = "text", label="p-value=0.014", x=1.5, y=0.001) +
+  scale_x_discrete(labels=c("less degraded", "more degraded")) +
+  ylab("Change in heterozygosity\nafter excluding transitions") +
+  theme_cowplot()
+```
+
+![](sfs_files/figure-gfm/unnamed-chunk-6-2.png)<!-- -->
+
+``` r
 t.test(filter(delta_het, filter=="relaxed", data_type=="se")$delta,
        filter(delta_het, filter=="relaxed", data_type=="pe")$delta)$p.value
 ```
 
-    ## [1] 0.1690388
+    ## [1] 0.02878372
 
 ``` r
 t.test(filter(delta_het, filter=="stringent", data_type=="se")$delta,
        filter(delta_het, filter=="stringent", data_type=="pe")$delta)$p.value
 ```
 
-    ## [1] 0.02245627
+    ## [1] 0.01429416
 
 This shows that DNA damage has an stronger effect on SE samples (which
 are more degraded).
@@ -247,18 +263,50 @@ delta_het_filter %>%
 ![](sfs_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
 ``` r
+delta_het_filter %>%
+  filter(tran=="Excluding transitions") %>%
+  ggplot(aes(x=data_type, y=delta)) +
+  geom_boxplot(outlier.alpha = 0) +
+  geom_jitter(height = 0) +
+  geom_hline(yintercept=0, color="red") +
+  annotate(geom = "text", label="p-value=0.039", x=1, y=0.001) +
+  annotate(geom = "text", label="p-value=0.322", x=2, y=0.001) +
+  scale_x_discrete(labels=c("more biased\nbase quality", "less biased\nbase quality")) +
+  ylab("Change in heterozygosity after\n a more stringent mapping quality filter") +
+  theme_cowplot()
+```
+
+![](sfs_files/figure-gfm/unnamed-chunk-7-2.png)<!-- -->
+
+``` r
 t.test(filter(delta_het_filter, tran=="Including transitions", data_type=="pe")$delta,
        filter(delta_het_filter, tran=="Including transitions", data_type=="se")$delta)$p.value
 ```
 
-    ## [1] 0.08840805
+    ## [1] 0.135872
 
 ``` r
 t.test(filter(delta_het_filter, tran=="Excluding transitions", data_type=="pe")$delta,
        filter(delta_het_filter, tran=="Excluding transitions", data_type=="se")$delta)$p.value
 ```
 
-    ## [1] 0.08767987
+    ## [1] 0.1332339
+
+``` r
+t.test(filter(het_per_ind, data_type=="se")$`Excluding transitions relaxed`,
+       filter(het_per_ind, data_type=="se")$`Excluding transitions stringent`,
+       paired=TRUE)$p.value
+```
+
+    ## [1] 0.3222135
+
+``` r
+t.test(filter(het_per_ind, data_type=="pe")$`Excluding transitions relaxed`,
+       filter(het_per_ind, data_type=="pe")$`Excluding transitions stringent`,
+       paired=TRUE)$p.value
+```
+
+    ## [1] 0.03979679
 
 A more stringent filter decreases heterozygosity estimate of PE samples
 but increases that of the the SE samples (very slightly). The difference
@@ -289,7 +337,7 @@ t.test(filter(het_final, str_detect(sample_id, "KNG2011"), filter=="relaxed", tr
        filter(het_final, str_detect(sample_id, "KNG2011"), filter=="relaxed", tran == "Including transitions", data_type=="pe")$het)$p.value
 ```
 
-    ## [1] 0.004913353
+    ## [1] 0.0007423342
 
 ``` r
 ## PE vs SE after filtering and excluding transitions
@@ -297,7 +345,7 @@ t.test(filter(het_final, str_detect(sample_id, "KNG2011"), filter=="stringent", 
        filter(het_final, str_detect(sample_id, "KNG2011"), filter=="stringent", tran == "Excluding transitions", data_type=="pe")$het)$p.value
 ```
 
-    ## [1] 0.4174047
+    ## [1] 0.001729581
 
 ``` r
 ## With all populations, controlling for population

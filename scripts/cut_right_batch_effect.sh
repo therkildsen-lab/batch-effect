@@ -1,6 +1,7 @@
 SAMPLELIST=/workdir/cod/greenland-cod/sample_lists/sample_list_pe_1.tsv 
 SAMPLETABLE=/workdir/cod/greenland-cod/sample_lists/sample_table_pe.tsv
-BASEDIR=/workdir/cod/greenland-cod/
+BASEDIR=/workdir/batch-effect/
+INPUTDIR=/workdir/cod/greenland-cod/adapter_clipped/
 
 for SAMPLEFILE in `cat $SAMPLELIST`; do
   SAMPLE_ID=`grep -P "${SAMPLEFILE}\t" $SAMPLETABLE | cut -f 4`
@@ -8,12 +9,9 @@ for SAMPLEFILE in `cat $SAMPLELIST`; do
   LANE_ID=`grep -P "${SAMPLEFILE}\t" $SAMPLETABLE | cut -f 2`
   SAMPLE_SEQ_ID=$SAMPLE_ID"_"$SEQ_ID"_"$LANE_ID
   
-  ## Extract data type from the sample table
-  DATATYPE=`grep -P "${SAMPLEFILE}\t" $SAMPLETABLE | cut -f 6`
-  
   ## The input and output path and file prefix
-  SAMPLEADAPT=$BASEDIR"adapter_clipped/"$SAMPLE_SEQ_ID
-  SAMPLEQUAL=$BASEDIR"qual_filtered/"$SAMPLE_SEQ_ID
+  SAMPLEADAPT=$INPUTDIR$SAMPLE_SEQ_ID
+  SAMPLEQUAL=$BASEDIR"cut_right/"$SAMPLE_SEQ_ID
 
   /workdir/programs/fastp --trim_poly_g -L -A --cut_right \
   -i $SAMPLEADAPT"_adapter_clipped_f_paired.fastq.gz" \

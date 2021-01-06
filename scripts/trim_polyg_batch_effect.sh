@@ -9,9 +9,6 @@ for SAMPLEFILE in `cat $SAMPLELIST`; do
   LANE_ID=`grep -P "${SAMPLEFILE}\t" $SAMPLETABLE | cut -f 2`
   SAMPLE_SEQ_ID=$SAMPLE_ID"_"$SEQ_ID"_"$LANE_ID
   
-  ## Extract data type from the sample table
-  DATATYPE=`grep -P "${SAMPLEFILE}\t" $SAMPLETABLE | cut -f 6`
-  
   ## The input and output path and file prefix
   SAMPLEADAPT=$INPUTDIR$SAMPLE_SEQ_ID
   SAMPLEQUAL=$BASEDIR"polyg_trimmed/"$SAMPLE_SEQ_ID

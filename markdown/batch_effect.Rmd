@@ -1,0 +1,756 @@
+---
+title: "Batch effect"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval=FALSE, message=FALSE, warning=FALSE)
+```
+
+## Load packages
+
+```{r eval=TRUE}
+library(tidyverse)
+library(cowplot)
+library(RcppCNPy)
+```
+
+## Fastqc
+
+Run fastqc on the bam files from a few samples / populations that were sequenced both in lane 1-6 and 7
+
+```{bash eval=FALSE}
+cd /workdir/cod/greenland-cod/bam
+fastqc QAQ2010_*gadMor3.bam
+fastqc PAA2011_752_55182_7_pe_bt2_gadMor3.bam
+fastqc PAA2011_752_14247X224_1_se_bt2_gadMor3.bam
+samtools view QAQ2010_036_55127_7_pe_bt2_gadMor3.bam -h -q 20 | samtools view -buS - | samtools sort -o QAQ2010_036_55127_7_pe_bt2_gadMor3_minq20_sorted.bam
+samtools view QAQ2010_036_14247X221_1_se_bt2_gadMor3.bam -h -q 20 | samtools view -buS - | samtools sort -o QAQ2010_036_14247X221_1_se_bt2_gadMor3_minq20_sorted.bam
+fasqc QAQ2010_036*sorted.bam
+```
+
+## Run the pipeline on selected populations that were sequenced in both HiSeq and NextSeq
+
+#### Create sample table and bam list
+
+```{r}
+```
+
+
+#### Run PCAngsd
+
+```{r fig.width=10, fig.height=6}
+source("/workdir/genomic-data-analysis/scripts/individual_pca_functions.R")
+sample_table_batch_effect <- read_tsv("../sample_lists/sample_table_merged_mincov_contamination_filtered_batch_effect.tsv")
+## original setup
+genome_cov <- npyLoad("../angsd/pcangsd_bam_list_realigned_mincov_contamination_filtered_batch_effect_mindp2_maxdp661_minind2_minq20_minmaf5.cov.npy")
+PCA(genome_cov, sample_table_batch_effect$sample_id_corrected, sample_table_batch_effect$data_type, 4, 5, show.ellipse = F, show.line = T)
+pca_table_data_type <- pca_table[,1:6] %>% rename(data_type=population)
+PCA(genome_cov, sample_table_batch_effect$sample_id_corrected, sample_table_batch_effect$population, 1, 2, show.ellipse = F, show.line = T)
+pca_table_population <- pca_table[,1:6]
+pca_table_data_type_summary <- group_by(pca_table_data_type, data_type) %>%
+  summarise(PC1_mean=mean(PC1), PC2_mean=mean(PC2), PC3_mean=mean(PC3), PC4_mean=mean(PC4))
+pca_table_population_summary <- group_by(pca_table_population, population) %>%
+  summarise(PC1_mean=mean(PC1), PC2_mean=mean(PC2), PC3_mean=mean(PC3), PC4_mean=mean(PC4))
+pca_table_combined <- left_join(pca_table_data_type, pca_table_population)
+
+pca_table_combined %>%
+  left_join(pca_table_data_type_summary) %>%
+  ggplot() +
+  geom_point(aes(x=PC3, y=PC4, color=population)) +
+  geom_segment(aes(x=PC3, y=PC4, xend=PC3_mean, yend=PC4_mean, color=population), size = 0.1) +
+  geom_label(aes(x=PC3_mean, y=PC4_mean, label=data_type)) +
+  ylim(NA, 0.15) +
+  theme_cowplot()
+
+pca_table_combined %>%
+  left_join(pca_table_population_summary) %>%
+  ggplot() +
+  geom_point(aes(x=PC3, y=PC4, color=data_type)) +
+  geom_segment(aes(x=PC3, y=PC4, xend=PC3_mean, yend=PC4_mean, color=data_type), size = 0.1) +
+  #geom_label(aes(x=PC3_mean, y=PC4_mean, label=population)) +
+  ylim(NA, 0.15) +
+  facet_wrap(~population) +
+  theme_cowplot()
+
+pca_table_combined %>%
+  left_join(pca_table_data_type_summary) %>%
+  ggplot() +
+  geom_point(aes(x=PC1, y=PC2, color=population)) +
+  geom_segment(aes(x=PC1, y=PC2, xend=PC1_mean, yend=PC2_mean, color=population), size = 0.1) +
+  #geom_label(aes(x=PC1_mean, y=PC2_mean, label=data_type)) +
+  ylim(NA, 0.1) +
+  facet_wrap(~data_type) +
+  theme_cowplot()
+
+pca_table_combined %>%
+  left_join(pca_table_population_summary) %>%
+  ggplot() +
+  geom_point(aes(x=PC1, y=PC2, color=data_type)) +
+  geom_segment(aes(x=PC1, y=PC2, xend=PC1_mean, yend=PC2_mean, color=data_type), size = 0.1) +
+  #geom_label(aes(x=PC1_mean, y=PC2_mean, label=population)) +
+  ylim(NA, 0.1) +
+  facet_wrap(~population) +
+  theme_cowplot()
+
+pca_table %>%
+  dplyr::transmute(data_type = population, x=PC4) %>%
+  ggplot(aes(x=x, fill=data_type)) +
+  geom_histogram(bins = 100, color="black") +
+  theme_cowplot()
+## more stringent filtering
+genome_cov <- npyLoad("../angsd/pcangsd_bam_list_realigned_mincov_contamination_filtered_batch_effect_mindp2_maxdp661_minind2_stringent_filter_minmaf5.cov.npy") 
+PCA(genome_cov, sample_table_batch_effect$sample_id_corrected, sample_table_batch_effect$data_type, 4, 5, show.ellipse = F, show.line = T) 
+pca_table %>%
+  dplyr::select(population, PC3) %>%
+  ggplot(aes(x=PC3, fill=population)) +
+  geom_histogram(bins = 100, color="black")
+```
+
+#### Get maf
+
+```{bash eval=F}
+## original pipeline
+nohup bash /workdir/genomic-data-analysis/scripts/get_maf_per_pop.sh \
+/workdir/cod/greenland-cod/ \
+/workdir/cod/greenland-cod/sample_lists/sample_table_merged_mincov_contamination_filtered_batch_effect.tsv \
+6 \
+bam_list_realigned_mincov_contamination_filtered_batch_effect_ \
+/workdir/cod/reference_seqs/gadMor3.fasta \
+/workdir/cod/greenland-cod/angsd/global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked.txt \
+2 661 2 20 \
+> /workdir/cod/greenland-cod/nohups/get_maf_per_pop_mincov_contamination_filtered_batch_effect_downsampled_unlinked.nohup &
+
+## more stringent filtering
+#### pe
+cd /workdir/cod/greenland-cod/
+nohup /workdir/programs/angsd0.931/angsd/angsd \
+-b sample_lists/bam_list_per_pop/bam_list_realigned_mincov_contamination_filtered_batch_effect_pe.txt \
+-anc /workdir/cod/reference_seqs/gadMor3.fasta \
+-out angsd/popminind2/pe_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_stringent_filter_downsampled_unlinked_popminind2 \
+-GL 1 -doGlf 2 -doMaf 1 -dosaf 1 -doMajorMinor 3 -doCounts 1 -doDepth 1 -dumpCounts 1 \
+-P 10 -setMinDepth 2 -setMaxDepth 661 -minInd 2 \
+-minQ 33 -minMapQ 25 -uniqueOnly 1 \
+-sites angsd/global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked.txt \
+-rf angsd/global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked.chrs \
+>& nohups/get_maf_pe_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_stringent_filter.log &
+#### se
+cd /workdir/cod/greenland-cod/
+nohup /workdir/programs/angsd0.931/angsd/angsd \
+-b sample_lists/bam_list_per_pop/bam_list_realigned_mincov_contamination_filtered_batch_effect_se.txt \
+-anc /workdir/cod/reference_seqs/gadMor3.fasta \
+-out angsd/popminind2/se_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_stringent_filter_downsampled_unlinked_popminind2 \
+-GL 1 -doGlf 2 -doMaf 1 -dosaf 1 -doMajorMinor 3 -doCounts 1 -doDepth 1 -dumpCounts 1 \
+-P 10 -setMinDepth 2 -setMaxDepth 661 -minInd 2 \
+-minQ 33 -minMapQ 20 -uniqueOnly 1 \
+-sites angsd/global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked.txt \
+-rf angsd/global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked.chrs \
+>& nohups/get_se_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_stringent_filter.log &
+```
+
+#### Get Fst
+
+```{bash eval=F}
+## original pipeline
+cd /workdir/cod/greenland-cod/angsd/popminind2
+nohup /workdir/programs/angsd0.928/angsd/misc/realSFS \
+pe_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked_popminind2.saf.idx \
+se_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked_popminind2.saf.idx \
+-P 8 \
+> pe_se_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked_popminind2.2dSFS \
+2> ../../nohups/pe_se_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked_popminind2.2dSFS.nohup &
+
+/workdir/programs/angsd0.928/angsd/misc/realSFS fst index  \
+pe_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked_popminind2.saf.idx \
+se_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked_popminind2.saf.idx \
+-sfs pe_se_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked_popminind2.2dSFS \
+-fstout pe_se_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked_popminind2.alpha_beta
+
+/workdir/programs/angsd0.928/angsd/misc/realSFS fst print \
+pe_se_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked_popminind2.alpha_beta.fst.idx \
+> pe_se_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked_popminind2.alpha_beta.txt
+
+## more stringent filtering
+cd /workdir/cod/greenland-cod/angsd/popminind2
+nohup /workdir/programs/angsd0.928/angsd/misc/realSFS \
+pe_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked_popminind2.saf.idx \
+se_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked_popminind2.saf.idx \
+-P 8 \
+> pe_se_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked_popminind2.2dSFS \
+2> ../../nohups/pe_se_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked_popminind2.2dSFS.nohup &
+
+/workdir/programs/angsd0.928/angsd/misc/realSFS fst index  \
+pe_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked_popminind2.saf.idx \
+se_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked_popminind2.saf.idx \
+-sfs pe_se_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked_popminind2.2dSFS \
+-fstout pe_se_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked_popminind2.alpha_beta
+
+/workdir/programs/angsd0.928/angsd/misc/realSFS fst print \
+pe_se_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked_popminind2.alpha_beta.fst.idx \
+> pe_se_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked_popminind2.alpha_beta.txt
+```
+
+#### Summarize maf and Fst results
+
+```{r fig.width=15, fig.height=3}
+###### original setup
+maf_se <- read_tsv("../angsd/popminind2/se_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked_popminind2.mafs.gz") %>%
+  transmute(lg = chromo, position = position, major=major, minor = minor, se_maf = knownEM, se_nind=nInd)
+maf_pe <- read_tsv("../angsd/popminind2/pe_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked_popminind2.mafs.gz")%>%
+  transmute(lg = chromo, position = position, major=major, minor = minor, pe_maf = knownEM, pe_nind=nInd)
+fst <- read_tsv("../angsd/popminind2/pe_se_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked_popminind2.alpha_beta.txt", col_names = F) %>%
+  mutate(X5=X3/X4) %>%
+  transmute(lg=X1, position = X2, alpha=X3, beta=X4, fst = X5)
+maf_joined <- inner_join(maf_se, maf_pe) %>%
+  left_join(fst) %>%
+  filter(se_nind>=20, pe_nind >=20) %>%
+  mutate(delta = abs(se_maf- pe_maf)) %>%
+  arrange(desc(fst))
+summarise(maf_joined, average_fst = sum(alpha)/sum(beta))
+maf_joined %>% filter(se_maf > 0.01 & se_maf<0.99) %>% summarise(average_fst = sum(alpha)/sum(beta))
+```
+
+As a point of reference, northern Greenland offshore vs. southern Greenland offshore has a slightly lower average Fst value. 
+
+###### Plot distribution of Fst across the genome
+
+```{r fig.width=15, fig.height=3}
+maf_joined %>%
+  ggplot(aes(x=position/10^6, y=fst)) +
+  geom_point(size = 0.2) +
+  geom_smooth(aes(color=minor)) +
+  facet_grid(~lg, scales = "free_x", space = "free_x") +
+  theme_cowplot() +
+  theme(panel.spacing = unit(0.0, "lines"))
+```
+
+###### Plot proportion of different base substitutions
+
+```{r fig.width=15, fig.height=3}
+bind_rows(transmute(maf_joined, major=major, minor=minor, type = "all_snps"),
+          (filter(maf_joined, fst>0.05) %>% transmute(major=major, minor=minor, type = "high_fst_snps")),
+          (filter(maf_joined, pe_maf<0.01 | pe_maf>0.99) %>% filter(se_maf>0.05 & se_maf<0.95) %>% transmute(major=major, minor=minor, type = "se_snps")),
+          (filter(maf_joined, se_maf<0.01 | se_maf>0.99) %>% filter(pe_maf>0.05 & pe_maf<0.95) %>% transmute(major=major, minor=minor, type = "pe_snps"))) %>%
+  group_by(major, minor, type) %>% 
+  count() %>% 
+  ungroup() %>% 
+  group_by(type) %>%
+  mutate(freq = n / sum(n)) %>%
+  ungroup() %>%
+  ggplot(aes(x=str_c(major, minor), y=freq, color=type, group= type)) +
+  geom_line() + 
+  geom_point() +
+  theme_bw()
+```
+
+###### Plot average frequency of different base substitutions at intermediate-frequency SNPs
+
+```{r fig.width=15, fig.height=3}
+maf_joined %>%
+  dplyr::select(major, minor, se_maf, pe_maf) %>%
+  filter(se_maf>0.05, se_maf<0.95, pe_maf>0.05, pe_maf<0.95) %>%
+  group_by(major, minor) %>%
+  summarise(mean_se_maf = mean(se_maf), mean_pe_maf = mean(pe_maf), count=n()) %>%
+  pivot_longer(cols = 3:4, names_to = "type", values_to = "mean_maf") %>%
+  ggplot(aes(x=str_c(major, minor), y=mean_maf, color= type, group=type)) +
+  geom_point(aes(size=count)) +
+  geom_line() +
+  theme_bw()
+```
+
+
+
+```{r eval=TRUE, fig.width=8, fig.height=5}
+maf_joined %>%
+  ggplot(aes(x=se_maf, y=pe_maf)) +
+  geom_point(size=0.5, alpha=1, aes(color=fst>0.1)) +
+  geom_abline(slope = 1 , intercept = 0) +
+  geom_smooth(method = "lm") +
+  ylim(0,1) +
+  xlim(0,1) +
+  theme_cowplot()
+filter(maf_joined, delta>0.3) %>%
+  mutate(pe_maf=ifelse(se_maf>0.5, 1-pe_maf, pe_maf)) %>%
+  mutate(se_maf=ifelse(se_maf>0.5, 1-se_maf, se_maf)) %>%
+  mutate(keep = ifelse(se_maf <0.01, F, T)) %>%
+  pivot_longer(cols = c(se_maf, pe_maf), names_to = "read_type", values_to = "maf") %>%
+  ggplot(aes(x=read_type, y=maf)) +
+  geom_point(size=0.1) +
+  geom_line(aes(group=position, color= keep), size=0.2)
+```
+
+
+```{r eval=FALSE}
+#### maf with more stringent filtering
+#maf_se <- read_tsv("../angsd/popminind2/se_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_stringent_filter_downsampled_unlinked_popminind2.mafs.gz") %>%
+#  transmute(lg = chromo, position = position, major=major, minor = minor, se_maf = knownEM, se_nind=nInd)
+#maf_pe <- read_tsv("../angsd/popminind2/pe_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_stringent_filter_downsampled_unlinked_popminind2.mafs.gz")%>%
+#  transmute(lg = chromo, position = position, major=major, minor = minor, pe_maf = knownEM, pe_nind=nInd)
+#maf_joined <- inner_join(maf_se, maf_pe) %>%
+#  filter(se_nind>=20, pe_nind >=20) %>%
+#  mutate(delta = abs(se_maf- pe_maf)) %>%
+#  arrange(desc(delta))
+#View(maf_joined)
+```
+
+#### Check mapping depth of high Fst SNPs
+
+```{r eval=FALSE, fig.width=10, fig.height=5}
+depth_se <- read_tsv("../angsd/popminind2/se_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked_popminind2.pos.gz") %>%
+  rename(lg=chr, position=pos, se_depth = totDepth)
+depth_pe <- read_tsv("../angsd/popminind2/pe_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked_popminind2.pos.gz") %>%
+  rename(lg=chr, position=pos, pe_depth = totDepth)
+left_join(maf_joined, depth_se) %>%
+  left_join(depth_pe) %>%
+  dplyr::select(pe_depth, se_depth, fst) %>%
+  pivot_longer(cols = 1:2, names_to = "type", values_to = "depth")  %>%
+  ggplot(aes(x=depth, y=fst)) +
+  geom_jitter(size=0.1) +
+  facet_wrap(~type) +
+  theme_cowplot()
+```
+
+#### Write a beagle file with only SNPs polymorphic in HiSeq samples
+
+```{r}
+new_snp_list <- maf_se %>%
+  filter(se_nind>=40, se_maf > 0.05, se_maf < 0.95) %>%
+  transmute(position = str_c(lg, as.integer(position), sep  = "_")) %>%
+  .$position
+```
+
+```{r eval=F}
+## Again because of the computational issue, the maf file isn't complete, only a few SNPs in LG23 are missing
+original_ordered_snps <- read_tsv("../angsd/bam_list_realigned_mincov_contamination_filtered_batch_effect_mindp2_maxdp661_minind2_minq20.mafs.gz") %>%
+  mutate(position = as.integer(position)) %>%
+  transmute(position = str_c(chromo, position, sep  = "_")) %>%
+  .$position
+filtered_snp_index <- which(original_ordered_snps %in% new_snp_list)
+original_ordered_snps[filtered_snp_index]
+write_lines(as.integer(c(1,filtered_snp_index+1)), "../angsd/batch_effect_test_se_minmaf5_minind40.idx")
+```
+
+```{bash eval=F}
+zcat /workdir/cod/greenland-cod/angsd/batch_effect_test.beagle.gz | awk 'NR==FNR{ pos[$1]; next }FNR in pos' /workdir/cod/greenland-cod/angsd/batch_effect_test_se_minmaf5_minind40.idx - | gzip > /workdir/cod/greenland-cod/angsd/batch_effect_test_se_minmaf5_minind40.beagle.gz
+## Run PCAngsd
+cd /workdir/cod/greenland-cod/angsd
+nohup python2 /workdir/programs/pcangsd/pcangsd.py \
+-beagle /workdir/cod/greenland-cod/angsd/batch_effect_test_se_minmaf5_minind40.beagle.gz \
+-minMaf 0.05 \
+-threads 8 \
+-o /workdir/cod/greenland-cod/angsd/batch_effect_test_se_minmaf5_minind40_minmaf5 \
+> /workdir/cod/greenland-cod/nohups/run_pcangsd_batch_effect_test_se_minmaf5_minind40.nohup &
+```
+
+```{r}
+genome_cov <- npyLoad("../angsd/batch_effect_test_se_minmaf5_minind40_minmaf5.cov.npy")
+PCA(genome_cov, sample_table_batch_effect$sample_id_corrected, sample_table_batch_effect$data_type, 1, 2, show.ellipse = F, show.line = T)
+PCA(genome_cov, sample_table_batch_effect$sample_id_corrected, sample_table_batch_effect$data_type, 3, 4, show.ellipse = F, show.line = T)
+PCA(genome_cov, sample_table_batch_effect$sample_id_corrected, sample_table_batch_effect$data_type, 5, 6, show.ellipse = F, show.line = T)
+PCA(genome_cov, sample_table_batch_effect$sample_id_corrected, sample_table_batch_effect$data_type, 7, 8, show.ellipse = F, show.line = T)
+PCA(genome_cov, sample_table_batch_effect$sample_id_corrected, sample_table_batch_effect$population, 1, 2, show.ellipse = F, show.line = T)
+```
+
+#### Write a beagle file excluding Fst outliers
+
+```{r eval=F}
+new_snp_list_fst_filtered <- maf_joined %>% 
+  filter(fst<0.1) %>%
+  transmute(position = str_c(lg, "_", position)) %>%
+  .$position
+## Again because of the computational issue, the maf file isn't complete, only a few SNPs in LG23 are missing
+original_ordered_snps <- read_tsv("../angsd/bam_list_realigned_mincov_contamination_filtered_batch_effect_mindp2_maxdp661_minind2_minq20.mafs.gz") %>%
+  mutate(position = as.integer(position)) %>%
+  transmute(position = str_c(chromo, position, sep  = "_")) %>%
+  .$position
+filtered_snp_index <- which(original_ordered_snps %in% new_snp_list_fst_filtered)
+original_ordered_snps[filtered_snp_index]
+write_lines(as.integer(c(1,filtered_snp_index+1)), "../angsd/batch_effect_test_maxfst0.01.idx")
+```
+
+```{bash eval=F}
+zcat /workdir/cod/greenland-cod/angsd/batch_effect_test.beagle.gz | awk 'NR==FNR{ pos[$1]; next }FNR in pos' /workdir/cod/greenland-cod/angsd/batch_effect_test_maxfst0.01.idx - | gzip > /workdir/cod/greenland-cod/angsd/batch_effect_test_maxfst0.01.beagle.gz
+## Run PCAngsd
+cd /workdir/cod/greenland-cod/angsd
+nohup python2 /workdir/programs/pcangsd/pcangsd.py \
+-beagle /workdir/cod/greenland-cod/angsd/batch_effect_test_maxfst0.01.beagle.gz \
+-minMaf 0.05 \
+-threads 8 \
+-o /workdir/cod/greenland-cod/angsd/batch_effect_test_maxfst0.01_minmaf5 \
+> /workdir/cod/greenland-cod/nohups/run_pcangsd_batch_effect_test_batch_effect_test_maxfst0.01.nohup &
+```
+
+```{r}
+genome_cov <- npyLoad("../angsd/batch_effect_test_maxfst0.01_minmaf5.cov.npy")
+PCA(genome_cov, sample_table_batch_effect$sample_id_corrected, sample_table_batch_effect$data_type, 1, 2, show.ellipse = F, show.line = T)
+PCA(genome_cov, sample_table_batch_effect$sample_id_corrected, sample_table_batch_effect$data_type, 3, 4, show.ellipse = F, show.line = T)
+PCA(genome_cov, sample_table_batch_effect$sample_id_corrected, sample_table_batch_effect$data_type, 5, 6, show.ellipse = F, show.line = T)
+PCA(genome_cov, sample_table_batch_effect$sample_id_corrected, sample_table_batch_effect$data_type, 7, 8, show.ellipse = F, show.line = T)
+PCA(genome_cov, sample_table_batch_effect$sample_id_corrected, sample_table_batch_effect$population, 1, 2, show.ellipse = F, show.line = T)
+```
+
+#### Write a beagle file excluding some potentially biased base mutations
+
+```{r eval=F}
+new_snp_list_mutation_filtered <- maf_joined %>% 
+  filter(! str_c(major, minor) %in% c("AT", "TA", "CT", "GA")) %>%
+  transmute(position = str_c(lg, "_", position)) %>%
+  .$position
+## Again because of the computational issue, the maf file isn't complete, only a few SNPs in LG23 are missing
+original_ordered_snps <- read_tsv("../angsd/bam_list_realigned_mincov_contamination_filtered_batch_effect_mindp2_maxdp661_minind2_minq20.mafs.gz") %>%
+  mutate(position = as.integer(position)) %>%
+  transmute(position = str_c(chromo, position, sep  = "_")) %>%
+  .$position
+filtered_snp_index <- which(original_ordered_snps %in% new_snp_list_mutation_filtered)
+original_ordered_snps[filtered_snp_index]
+write_lines(as.integer(c(1,filtered_snp_index+1)), "../angsd/batch_effect_test_mutation_filtered.idx")
+```
+
+```{bash eval=F}
+zcat /workdir/cod/greenland-cod/angsd/batch_effect_test.beagle.gz | awk 'NR==FNR{ pos[$1]; next }FNR in pos' /workdir/cod/greenland-cod/angsd/batch_effect_test_mutation_filtered.idx - | gzip > /workdir/cod/greenland-cod/angsd/batch_effect_test_mutation_filtered.beagle.gz
+## Run PCAngsd
+cd /workdir/cod/greenland-cod/angsd
+nohup python2 /workdir/programs/pcangsd/pcangsd.py \
+-beagle /workdir/cod/greenland-cod/angsd/batch_effect_test_mutation_filtered.beagle.gz \
+-minMaf 0.05 \
+-threads 8 \
+-o /workdir/cod/greenland-cod/angsd/batch_effect_test_mutation_filtered_minmaf5 \
+> /workdir/cod/greenland-cod/nohups/run_pcangsd_batch_effect_test_batch_effect_test_mutation_filtered.nohup &
+```
+
+```{r}
+genome_cov <- npyLoad("../angsd/batch_effect_test_mutation_filtered_minmaf5.cov.npy")
+PCA(genome_cov, sample_table_batch_effect$sample_id_corrected, sample_table_batch_effect$data_type, 1, 2, show.ellipse = F, show.line = T)
+PCA(genome_cov, sample_table_batch_effect$sample_id_corrected, sample_table_batch_effect$data_type, 3, 4, show.ellipse = F, show.line = T)
+PCA(genome_cov, sample_table_batch_effect$sample_id_corrected, sample_table_batch_effect$data_type, 5, 6, show.ellipse = F, show.line = T)
+PCA(genome_cov, sample_table_batch_effect$sample_id_corrected, sample_table_batch_effect$data_type, 7, 8, show.ellipse = F, show.line = T)
+PCA(genome_cov, sample_table_batch_effect$sample_id_corrected, sample_table_batch_effect$population, 1, 2, show.ellipse = F, show.line = T)
+```
+
+#### Spot check some outlier SNPs
+
+LG13:23405220, LG16:29198325, LG13:27638491, LG11:13802257
+LG01:2359603
+
+```{bash eval=F}
+cd /workdir/cod/greenland-cod/bam/
+## the original bam files
+for FILE in `cat /workdir/cod/greenland-cod/sample_lists/bam_list_per_pop/bam_list_realigned_mincov_contamination_filtered_batch_effect_se.txt`; do 
+echo $FILE
+samtools tview -d T -p LG13:23405220 $FILE /workdir/cod/reference_seqs/gadMor3.fasta; 
+done
+for FILE in `cat /workdir/cod/greenland-cod/sample_lists/bam_list_per_pop/bam_list_realigned_mincov_contamination_filtered_batch_effect_pe.txt`; do
+echo $FILE
+samtools tview -d T -p LG13:23405220 $FILE /workdir/cod/reference_seqs/gadMor3.fasta; 
+done
+
+for FILE in KNG2011_*se*_realigned.bam; do 
+echo $FILE
+samtools tview -d T -p LG18:21867411 $FILE /workdir/cod/reference_seqs/gadMor3.fasta; 
+done
+for FILE in KNG2011_*pe*_realigned.bam; do
+echo $FILE
+samtools tview -d T -p LG18:21867411 $FILE /workdir/cod/reference_seqs/gadMor3.fasta; 
+done
+
+samtools tview -d C -p LG19:15920105 KNG2011_423_14247X151_5_se_bt2_gadMor3_minq20_sorted_dedup_realigned.bam /workdir/cod/reference_seqs/gadMor3.fasta
+samtools tview -d C -p LG19:15920105 KNG2011_383_55100_7_pe_bt2_gadMor3_minq20_sorted_dedup_overlapclipped_realigned.bam /workdir/cod/reference_seqs/gadMor3.fasta
+
+## try quality filtering
+samtools view -buS -h -q 25 KNG2011_383_55100_7_pe_bt2_gadMor3_minq20_sorted_dedup_overlapclipped_realigned.bam > junk.bam
+samtools index junk.bam
+samtools tview -d T -p LG13:23405210 junk.bam /workdir/cod/reference_seqs/gadMor3.fasta
+samtools tview -d T -p LG19:15920105 junk.bam /workdir/cod/reference_seqs/gadMor3.fasta
+
+samtools view junk.bam LG19:15920105-15920155
+```
+
+#### Export some bam files and use IGV viewer to check outlier SNPs
+
+LG11:13802257, LG13:23405220, LG21:11929988
+
+```{bash eval=F}
+cd /workdir/cod/greenland-cod/bam/
+for FILE in `cat /workdir/cod/greenland-cod/sample_lists/bam_list_per_pop/bam_list_realigned_mincov_contamination_filtered_batch_effect_se.txt`; do 
+samtools view -b $FILE "LG11:13800000-13810000" > ${FILE%bam}'lane1-6_LG11.bam'
+samtools view -b $FILE "LG13:23400000-23410000" > ${FILE%bam}'lane1-6_LG13.bam'
+samtools view -b $FILE "LG21:11920000-11940000" > ${FILE%bam}'lane1-6_LG21.bam'
+done
+
+for FILE in `cat /workdir/cod/greenland-cod/sample_lists/bam_list_per_pop/bam_list_realigned_mincov_contamination_filtered_batch_effect_pe.txt`; do 
+samtools view -b $FILE "LG11:13800000-13810000" > ${FILE%bam}'lane7_LG11.bam'
+samtools view -b $FILE "LG13:23400000-23410000" > ${FILE%bam}'lane7_LG13.bam'
+samtools view -b $FILE "LG21:11920000-11940000" > ${FILE%bam}'lane7_LG21.bam'
+done
+
+for FILE in IS911*realigned.bam; do 
+samtools view -b $FILE "LG11:13800000-13810000" > ${FILE%bam}'lane7_is911_LG11.bam'
+samtools view -b $FILE "LG13:23400000-23410000" > ${FILE%bam}'lane7_is911_LG13.bam'
+samtools view -b $FILE "LG21:11920000-11940000" > ${FILE%bam}'lane7_is911_LG21.bam'
+done
+
+for FILE in ??1*realigned.bam; do 
+samtools view -b $FILE "LG11:13800000-13810000" > ${FILE%bam}'lane8_iceland_LG11.bam'
+samtools view -b $FILE "LG13:23400000-23410000" > ${FILE%bam}'lane8_iceland_LG13.bam'
+samtools view -b $FILE "LG21:11920000-11940000" > ${FILE%bam}'lane8_iceland_LG21.bam'
+done
+
+for FILE in FYB2018*realigned.bam; do 
+samtools view -b $FILE "LG11:13800000-13810000" > ${FILE%bam}'lane8_fyb_LG11.bam'
+samtools view -b $FILE "LG13:23400000-23410000" > ${FILE%bam}'lane8_fyb_LG13.bam'
+samtools view -b $FILE "LG21:11920000-11940000" > ${FILE%bam}'lane8_fyb_LG21.bam'
+done
+
+for FILE in `ls {*_9_se_*realigned.bam,*_10_se_*realigned.bam,*_11_se_*realigned.bam,*_12_se_*realigned.bam}`; do 
+samtools view -b $FILE "LG11:13800000-13810000" > ${FILE%bam}'lane9-12_LG11.bam'
+samtools view -b $FILE "LG13:23400000-23410000" > ${FILE%bam}'lane9-12_LG13.bam'
+samtools view -b $FILE "LG21:11920000-11940000" > ${FILE%bam}'lane9-12_LG21.bam'
+done
+
+for FILE in `ls {*_1_se_*gadMor3.bam,*_2_se_*gadMor3.bam,*_3_se_*gadMor3.bam,*_4_se_*gadMor3.bam,*_5_se_*gadMor3.bam,*_6_se_*gadMor3.bam}`; do 
+samtools sort $FILE > tmp.bam
+samtools index tmp.bam
+samtools view -b tmp.bam "LG11:13800000-13810000" > ${FILE%bam}'lane1-6_raw_LG11.bam'
+samtools view -b tmp.bam "LG13:23400000-23410000" > ${FILE%bam}'lane1-6_raw_LG13.bam'
+samtools view -b tmp.bam "LG21:11920000-11940000" > ${FILE%bam}'lane1-6_raw_LG21.bam'
+rm tmp.bam
+done
+
+samtools merge batch_effect_lane1-6.bam *lane1-6_LG??.bam
+samtools index batch_effect_lane1-6.bam
+
+samtools merge batch_effect_lane7.bam *lane7_LG??.bam
+samtools index batch_effect_lane7.bam
+
+samtools merge batch_effect_lane7_is911.bam *lane7_is911_LG??.bam
+samtools index batch_effect_lane7_is911.bam
+
+samtools merge batch_effect_lane8_iceland.bam *lane8_iceland_LG??.bam
+samtools index batch_effect_lane8_iceland.bam
+
+samtools merge batch_effect_lane8_fyb.bam *lane8_fyb_LG??.bam
+samtools index batch_effect_lane8_fyb.bam
+
+samtools merge batch_effect_lane9-12.bam *lane9-12_LG??.bam
+samtools index batch_effect_lane9-12.bam
+
+samtools merge batch_effect_lane1-6_raw.bam *lane1-6_raw_LG??.bam
+samtools index batch_effect_lane1-6_raw.bam
+```
+
+#### Estimate heterozygosity
+
+use minQ filter of 30 instead of 20, 
+-uniqueOnly 1 
+
+```{bash eval=F}
+#### SE individual
+###### get saf
+cd /workdir/cod/greenland-cod/
+nohup /workdir/programs/angsd0.931/angsd/angsd \
+-i bam/KNG2011_427_14247X152_5_se_bt2_gadMor3_minq20_sorted_dedup_realigned.bam \
+-anc /workdir/cod/reference_seqs/gadMor3.fasta   \
+-out angsd/heterozygosity/KNG2011_427_14247X152_5_se_test \
+-doSaf 1 -GL 1 -P 8 -doCounts 1 -setMinDepth 2 -setMaxDepth 1000 -r LG03 \
+-minQ 33 -minMapQ 25 -noTrans 1 -uniqueOnly 1 \
+> nohups/get_heterozygosity_KNG2011_427_14247X152_5_se_test.nohup &
+###### get SFS
+/workdir/programs/angsd0.931/angsd/misc/realSFS \
+angsd/heterozygosity/KNG2011_427_14247X152_5_se_test.saf.idx \
+-P 8 \
+> angsd/heterozygosity/KNG2011_427_14247X152_5_se_test.ml
+#### PE individual
+###### get saf
+cd /workdir/cod/greenland-cod/
+nohup /workdir/programs/angsd0.931/angsd/angsd \
+-i bam/KNG2011_383_55100_7_pe_bt2_gadMor3_minq20_sorted_dedup_overlapclipped_realigned.bam \
+-anc /workdir/cod/reference_seqs/gadMor3.fasta   \
+-out angsd/heterozygosity/KNG2011_383_55100_7_pe_test \
+-doSaf 1 -GL 1 -P 8 -doCounts 1 -setMinDepth 2 -setMaxDepth 1000 -r LG03 \
+-minQ 33 -minMapQ 25 -noTrans 1 -uniqueOnly 1 \
+> nohups/get_heterozygosity_KNG2011_383_55100_7_pe_test.nohup &
+###### get SFS
+/workdir/programs/angsd0.931/angsd/misc/realSFS \
+angsd/heterozygosity/KNG2011_383_55100_7_pe_test.saf.idx \
+-P 8 \
+> angsd/heterozygosity/KNG2011_383_55100_7_pe_test.ml
+```
+
+```{r}
+het_se <- read_lines("../angsd/heterozygosity/KNG2011_427_14247X152_5_se_test.ml") %>%
+  str_split(" ") %>%
+  .[[1]] %>%
+  as.numeric() %>%
+  { `/`(.[2], sum(.[1:3])) }
+het_se
+het_pe <- read_lines("../angsd/heterozygosity/KNG2011_383_55100_7_pe_test.ml") %>%
+  str_split(" ") %>%
+  .[[1]] %>%
+  as.numeric() %>%
+  { `/`(.[2], sum(.[1:3])) }
+het_pe
+```
+
+## Filter out reads that map to multiple locations 
+
+This is regardless of the mapping score or the quality score
+
+```{bash eval=F}
+## Filter out all reads that map to more than one location
+echo 'N_CORE_MAX=10
+COUNT=0
+for FILE in `cat /workdir/cod/greenland-cod/sample_lists/bam_list_realigned_mincov_contamination_filtered_batch_effect.txt`; do
+PREFIX=${FILE%.bam}
+echo $PREFIX
+samtools view -h $FILE | grep -v XS:i | samtools view -buS - | samtools sort -o $PREFIX"_uniqueonly.bam" &
+COUNT=$(( COUNT + 1 ))
+if [ $COUNT == $N_CORE_MAX ]; then
+  wait
+  COUNT=0
+fi
+done' > /workdir/cod/greenland-cod/scripts/filter_unique_mapping_only_batch_effect.sh
+nohup bash /workdir/cod/greenland-cod/scripts/filter_unique_mapping_only_batch_effect.sh > /workdir/cod/greenland-cod/nohups/filter_unique_mapping_only_batch_effect.nohups &
+samtools index /workdir/cod/greenland-cod/bam/*uniqueonly*.bam
+## Get bam list and index bam files
+for FILE in `cat /workdir/cod/greenland-cod/sample_lists/bam_list_realigned_mincov_contamination_filtered_batch_effect.txt`; do
+PREFIX=${FILE%.bam}
+echo $PREFIX"_uniqueonly.bam" >> /workdir/cod/greenland-cod/sample_lists/bam_list_realigned_mincov_contamination_filtered_batch_effect_uniqueonly.txt
+samtools index $PREFIX"_uniqueonly.bam"
+done
+
+for FILE in `cat /workdir/cod/greenland-cod/sample_lists/bam_list_per_pop/bam_list_realigned_mincov_contamination_filtered_batch_effect_pe.txt`; do
+  PREFIX=${FILE%.bam}
+  echo $PREFIX"_uniqueonly.bam" >> /workdir/cod/greenland-cod/sample_lists/bam_list_per_pop/bam_list_realigned_mincov_contamination_filtered_batch_effect_uniqueonly_pe.txt
+done
+
+for FILE in `cat /workdir/cod/greenland-cod/sample_lists/bam_list_per_pop/bam_list_realigned_mincov_contamination_filtered_batch_effect_se.txt`; do
+  PREFIX=${FILE%.bam}
+  echo $PREFIX"_uniqueonly.bam" >> /workdir/cod/greenland-cod/sample_lists/bam_list_per_pop/bam_list_realigned_mincov_contamination_filtered_batch_effect_uniqueonly_se.txt
+done
+## Get genotype likelihood
+cd /workdir/cod/greenland-cod/
+nohup /workdir/programs/angsd0.931/angsd/angsd \
+-b sample_lists/bam_list_realigned_mincov_contamination_filtered_batch_effect_uniqueonly.txt \
+-anc /workdir/cod/reference_seqs/gadMor3.fasta \
+-out angsd/bam_list_realigned_mincov_contamination_filtered_batch_effect_uniqueonly_mindp2_maxdp661_minind2_minq20 \
+-GL 1 -doGlf 2 -doMaf 1 -doMajorMinor 3 -doCounts 1 -doDepth 1 -dumpCounts 1 \
+-P 10 -setMinDepth 2 -setMaxDepth 661 -minInd 2 -minQ 20 -minMaf 0.01 \
+-sites angsd/global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked.txt \
+-rf angsd/global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked.chrs \
+>& nohups/get_gl_bam_list_realigned_mincov_contamination_filtered_batch_effect.log &
+## Get MAF and SAF files
+#### pe
+cd /workdir/cod/greenland-cod/
+nohup /workdir/programs/angsd0.931/angsd/angsd \
+-b sample_lists/bam_list_per_pop/bam_list_realigned_mincov_contamination_filtered_batch_effect_uniqueonly_pe.txt \
+-anc /workdir/cod/reference_seqs/gadMor3.fasta \
+-out angsd/popminind2/pe_batch_effect_uniqueonly \
+-GL 1 -doGlf 2 -doMaf 1 -dosaf 1 -doMajorMinor 3 -doCounts 1 -doDepth 1 -dumpCounts 1 \
+-P 5 -setMinDepth 2 -setMaxDepth 661 -minInd 2 \
+-minQ 20 \
+-sites angsd/global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked.txt \
+-rf angsd/global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked.chrs \
+>& nohups/get_maf_pe_uniqueonly.log &
+#### se
+cd /workdir/cod/greenland-cod/
+nohup /workdir/programs/angsd0.931/angsd/angsd \
+-b sample_lists/bam_list_per_pop/bam_list_realigned_mincov_contamination_filtered_batch_effect_uniqueonly_se.txt \
+-anc /workdir/cod/reference_seqs/gadMor3.fasta \
+-out angsd/popminind2/se_batch_effect_uniqueonly \
+-GL 1 -doGlf 2 -doMaf 1 -dosaf 1 -doMajorMinor 3 -doCounts 1 -doDepth 1 -dumpCounts 1 \
+-P 5 -setMinDepth 2 -setMaxDepth 661 -minInd 2 \
+-minQ 20 \
+-sites angsd/global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked.txt \
+-rf angsd/global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked.chrs \
+>& nohups/get_maf_se_uniqueonly.log &
+
+## get fst
+cd /workdir/cod/greenland-cod/angsd/popminind2
+nohup /workdir/programs/angsd0.928/angsd/misc/realSFS \
+se_batch_effect_uniqueonly.saf.idx \
+pe_batch_effect_uniqueonly.saf.idx \
+-P 8 \
+> pe_se_batch_effect_uniqueonly.2dSFS \
+2> ../../nohups/pe_se_batch_effect_uniqueonly.2dSFS.nohup &
+
+/workdir/programs/angsd0.928/angsd/misc/realSFS fst index  \
+pe_batch_effect_uniqueonly.saf.idx \
+se_batch_effect_uniqueonly.saf.idx \
+-sfs pe_se_batch_effect_uniqueonly.2dSFS \
+-fstout pe_se_batch_effect_uniqueonly.alpha_beta
+
+/workdir/programs/angsd0.928/angsd/misc/realSFS fst print \
+pe_se_batch_effect_uniqueonly.alpha_beta.fst.idx \
+> pe_se_batch_effect_uniqueonly.alpha_beta.txt
+
+## Run PCAngsd
+nohup python2 /workdir/programs/pcangsd/pcangsd.py \
+-beagle /workdir/cod/greenland-cod/angsd/bam_list_realigned_mincov_contamination_filtered_batch_effect_uniqueonly_mindp2_maxdp661_minind2_minq20.beagle.gz \
+-minMaf 0.05 \
+-threads 8 \
+-o /workdir/cod/greenland-cod/angsd/batch_effect_uniqueonly \
+> /workdir/cod/greenland-cod/nohups/run_pcangsd_batch_effect_uniqueonly.nohup &
+```
+
+```{r fig.width=15, fig.height=3}
+## Fst
+maf_pe_uniqueonly <- read_tsv("../angsd/popminind2/pe_batch_effect_uniqueonly.mafs.gz") %>%
+  transmute(lg=chromo, position=position, pe_maf=knownEM, pe_nind=nInd)
+maf_se_uniqueonly <- read_tsv("../angsd/popminind2/se_batch_effect_uniqueonly.mafs.gz") %>%
+  transmute(lg=chromo, position=position, se_maf=knownEM, se_nind=nInd)
+fst_uniqueonly <- read_tsv("../angsd/popminind2/pe_se_batch_effect_uniqueonly.alpha_beta.txt", col_names = F) %>%
+  mutate(X5=X3/X4) %>%
+  transmute(lg=X1, position = X2, alpha=X3, beta=X4, fst = X5)
+maf_uniqueonly_joined <- inner_join(maf_se_uniqueonly, maf_pe_uniqueonly) %>%
+  filter(se_nind>=20, pe_nind >=20) %>%
+  left_join(fst_uniqueonly) %>%
+  mutate(delta = abs(se_maf- pe_maf)) %>%
+  arrange(desc(fst))
+maf_joined %>%
+  ggplot(aes(x=position/10^6, y=delta)) +
+  geom_point(size = 0.2) +
+  facet_grid(~lg, scales = "free_x", space = "free_x") +
+  theme_cowplot() +
+  theme(panel.spacing = unit(0.0, "lines"))
+```
+
+```{r}
+## PCA
+source("/workdir/genomic-data-analysis/scripts/individual_pca_functions.R")
+sample_table_batch_effect <- read_tsv("../sample_lists/sample_table_merged_mincov_contamination_filtered_batch_effect.tsv")
+## original setup
+genome_cov <- RcppCNPy::npyLoad("../angsd/batch_effect_uniqueonly.cov.npy")
+PCA(genome_cov, sample_table_batch_effect$sample_id_corrected, sample_table_batch_effect$data_type, 3, 4, show.ellipse = F, show.line = T)
+PCA(genome_cov, sample_table_batch_effect$sample_id_corrected, sample_table_batch_effect$population, 1, 2, show.ellipse = F, show.line = T)
+```
+
+## Perform more stringent quality trimming to NextSeq fastq files (TrialPaired and lane7)
+
+```{bash eval=F}
+echo 'SAMPLELIST=/workdir/cod/greenland-cod/sample_lists/sample_list_pe_1.tsv 
+SAMPLETABLE=/workdir/cod/greenland-cod/sample_lists/sample_table_pe.tsv
+BASEDIR=/workdir/cod/greenland-cod/
+
+for SAMPLEFILE in `cat $SAMPLELIST`; do
+  SAMPLE_ID=`grep -P "${SAMPLEFILE}\t" $SAMPLETABLE | cut -f 4`
+  SEQ_ID=`grep -P "${SAMPLEFILE}\t" $SAMPLETABLE | cut -f 3`
+  LANE_ID=`grep -P "${SAMPLEFILE}\t" $SAMPLETABLE | cut -f 2`
+  SAMPLE_SEQ_ID=$SAMPLE_ID"_"$SEQ_ID"_"$LANE_ID
+  
+  ## Extract data type from the sample table
+  DATATYPE=`grep -P "${SAMPLEFILE}\t" $SAMPLETABLE | cut -f 6`
+  
+  ## The input and output path and file prefix
+  SAMPLEADAPT=$BASEDIR"adapter_clipped/"$SAMPLE_SEQ_ID
+  SAMPLEQUAL=$BASEDIR"qual_filtered/"$SAMPLE_SEQ_ID
+
+  /workdir/programs/fastp --trim_poly_g -L -A --cut_right \
+  -i $SAMPLEADAPT"_adapter_clipped_f_paired.fastq.gz" \
+  -I $SAMPLEADAPT"_adapter_clipped_r_paired.fastq.gz" \
+  -o $SAMPLEQUAL"_adapter_clipped_qual_filtered_f_paired.fastq.gz" \
+  -O $SAMPLEQUAL"_adapter_clipped_qual_filtered_r_paired.fastq.gz" \
+  -h $SAMPLEQUAL"_adapter_clipped_qual_filtered_fastp.html"
+done' > /workdir/cod/greenland-cod/scripts/cut_right_batch_effect.sh
+
+nohup bash /workdir/cod/greenland-cod/scripts/cut_right_batch_effect.sh > /workdir/cod/greenland-cod/nohups/cut_right_batch_effect.nohups &
+```

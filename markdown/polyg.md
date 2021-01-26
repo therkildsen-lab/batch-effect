@@ -143,9 +143,9 @@ base_p_final <- base_p +
   annotate("text", 48.5, 2.2, label="sliding window\ntrimming", size = 3.8) +
   annotate("segment", 48.5, 1.3, xend=48.5, yend=0.6, arrow=arrow(length = unit(0.1, "npc")), size=1) +
   annotate("text", 101.5, 2.2, label="polyG\ntrimming", size = 3.8) +
-  annotate("segment", 101.5, 1.3, xend=101.5, yend=0.6, arrow=arrow(length = unit(0.1, "npc")), size=1)+
-  annotate("text", 76, 2.5, label='bold("base")', size = 3.8, parse=TRUE) +
-  theme(legend.title=element_blank())
+  annotate("segment", 101.5, 1.3, xend=101.5, yend=0.6, arrow=arrow(length = unit(0.1, "npc")), size=1) #+
+  #annotate("text", 76, 2.5, label='bold("base")', size = 3.8, parse=TRUE) +
+  #theme(legend.title=element_blank())
 
 base_p_final
 ```
@@ -160,11 +160,12 @@ for (file in rev(c("../misc/polyg_example.fastq", "../misc/polyg_example_trim_po
     {.-33}
   quality_p <- tibble(quality=quality_vector) %>%
     {mutate(., id=seq(nrow(.)))} %>%
-    ggplot(aes(x=id, y=0, fill=as.factor(quality))) +
+    ggplot(aes(x=id, y=0, fill=quality)) +
     geom_tile(color="black", size=0.3) +
-    scale_fill_viridis_d(option = "D", begin = 0.4, direction = -1) +
+    scale_fill_continuous(high = "darkgreen", low = "lightgreen") +
+    #scale_fill_viridis_c(option = "D", begin = 0.4, direction = -1) +
     theme_void() +
-    labs(fill = "base quality score") +
+    labs(fill = "quality score") +
     theme(legend.position = "bottom")
   print(quality_p)
 }
@@ -178,19 +179,47 @@ quality_p_final <- quality_p +
   annotate("text", 48.5, -2.2, label="sliding window\ntrimming", size = 3.8) +
   annotate("segment", 48.5, -1.3, xend=48.5, yend=-0.6, arrow=arrow(length = unit(0.1, "npc")), size=1) +
   annotate("text", 101.5, -2.2, label="polyG\ntrimming", size = 3.8) +
-  annotate("segment", 101.5, -1.3, xend=101.5, yend=-0.6, arrow=arrow(length = unit(0.1, "npc")), size=1) +
-  annotate("text", 76, -2.5, label='bold("base quality score")', size = 3.8, parse=TRUE) +
-  theme(legend.title=element_blank())
+  annotate("segment", 101.5, -1.3, xend=101.5, yend=-0.6, arrow=arrow(length = unit(0.1, "npc")), size=1) #+
+  #annotate("text", 76, -2.5, label='bold("base quality score")', size = 3.8, parse=TRUE) +
+  #theme(legend.title=element_blank())
 quality_p_final
 ```
 
 ![](polyg_files/figure-gfm/unnamed-chunk-11-1.svg)<!-- -->
 
-## Assemble everything together
+## Alternative option for the top plot
 
 ``` r
-top <- plot_grid(base_p_final, quality_p_final, rows = 2) + theme(plot.margin=unit(c(1, 1.5, 1, 1), unit="line"))
-plot_grid(top, seq_content_p, labels = c('A', 'B'), label_size = 15, nrow = 2, rel_heights = c(2.5, 5))
+top2 <- tibble(base=sequence_vector, quality=quality_vector) %>%
+  {mutate(., position=seq(nrow(.)))} %>%
+  ggplot(aes(x=position, y=quality)) +
+  geom_line(color="grey") +
+  #geom_text(aes(label=base, color=base)) +
+  geom_point(aes(label=base, color=base)) +
+  scale_color_manual(values = c("#749dae", "#5445b1", "orange", "#cd3341")) +
+  geom_vline(xintercept = 48.5) +
+  geom_vline(xintercept = 101.5) +
+  #coord_cartesian(clip = 'off') +
+  annotate("text", 38, 40, label="sliding window\ntrimming") +
+  annotate("text", 94, 40, label="polyG\ntrimming") +
+  ylim(c(NA, 41)) +
+  theme_cowplot()
+top2
 ```
 
 ![](polyg_files/figure-gfm/unnamed-chunk-12-1.svg)<!-- -->
+
+## Assemble everything together
+
+``` r
+top <- plot_grid(base_p_final, quality_p_final, rows = 2, rel_heights=c(1, 1.2)) + theme(plot.margin=unit(c(1, 1.5, 1, 1), unit="line"))
+plot_grid(top, seq_content_p, labels = c('A', 'B'), label_size = 15, nrow = 2, rel_heights = c(2.5, 5))
+```
+
+![](polyg_files/figure-gfm/unnamed-chunk-13-1.svg)<!-- -->
+
+``` r
+plot_grid(top2, seq_content_p, labels = c('A', 'B'), label_size = 15, nrow = 2, rel_heights = c(3, 5))
+```
+
+![](polyg_files/figure-gfm/unnamed-chunk-14-1.svg)<!-- -->

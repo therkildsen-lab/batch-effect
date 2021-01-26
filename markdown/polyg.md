@@ -5,6 +5,7 @@ PolyG Trimming
 
 ``` r
 library(tidyverse)
+library(cowplot)
 ```
 
 ## Read in the sample table
@@ -86,7 +87,7 @@ for (j in 1:3){
   }
 }
 
-per_base_seq_content_polyg_trimmed_final %>%
+seq_content_p <- per_base_seq_content_polyg_trimmed_final %>%
   mutate(position = as_factor(position)) %>%
   ggplot(aes(x=position, y=percentage, color=base, group=base)) +
   geom_line(size=0.8) +
@@ -97,6 +98,7 @@ per_base_seq_content_polyg_trimmed_final %>%
   cowplot::theme_cowplot() +
   theme(axis.text.x = element_blank(),
         axis.ticks.x = element_blank())
+seq_content_p
 ```
 
 ![](polyg_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
@@ -117,11 +119,11 @@ zcat /workdir/backup/cod/greenland_cod/fastq/8467_3270_55085_HMK3YBGX2_NAR2008_0
 #### Visualization
 
 ``` r
-for (file in c("../misc/polyg_example.fastq", "../misc/polyg_example_trim_polyg.fastq", "../misc/polyg_example_polyg_cut_right.fastq")){
+for (file in rev(c("../misc/polyg_example.fastq", "../misc/polyg_example_trim_polyg.fastq", "../misc/polyg_example_polyg_cut_right.fastq"))){
   sequence_vector <- read_lines(file)[2] %>%
     str_split(pattern = "") %>%
     .[[1]]
-  p <- tibble(base=sequence_vector) %>%
+  base_p <- tibble(base=sequence_vector) %>%
     {mutate(., id=seq(nrow(.)))} %>%
     ggplot(aes(x=id, y=0, fill=base)) +
     geom_tile(color="black", size=0.3) +
@@ -129,31 +131,66 @@ for (file in c("../misc/polyg_example.fastq", "../misc/polyg_example_trim_polyg.
     scale_fill_manual(values = c("#749dae", "#5445b1", "orange", "#cd3341")) +
     theme_void() +
     theme(legend.position = "top")
-  print(p)
+  print(base_p)
 }
 ```
 
 ![](polyg_files/figure-gfm/unnamed-chunk-8-1.svg)<!-- -->![](polyg_files/figure-gfm/unnamed-chunk-8-2.svg)<!-- -->![](polyg_files/figure-gfm/unnamed-chunk-8-3.svg)<!-- -->
 
 ``` r
-for (file in c("../misc/polyg_example.fastq", "../misc/polyg_example_trim_polyg.fastq", "../misc/polyg_example_polyg_cut_right.fastq")){
+base_p_final <- base_p +
+  coord_cartesian(clip = 'off') +
+  annotate("text", 48.5, 2.2, label="sliding window\ntrimming", size = 3.8) +
+  annotate("segment", 48.5, 1.3, xend=48.5, yend=0.6, arrow=arrow(length = unit(0.1, "npc")), size=1) +
+  annotate("text", 101.5, 2.2, label="polyG\ntrimming", size = 3.8) +
+  annotate("segment", 101.5, 1.3, xend=101.5, yend=0.6, arrow=arrow(length = unit(0.1, "npc")), size=1)+
+  annotate("text", 76, 2.5, label='bold("base")', size = 3.8, parse=TRUE) +
+  theme(legend.title=element_blank())
+
+base_p_final
+```
+
+![](polyg_files/figure-gfm/unnamed-chunk-9-1.svg)<!-- -->
+
+``` r
+for (file in rev(c("../misc/polyg_example.fastq", "../misc/polyg_example_trim_polyg.fastq", "../misc/polyg_example_polyg_cut_right.fastq"))){
   quality_vector <- read_lines(file)[4] %>%
     charToRaw() %>%
     as.integer() %>% 
     {.-33}
-  p <- tibble(quality=quality_vector) %>%
+  quality_p <- tibble(quality=quality_vector) %>%
     {mutate(., id=seq(nrow(.)))} %>%
     ggplot(aes(x=id, y=0, fill=as.factor(quality))) +
     geom_tile(color="black", size=0.3) +
-    scale_fill_viridis_d(option = "D", begin = 0.4) +
+    scale_fill_viridis_d(option = "D", begin = 0.4, direction = -1) +
     theme_void() +
     labs(fill = "base quality score") +
     theme(legend.position = "bottom")
-  print(p)
+  print(quality_p)
 }
 ```
 
-![](polyg_files/figure-gfm/unnamed-chunk-9-1.svg)<!-- -->![](polyg_files/figure-gfm/unnamed-chunk-9-2.svg)<!-- -->![](polyg_files/figure-gfm/unnamed-chunk-9-3.svg)<!-- -->
+![](polyg_files/figure-gfm/unnamed-chunk-10-1.svg)<!-- -->![](polyg_files/figure-gfm/unnamed-chunk-10-2.svg)<!-- -->![](polyg_files/figure-gfm/unnamed-chunk-10-3.svg)<!-- -->
 
-The rest of the plotting was done by exporting the svg files into
-PowerPoint and adding some text and arrows there.
+``` r
+quality_p_final <- quality_p +
+  coord_cartesian(clip = 'off') +
+  annotate("text", 48.5, -2.2, label="sliding window\ntrimming", size = 3.8) +
+  annotate("segment", 48.5, -1.3, xend=48.5, yend=-0.6, arrow=arrow(length = unit(0.1, "npc")), size=1) +
+  annotate("text", 101.5, -2.2, label="polyG\ntrimming", size = 3.8) +
+  annotate("segment", 101.5, -1.3, xend=101.5, yend=-0.6, arrow=arrow(length = unit(0.1, "npc")), size=1) +
+  annotate("text", 76, -2.5, label='bold("base quality score")', size = 3.8, parse=TRUE) +
+  theme(legend.title=element_blank())
+quality_p_final
+```
+
+![](polyg_files/figure-gfm/unnamed-chunk-11-1.svg)<!-- -->
+
+## Assemble everything together
+
+``` r
+top <- plot_grid(base_p_final, quality_p_final, rows = 2) + theme(plot.margin=unit(c(1, 1.5, 1, 1), unit="line"))
+plot_grid(top, seq_content_p, labels = c('A', 'B'), label_size = 15, nrow = 2, rel_heights = c(2.5, 5))
+```
+
+![](polyg_files/figure-gfm/unnamed-chunk-12-1.svg)<!-- -->

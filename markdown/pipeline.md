@@ -63,11 +63,12 @@ sample_table_merged %>%
 
 ``` r
 ## Number of bases
-base_count <- read_tsv("/workdir/cod/greenland-cod/sample_lists/count_merged.tsv") %>%
+base_count <- read_tsv("../sample_lists/count_merged_old.tsv") %>%
   dplyr::select(sample_id_corrected, final_mapped_bases)
 sample_table_merged %>%
   left_join(base_count) %>%
-  mutate(sample_id_corrected=fct_reorder(sample_id_corrected, data_type)) %>%
+  arrange(data_type, desc(final_mapped_bases)) %>%
+  mutate(sample_id_corrected=as_factor(sample_id_corrected)) %>%
   ggplot(aes(x=population_new, y=final_mapped_bases, fill=data_type, group=sample_id_corrected)) +
   geom_col(color="black") +
   theme_cowplot() +
@@ -85,6 +86,19 @@ sample_table_merged %>%
 ```
 
 ![](pipeline_files/figure-gfm/unnamed-chunk-2-3.png)<!-- -->
+
+``` r
+sample_table_merged %>%
+  left_join(base_count) %>%
+  group_by(data_type) %>%
+  summarise(sample_size=n(), avearge_final_coverage=mean(final_mapped_bases)/0.67/10^9)
+```
+
+    ## # A tibble: 2 x 3
+    ##   data_type sample_size avearge_final_coverage
+    ##   <chr>           <int>                  <dbl>
+    ## 1 pe                 75                  0.299
+    ## 2 se                 88                  0.788
 
 ``` r
 # Write the objects created above

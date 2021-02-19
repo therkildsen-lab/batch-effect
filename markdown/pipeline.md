@@ -51,12 +51,16 @@ fastq_list_pe <- filter(sample_table_unmerged, lane_number == 7)$prefix
 fastq_list_se <- filter(sample_table_unmerged, lane_number != 7)$prefix
 
 ## Sample distribution
-sample_table_merged %>%
+sample_size_plot <- sample_table_merged %>%
   mutate(sample_id_corrected=fct_reorder(sample_id_corrected, data_type)) %>%
   ggplot(aes(x=population_new, fill=data_type, group=sample_id_corrected)) +
   geom_bar(color="black") +
+  xlab("population")+
+  ylab("sample size") +
   theme_cowplot() +
-  coord_flip()
+  coord_flip() +
+  theme(legend.position = "none")
+sample_size_plot
 ```
 
 ![](pipeline_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
@@ -65,14 +69,18 @@ sample_table_merged %>%
 ## Number of bases
 base_count <- read_tsv("../sample_lists/count_merged_old.tsv") %>%
   dplyr::select(sample_id_corrected, final_mapped_bases)
-sample_table_merged %>%
+coverage_plot <- sample_table_merged %>%
   left_join(base_count) %>%
   arrange(data_type, desc(final_mapped_bases)) %>%
   mutate(sample_id_corrected=as_factor(sample_id_corrected)) %>%
-  ggplot(aes(x=population_new, y=final_mapped_bases, fill=data_type, group=sample_id_corrected)) +
+  ggplot(aes(x=population_new, y=final_mapped_bases/0.67/10^9, fill=data_type, group=sample_id_corrected)) +
   geom_col(color="black") +
+  scale_fill_discrete(labels=c("NextSeq-150PE", "HiSeq-125PE")) +
+  labs(x="population", y="coverage", fill="batch")+
+  ylab("coverage") +
   theme_cowplot() +
   coord_flip()
+coverage_plot
 ```
 
 ![](pipeline_files/figure-gfm/unnamed-chunk-2-2.png)<!-- -->
@@ -99,6 +107,12 @@ sample_table_merged %>%
     ##   <chr>           <int>                  <dbl>
     ## 1 pe                 75                  0.299
     ## 2 se                 88                  0.788
+
+``` r
+cowplot::plot_grid(sample_size_plot, coverage_plot, nrow = 1, rel_widths = c(1, 1.2))
+```
+
+![](pipeline_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
 
 ``` r
 # Write the objects created above

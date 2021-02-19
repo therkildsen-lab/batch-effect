@@ -75,7 +75,7 @@ coverage_plot <- sample_table_merged %>%
   mutate(sample_id_corrected=as_factor(sample_id_corrected)) %>%
   ggplot(aes(x=population_new, y=final_mapped_bases/0.67/10^9, fill=data_type, group=sample_id_corrected)) +
   geom_col(color="black") +
-  scale_fill_discrete(labels=c("NextSeq-150PE", "HiSeq-125PE")) +
+  scale_fill_discrete(labels=c("NextSeq-150PE", "HiSeq-125SE")) +
   labs(x="population", y="coverage", fill="batch")+
   ylab("coverage") +
   theme_cowplot() +

@@ -54,7 +54,7 @@ for (i in 1:nrow(sample_table)){
 het_gg <- het_final %>%
   left_join(rename_pop) %>%
   mutate(type=fct_relevel(type, c("Before", "After"))) %>%
-  mutate(batch=ifelse(data_type=="pe", "NextSeq", "HiSeq")) 
+  mutate(batch=ifelse(data_type=="pe", "NextSeq-150PE", "HiSeq-125SE")) 
 set.seed(42)
 het_plot <- het_gg %>%
   filter(population %in% c("KNG2011", "QQL2011", "ITV2011")) %>%
@@ -70,7 +70,7 @@ het_plot <- het_gg %>%
   coord_flip() +
   theme_cowplot() +
   theme(panel.background=element_rect(colour="black", size=0.8),
-        legend.position = c(0.8, 0.9),
+        legend.position = c(0.78, 0.94),
         legend.key.size = unit(0.5, 'lines'),
         strip.text.x = element_text(face = "bold", size=20),
         axis.text.y = element_blank(),
@@ -101,7 +101,7 @@ these plots for clearer results.
 pca_combined <- bind_rows(bind_cols(pca_before, type="Before"), 
                           bind_cols(pca_after, type="After")) %>%
   mutate(type=fct_relevel(type, c("Before", "After"))) %>%
-  mutate(batch=ifelse(data_type=="se", "HiSeq", "NextSeq"))
+  mutate(batch=ifelse(data_type=="se", "HiSeq-125SE", "NextSeq-150PE"))
 pca_combined_select_pops <- filter(pca_combined, population %in% c("KNG2011", "QQL2011", "ITV2011"))
 pca_plot <- pca_combined_select_pops %>%
   left_join(rename_pop) %>%
@@ -116,7 +116,7 @@ pca_plot <- pca_combined_select_pops %>%
   theme(axis.text = element_blank(),
         axis.ticks = element_blank(),
         panel.border = element_rect(colour="black",size=0.5),
-        legend.position = c(0.85, 0.92),
+        legend.position = c(0.78, 0.94),
         legend.key.size = unit(0.5, 'lines'),
         strip.text.x = element_text(face = "bold", size=20))
 pca_plot

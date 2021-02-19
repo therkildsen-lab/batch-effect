@@ -214,3 +214,52 @@ plot_grid(top, seq_content_p, labels = c('A', 'B'), label_size = 15, nrow = 2, r
 ```{r eval=T, fig.height=8, fig.width=10, dev='svg'}
 plot_grid(top2, seq_content_p, labels = c('A', 'B'), label_size = 15, nrow = 2, rel_heights = c(3, 5))
 ```
+
+## Persistence of polyG tails in bam files
+
+```{bash eval=FALSE}
+fastqc /workdir/cod/greenland-cod/bam/QQL2011_884_55191_7_pe_bt2_gadMor3_minq20_sorted_dedup_overlapclipped_realigned.bam
+fastqc /workdir/cod/greenland-cod/bam/UUM2010_068_55111_7_pe_bt2_gadMor3_minq20_sorted_dedup_overlapclipped_realigned.bam
+fastqc /workdir/cod/greenland-cod/bam/IKE2011_976_55124_7_pe_bt2_gadMor3_minq20_sorted_dedup_overlapclipped_realigned.bam
+mv /workdir/cod/greenland-cod/bam/*fastqc* /workdir/cod/greenland-cod/fastqc/
+```
+
+## Compile FastQC result
+
+```{r eval=T, fig.width=4.5, fig.height=5}
+set.seed(0)
+random_sample <- sample_table_unmerged_pe[sample(1:75, 3), ]
+path <- "../../cod/greenland-cod/fastqc/"
+suffix <- "_pe_bt2_gadMor3_minq20_sorted_dedup_overlapclipped_realigned_fastqc"
+type <- "polyG trimming, mapped"
+for (i in 1:3){
+  sample_id <- random_sample$sample_id[i]
+  sample_prefix <- random_sample$prefix_new[i]
+  file_name <- str_c(path, sample_prefix, suffix)
+  unzip(str_c(file_name, ".zip"), exdir = path, overwrite = FALSE)
+  fastqc_data <- read_lines(file = str_c(file_name, "/fastqc_data.txt"))
+  first_line <- which(str_detect(fastqc_data, ">>Per base sequence content")) + 1
+  last_line <- which(str_detect(fastqc_data, ">>Per sequence GC content")) - 2
+  per_base_seq_content_polyg_trimmed <- fastqc_data[first_line:last_line] %>%
+    read_tsv() %>%
+    rename(position=`#Base`) %>%
+    pivot_longer(2:5, names_to = "base", values_to = "percentage") %>%
+    mutate(sample_id=sample_id, type = type)
+  if (i == 1) {
+    per_base_seq_content_polyg_trimmed_final <- per_base_seq_content_polyg_trimmed
+  } else {
+    per_base_seq_content_polyg_trimmed_final <- bind_rows(per_base_seq_content_polyg_trimmed_final, per_base_seq_content_polyg_trimmed)
+  }
+}
+
+seq_content_p <- per_base_seq_content_polyg_trimmed_final %>%
+  mutate(position = as_factor(position)) %>%
+  ggplot(aes(x=position, y=percentage, color=base, group=base)) +
+  geom_line(size=0.8) +
+  scale_color_manual(values = c("#749dae", "#5445b1", "orange", "#cd3341")) +
+  facet_grid(sample_id~type) +
+  cowplot::theme_cowplot() +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank())
+seq_content_p
+```

@@ -58,9 +58,11 @@ fastq_list_se <- filter(sample_table_unmerged, lane_number != 7)$prefix
 
 ## Sample distribution
 sample_size_plot <- sample_table_merged %>%
+  mutate(data_type=ifelse(data_type=="pe", "NextSeq-150PE", "HiSeq-125SE")) %>%
   mutate(sample_id_corrected=fct_reorder(sample_id_corrected, data_type)) %>%
   ggplot(aes(x=population_new, fill=data_type, group=sample_id_corrected)) +
   geom_bar(color="black") +
+  scale_fill_viridis_d(begin=0.3, end=0.8) +
   xlab("population")+
   ylab("sample size") +
   theme_cowplot() +
@@ -71,14 +73,14 @@ sample_size_plot
 base_count <- read_tsv("../sample_lists/count_merged_old.tsv") %>%
   dplyr::select(sample_id_corrected, final_mapped_bases)
 coverage_plot <- sample_table_merged %>%
+  mutate(data_type=ifelse(data_type=="pe", "NextSeq-150PE", "HiSeq-125SE")) %>%
   left_join(base_count) %>%
   arrange(data_type, desc(final_mapped_bases)) %>%
   mutate(sample_id_corrected=as_factor(sample_id_corrected)) %>%
   ggplot(aes(x=population_new, y=final_mapped_bases/0.67/10^9, fill=data_type, group=sample_id_corrected)) +
   geom_col(color="black") +
-  scale_fill_discrete(labels=c("NextSeq-150PE", "HiSeq-125SE")) +
+  scale_fill_viridis_d(begin=0.3, end=0.8) +
   labs(x="population", y="coverage", fill="batch")+
-  ylab("coverage") +
   theme_cowplot() +
   coord_flip()
 coverage_plot

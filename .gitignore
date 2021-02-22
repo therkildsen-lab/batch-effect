@@ -43,3 +43,5 @@ angsd/
 polyg_trimmed/
 nohups/
 cut_right/
+
+.DS_Store

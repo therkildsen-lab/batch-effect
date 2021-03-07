@@ -55,6 +55,12 @@ maf_joined <- inner_join(maf_pe, maf_se) %>%
 maf_joined_excluding_private <- filter(maf_joined, !((pe_maf<0.01 | pe_maf>0.99)&(se_maf>0.1 & se_maf<0.9))) %>%
   filter(!((se_maf<0.01 | se_maf>0.99)&(pe_maf>0.1 & pe_maf<0.9)))
 
+maf_excluding_pe <- maf_se %>%
+  filter(!(se_maf<0.1 | se_maf>0.9))
+
+maf_excluding_se <-  maf_pe %>%
+  filter(!(pe_maf<0.1 | pe_maf>0.9))
+
 anymapq_depth <- read_tsv("../angsd/popminind2/bam_list_realigned_se_anymapq.pos.gz") %>%
   rename(lg=chr, position=pos, total_depth_anymapq=totDepth)
 mapq20_depth <- read_tsv("../angsd/popminind20/se_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked_popminind20.pos.gz") %>%
@@ -70,11 +76,19 @@ original_snp_list <- read_tsv("/workdir/cod/greenland-cod/angsd/global_snp_list_
   
 new_snp_list <- semi_join(original_snp_list, maf_joined_excluding_private_filtering_depth)
 write_tsv(new_snp_list, "../angsd/global_snp_list_private_snps_depth_ratio_filtered.txt", col_names = F)
+
+se_snp_list <- semi_join(original_snp_list, maf_excluding_pe)
+write_tsv(se_snp_list, "../angsd/global_snp_list_se_snps_depth_ratio_filtered.txt", col_names = F)
+
+pe_snp_list <- semi_join(original_snp_list, maf_excluding_se)
+write_tsv(pe_snp_list, "../angsd/global_snp_list_pe_snps_depth_ratio_filtered.txt", col_names = F)
+
 ```
 
 #### Run ANGSD
 
 ```{bash eval=FALSE}
+## Private SNPs, depth ratio filtered
 cd /workdir/batch-effect/
 /workdir/programs/angsd0.931/angsd/angsd sites index /workdir/batch-effect/angsd/global_snp_list_private_snps_depth_ratio_filtered.txt
 nohup /workdir/programs/angsd0.931/angsd/angsd \
@@ -87,6 +101,33 @@ nohup /workdir/programs/angsd0.931/angsd/angsd \
 -sites /workdir/batch-effect/angsd/global_snp_list_private_snps_depth_ratio_filtered.txt \
 -rf /workdir/cod/greenland-cod/angsd/global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked.chrs \
 >& nohups/get_gl_bam_list_realigned_private_snps_depth_ratio_filtered.log &
+## SE SNPs
+cd /workdir/batch-effect/
+/workdir/programs/angsd0.931/angsd/angsd sites index /workdir/batch-effect/angsd/global_snp_list_se_snps_depth_ratio_filtered.txt
+nohup /workdir/programs/angsd0.931/angsd/angsd \
+-b sample_lists/bam_list_realigned.txt \
+-anc /workdir/cod/reference_seqs/gadMor3.fasta \
+-out angsd/bam_list_realigned_se_snps \
+-GL 1 -doGlf 2 -doMaf 1 -doMajorMinor 3 -doCounts 1 -doDepth 1 -dumpCounts 1 \
+-P 16 -setMinDepth 2 -setMaxDepth 661 -minInd 2 -minQ 20 -minMapQ 20 -minMaf 0.05 \
+-doIBS 2 -makematrix 1 -doCov 1 \
+-sites /workdir/batch-effect/angsd/global_snp_list_se_snps_depth_ratio_filtered.txt \
+-rf /workdir/cod/greenland-cod/angsd/global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked.chrs \
+>& nohups/get_gl_bam_list_realigned_se_snps.log &
+## PE SNPs
+cd /workdir/batch-effect/
+/workdir/programs/angsd0.931/angsd/angsd sites index /workdir/batch-effect/angsd/global_snp_list_pe_snps_depth_ratio_filtered.txt
+nohup /workdir/programs/angsd0.931/angsd/angsd \
+-b sample_lists/bam_list_realigned.txt \
+-anc /workdir/cod/reference_seqs/gadMor3.fasta \
+-out angsd/bam_list_realigned_pe_snps \
+-GL 1 -doGlf 2 -doMaf 1 -doMajorMinor 3 -doCounts 1 -doDepth 1 -dumpCounts 1 \
+-P 16 -setMinDepth 2 -setMaxDepth 661 -minInd 2 -minQ 20 -minMapQ 20 -minMaf 0.05 \
+-doIBS 2 -makematrix 1 -doCov 1 \
+-sites /workdir/batch-effect/angsd/global_snp_list_pe_snps_depth_ratio_filtered.txt \
+-rf /workdir/cod/greenland-cod/angsd/global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked.chrs \
+>& nohups/get_gl_bam_list_realigned_pe_snps.log &
+
 ```
 
 #### Run PCAngsd

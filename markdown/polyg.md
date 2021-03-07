@@ -91,10 +91,8 @@ seq_content_p <- per_base_seq_content_polyg_trimmed_final %>%
   mutate(position = as_factor(position)) %>%
   ggplot(aes(x=position, y=percentage, color=base, group=base)) +
   geom_line(size=0.8) +
-  #scale_color_viridis_d(end = 0.9) +
-  #scale_color_brewer(palette = "Dark2") +
   scale_color_manual(values = c("#749dae", "#5445b1", "orange", "#cd3341")) +
-  facet_grid(sample_id~type) +
+  facet_grid(str_c("ind ", as.numeric(as.factor(sample_id)))~type) +
   cowplot::theme_cowplot() +
   theme(axis.text.x = element_blank(),
         axis.ticks.x = element_blank())
@@ -266,7 +264,7 @@ seq_content_p <- per_base_seq_content_polyg_trimmed_final %>%
   ggplot(aes(x=position, y=percentage, color=base, group=base)) +
   geom_line(size=0.8) +
   scale_color_manual(values = c("#749dae", "#5445b1", "orange", "#cd3341")) +
-  facet_grid(sample_id~type) +
+  facet_grid(str_c("ind ", as.numeric(as.factor(sample_id)))~type) +
   cowplot::theme_cowplot() +
   theme(axis.text.x = element_blank(),
         axis.ticks.x = element_blank())

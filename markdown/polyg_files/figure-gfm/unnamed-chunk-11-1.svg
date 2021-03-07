@@ -114,12 +114,12 @@
 <clipPath id="clip1">
   <path d="M 350.539062 40.242188 L 436.9375 40.242188 L 436.9375 57.523438 L 350.539062 57.523438 Z M 350.539062 40.242188 "/>
 </clipPath>
-<image id="image211" width="20" height="1" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAABCAIAAABR8BlyAAAABmJLR0QA/wD/AP+gvaeTAAAALElEQVQImT3GIRIAIAgAwfH/hZcaCHBHMji6aVfsENTBG3H8eUBFkR7KSvsAwFU5Zin+czsAAAAASUVORK5CYII="/>
+<image id="image202" width="20" height="1" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAABCAIAAABR8BlyAAAABmJLR0QA/wD/AP+gvaeTAAAALElEQVQImT3GIRIAIAgAwfH/hZcaCHBHMji6aVfsENTBG3H8eUBFkR7KSvsAwFU5Zin+czsAAAAASUVORK5CYII="/>
 <pattern id="pattern0" patternUnits="userSpaceOnUse" width="20" height="1"  patternTransform="matrix(4.32,0,0,17.28,350.539726,40.240548)">
-  <use xlink:href="#image211"/>
+  <use xlink:href="#image202"/>
 </pattern>
 </defs>
-<g id="surface207">
+<g id="surface198">
 <rect x="0" y="0" width="720" height="72" style="fill:rgb(100%,100%,100%);fill-opacity:1;stroke:none;"/>
 <path style="fill-rule:nonzero;fill:rgb(14.509804%,48.627451%,12.156863%);fill-opacity:1;stroke-width:0.640187;stroke-linecap:square;stroke-linejoin:miter;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 32.726562 13.210938 L 37.0625 13.210938 L 37.0625 1.570312 L 32.726562 1.570312 Z M 32.726562 13.210938 "/>
 <path style="fill-rule:nonzero;fill:rgb(14.509804%,48.627451%,12.156863%);fill-opacity:1;stroke-width:0.640187;stroke-linecap:square;stroke-linejoin:miter;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 37.0625 13.210938 L 41.398438 13.210938 L 41.398438 1.570312 L 37.0625 1.570312 Z M 37.0625 13.210938 "/>

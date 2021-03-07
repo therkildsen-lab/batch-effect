@@ -11,3 +11,5 @@
 [Fst-based analyses](https://github.com/therkildsen-lab/batch-effect/blob/main/markdown/fst.md)
 
 [Figures for publication](https://github.com/therkildsen-lab/batch-effect/blob/main/markdown/figures.md)
+
+[Supplementary figures](https://github.com/therkildsen-lab/batch-effect/blob/main/markdown/supplementary_figures.md)

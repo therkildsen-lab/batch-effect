@@ -153,7 +153,7 @@ p_b <- delta_het %>%
   geom_boxplot(outlier.alpha = 0) +
   geom_jitter(height = 0) +
   annotate(geom = "text", label="p-value=0.014", x=1.5, y=0.002) +
-  scale_x_discrete(labels=c("NextSeq-150PE\n(less degraded)", "HiSeq-125SE\n(more degraded)")) +
+  scale_x_discrete(labels=c("NextSeq-150PE\n(less degraded)\n", "HiSeq-125SE\n(more degraded)\n")) +
   ylab("change in heterozygosity\nafter excluding transitions") +
   theme_cowplot() +
   theme(axis.title.x = element_blank())

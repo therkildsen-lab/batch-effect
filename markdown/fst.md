@@ -115,10 +115,11 @@ depth <- inner_join(anymapq_depth, mapq20_depth) %>%
 p <- maf_joined %>%
   left_join(depth) %>%
   ggplot(aes(x=depth_ratio, y=fst)) +
+  labs(x="depth ratio in HiSeq-125SE batch", y="Fst") +
   geom_point(size=0.2) +
-  geom_smooth() +
+  geom_smooth(se=T) +
   theme_cowplot()
-ggExtra::ggMarginal(p, type = "histogram", size=5, margins="x")
+ggExtra::ggMarginal(p, type = "histogram", size=5, margins="x", fill="white")
 ```
 
 ![](fst_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
@@ -158,30 +159,6 @@ maf_joined %>%
     ##   mean_fst
     ##      <dbl>
     ## 1  0.00456
-
-``` r
-depth_filtered_maf <- maf_joined #%>%
-  #left_join(depth) %>%
-  #filter(depth_ratio > 0.8)
-
-bind_rows((filter(depth_filtered_maf, pe_maf<0.01 | pe_maf>0.99) %>% filter(se_maf>0.1 & se_maf<0.9) %>% transmute(major=major, minor=minor, batch = "HiSeq, more degraded")),
-          (filter(depth_filtered_maf, se_maf<0.01 | se_maf>0.99) %>% filter(pe_maf>0.1 & pe_maf<0.9) %>% transmute(major=major, minor=minor, batch = "NextSeq, less degraded"))) %>%
-  mutate(base_substitution = str_c(major, "-to-", minor)) %>%
-  group_by(base_substitution, batch) %>% 
-  count() %>% 
-  ungroup() %>% 
-  group_by(batch) %>%
-  mutate(frequency = n / sum(n)) %>%
-  ungroup() %>%
-  ggplot(aes(x=base_substitution, y=frequency, color=batch, group=batch)) +
-  geom_line() + 
-  geom_point() +
-  scale_color_viridis_d(end=0.75) +
-  theme_bw() +
-  theme(legend.position = "top")
-```
-
-![](fst_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
 #### Spot check some outlier SNPs
 

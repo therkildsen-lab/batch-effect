@@ -183,7 +183,7 @@ quality_p_final
 
 ## Alternative option for the top plot
 
-```{r eval=T, fig.width=10, fig.height=3, dev='svg'}
+```{r eval=T, fig.width=10, fig.height=2, dev='svg'}
 top2 <- tibble(base=sequence_vector, quality=quality_vector) %>%
   {mutate(., position=seq(nrow(.)))} %>%
   ggplot(aes(x=position, y=quality)) +
@@ -194,9 +194,9 @@ top2 <- tibble(base=sequence_vector, quality=quality_vector) %>%
   geom_vline(xintercept = 48.5) +
   geom_vline(xintercept = 101.5) +
   #coord_cartesian(clip = 'off') +
-  annotate("text", 38, 40, label="sliding window\ntrimming") +
-  annotate("text", 94, 40, label="polyG\ntrimming") +
-  ylim(c(NA, 41)) +
+  annotate("text", 38, 42, label="sliding window\ntrimming", lineheight = 0.8) +
+  annotate("text", 94, 42, label="polyG\ntrimming", lineheight = 0.8) +
+  ylim(c(NA, 44)) +
   theme_cowplot()
 top2
 ```
@@ -209,8 +209,8 @@ plot_grid(top, seq_content_p, labels = c('A', 'B'), label_size = 15, nrow = 2, r
 ```
 
 
-```{r eval=T, fig.height=8, fig.width=10, dev='svg'}
-plot_grid(top2, seq_content_p, labels = c('A', 'B'), label_size = 15, nrow = 2, rel_heights = c(3, 5))
+```{r eval=T, fig.height=7, fig.width=10, dev='svg'}
+plot_grid(top2, seq_content_p, labels = c('A', 'B'), label_size = 15, nrow = 2, rel_heights = c(2, 5))
 ```
 
 ## Persistence of polyG tails in bam files

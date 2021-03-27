@@ -198,9 +198,9 @@ top2 <- tibble(base=sequence_vector, quality=quality_vector) %>%
   geom_vline(xintercept = 48.5) +
   geom_vline(xintercept = 101.5) +
   #coord_cartesian(clip = 'off') +
-  annotate("text", 38, 40, label="sliding window\ntrimming") +
-  annotate("text", 94, 40, label="polyG\ntrimming") +
-  ylim(c(NA, 41)) +
+  annotate("text", 38, 42, label="sliding window\ntrimming", lineheight = 0.8) +
+  annotate("text", 94, 42, label="polyG\ntrimming", lineheight = 0.8) +
+  ylim(c(NA, 44)) +
   theme_cowplot()
 top2
 ```
@@ -217,7 +217,7 @@ plot_grid(top, seq_content_p, labels = c('A', 'B'), label_size = 15, nrow = 2, r
 ![](polyg_files/figure-gfm/unnamed-chunk-13-1.svg)<!-- -->
 
 ``` r
-plot_grid(top2, seq_content_p, labels = c('A', 'B'), label_size = 15, nrow = 2, rel_heights = c(3, 5))
+plot_grid(top2, seq_content_p, labels = c('A', 'B'), label_size = 15, nrow = 2, rel_heights = c(2, 5))
 ```
 
 ![](polyg_files/figure-gfm/unnamed-chunk-14-1.svg)<!-- -->

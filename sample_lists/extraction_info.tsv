@@ -1,0 +1,609 @@
+sample_id	extraction_id	extraction_year	extraction_month	extraction_day	tissue_type	extraction_method	rnase	who_extracted	elution_liquid	elution_vol	elution_conc	conc_measure_method	degradation_level	extraction_tube_label	extraction_plate_id	extraction_plate_well	normalized_plate_id	normalized_plate_well	notes
+API2011_005	API2011_005	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	17.9	Qubit	NA	NA	20161010pl1	01A	NA	NA	NA
+API2011_007	API2011_007	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	2.37	Qubit	NA	NA	20161010pl1	01C	NA	NA	NA
+API2011_008	API2011_008	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	2.42	Qubit	NA	NA	20161010pl1	01D	NA	NA	NA
+API2011_017	API2011_017	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	2.67	Qubit	NA	NA	20161010pl1	01F	NA	NA	NA
+API2011_020	API2011_020	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	3.6	Qubit	NA	NA	20161010pl1	01G	NA	NA	NA
+API2011_025	API2011_025	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	2.26	Qubit	NA	NA	20161010pl1	02D	NA	NA	NA
+API2011_027	API2011_027	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	1.87	Qubit	NA	NA	20161010pl1	02F	NA	NA	NA
+GRD2011_145	GRD2011_145	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	41.6	Qubit	NA	NA	20161010pl1	02H	NA	NA	NA
+GRD2011_149	GRD2011_149	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	12.1	Qubit	NA	NA	20161010pl1	03A	NA	NA	NA
+GRD2011_151	GRD2011_151	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	12.5	Qubit	NA	NA	20161010pl1	03B	NA	NA	NA
+GRD2011_153	GRD2011_153	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	38.1	Qubit	1	NA	20161010pl1	03C	20170119norm2	03F	NA
+GRD2011_155	GRD2011_155	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	12	Qubit	1	NA	20161010pl1	03D	20170119norm2	03G	NA
+GRD2011_157	GRD2011_157	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	25.4	Qubit	1	NA	20161010pl1	03E	20170119norm2	04A	NA
+GRD2011_159	GRD2011_159	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	14.1	Qubit	1	NA	20161010pl1	03F	20170119norm2	04B	NA
+GRD2011_161	GRD2011_161	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	16.6	Qubit	1	NA	20161010pl1	03G	20170119norm2	04C	NA
+GRD2011_163	GRD2011_163	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	56	Qubit	NA	NA	20161010pl1	03H	NA	NA	NA
+GRD2011_173	GRD2011_173	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	25.9	Qubit	1	NA	20161010pl1	04A	20170119norm2	04D	NA
+GRD2011_185	GRD2011_185	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	13	Qubit	1	NA	20161010pl1	04B	20170119norm2	04E	NA
+GRD2011_189	GRD2011_189	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	28.5	Qubit	1	NA	20161010pl1	04C	20170119norm2	04F	NA
+GRD2011_191	GRD2011_191	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	28.8	Qubit	1	NA	20161010pl1	04D	20170119norm2	04G	NA
+KAP2011_010	KAP2011_010	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	15	Qubit	NA	NA	20161010pl1	04F	NA	NA	NA
+KAP2011_011	KAP2011_011	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	25.7	Qubit	NA	NA	20161010pl1	04G	NA	NA	NA
+KAP2011_013	KAP2011_013	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	4.01	Qubit	NA	NA	20161010pl1	04H	NA	NA	NA
+KAP2011_015	KAP2011_015	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	3.35	Qubit	NA	NA	20161010pl1	05A	NA	NA	NA
+KAP2011_016	KAP2011_016	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	11.1	Qubit	NA	NA	20161010pl1	05B	NA	NA	NA
+KAP2011_017	KAP2011_017	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	9.01	Qubit	NA	NA	20161010pl1	05C	NA	NA	NA
+KAP2011_020	KAP2011_020	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	6.11	Qubit	NA	NA	20161010pl1	05D	NA	NA	NA
+KAP2011_021	KAP2011_021	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	2.04	Qubit	1	NA	20161010pl1	05E	20170119norm2	05A	NA
+KAP2011_022	KAP2011_022	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	3.39	Qubit	NA	NA	20161010pl1	05F	NA	NA	NA
+KAP2011_034	KAP2011_034	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	17.9	Qubit	NA	NA	20161010pl1	05H	NA	NA	NA
+KAP2011_035	KAP2011_035	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	18.3	Qubit	1	NA	20161010pl1	06A	20170119norm2	05B	NA
+KAP2011_037	KAP2011_037	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	10.2	Qubit	NA	NA	20161010pl1	06B	NA	NA	NA
+UPR2011_016	UPR2011_016	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	21.1	Qubit	3	NA	20161010pl1	06D	20170119norm2	07A	NA
+UPR2011_017	UPR2011_017	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	0.445	Qubit	NA	NA	20161010pl1	06E	NA	NA	NA
+UPR2011_018	UPR2011_018	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	4.33	Qubit	3	NA	20161010pl1	06F	20170119norm2	07B	NA
+UPR2011_020	UPR2011_020	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	0.384	Qubit	NA	NA	20161010pl1	06H	NA	NA	NA
+UPR2011_021	UPR2011_021	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	2.62	Qubit	NA	NA	20161010pl1	07A	NA	NA	NA
+UPR2011_024	UPR2011_024	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	13.8	Qubit	1	NA	20161010pl1	07D	20170119norm2	05C	NA
+UPR2011_025	UPR2011_025	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	6.03	Qubit	NA	NA	20161010pl1	07E	NA	NA	NA
+UPR2011_026	UPR2011_026	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	16.4	Qubit	1	NA	20161010pl1	07F	20170119norm2	05D	NA
+API2011_031	API2011_031	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	5.9	Qubit	NA	NA	20161010pl2	01A	NA	NA	NA
+API2011_033	API2011_033	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	2.23	Qubit	NA	NA	20161010pl2	01B	NA	NA	NA
+API2011_034	API2011_034	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	2.5	Qubit	NA	NA	20161010pl2	01C	NA	NA	NA
+API2011_035	API2011_035	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	2.5	Qubit	NA	NA	20161010pl2	01D	NA	NA	NA
+API2011_039	API2011_039	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	5.65	Qubit	NA	NA	20161010pl2	01E	NA	NA	NA
+API2011_040	API2011_040	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	19.2	Qubit	NA	NA	20161010pl2	01F	NA	NA	NA
+API2011_041	API2011_041	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	13.2	Qubit	NA	NA	20161010pl2	01G	NA	NA	NA
+API2011_042	API2011_042	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	11.2	Qubit	NA	NA	20161010pl2	01H	NA	NA	NA
+API2011_043	API2011_043	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	2.78	Qubit	NA	NA	20161010pl2	02A	NA	NA	NA
+API2011_045	API2011_045	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	4.97	Qubit	NA	NA	20161010pl2	02C	NA	NA	NA
+API2011_046	API2011_046	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	3.73	Qubit	NA	NA	20161010pl2	02D	NA	NA	NA
+API2011_047	API2011_047	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	1.37	Qubit	NA	NA	20161010pl2	02E	NA	NA	NA
+GRD2011_041	GRD2011_041	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	33.2	Qubit	NA	NA	20161010pl2	02G	NA	NA	NA
+GRD2011_043	GRD2011_043	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	37	Qubit	NA	NA	20161010pl2	02H	NA	NA	NA
+GRD2011_045	GRD2011_045	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	38.8	Qubit	NA	NA	20161010pl2	03A	NA	NA	NA
+GRD2011_051	GRD2011_051	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	35.7	Qubit	NA	NA	20161010pl2	03B	NA	NA	NA
+GRD2011_059	GRD2011_059	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	26.8	Qubit	NA	NA	20161010pl2	03C	NA	NA	NA
+GRD2011_061	GRD2011_061	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	26	Qubit	NA	NA	20161010pl2	03D	NA	NA	NA
+GRD2011_063	GRD2011_063	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	22.4	Qubit	NA	NA	20161010pl2	03E	NA	NA	NA
+GRD2011_065	GRD2011_065	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	27.8	Qubit	NA	NA	20161010pl2	03F	NA	NA	NA
+GRD2011_069	GRD2011_069	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	29.9	Qubit	NA	NA	20161010pl2	03G	NA	NA	NA
+GRD2011_121	GRD2011_121	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	31.2	Qubit	NA	NA	20161010pl2	03H	NA	NA	NA
+GRD2011_131	GRD2011_131	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	30.5	Qubit	NA	NA	20161010pl2	04A	NA	NA	NA
+GRD2011_133	GRD2011_133	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	32.8	Qubit	NA	NA	20161010pl2	04B	NA	NA	NA
+GRD2011_139	GRD2011_139	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	35.3	Qubit	NA	NA	20161010pl2	04C	NA	NA	NA
+GRD2011_143	GRD2011_143	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	31.9	Qubit	1	NA	20161010pl2	04D	20170119norm2	05E	NA
+KAP2011_038	KAP2011_038	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	17.8	Qubit	NA	NA	20161010pl2	04F	NA	NA	NA
+KAP2011_039	KAP2011_039	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	11	Qubit	NA	NA	20161010pl2	04G	NA	NA	NA
+KAP2011_040	KAP2011_040	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	12.4	Qubit	NA	NA	20161010pl2	04H	NA	NA	NA
+KAP2011_042	KAP2011_042	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	34.6	Qubit	NA	NA	20161010pl2	05A	NA	NA	NA
+KAP2011_043	KAP2011_043	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	13.5	Qubit	NA	NA	20161010pl2	05B	NA	NA	NA
+KAP2011_044	KAP2011_044	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	17.6	Qubit	NA	NA	20161010pl2	05C	NA	NA	NA
+KAP2011_045	KAP2011_045	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	14.4	Qubit	NA	NA	20161010pl2	05D	NA	NA	NA
+KAP2011_049	KAP2011_049	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	28	Qubit	1	NA	20161010pl2	05E	20170119norm2	05F	NA
+KAP2011_054	KAP2011_054	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	5.33	Qubit	1	NA	20161010pl2	05F	20170119norm2	05G	NA
+KAP2011_057	KAP2011_057	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	4	Qubit	1	NA	20161010pl2	05G	20170119norm2	06A	NA
+KAP2011_059	KAP2011_059	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	23.3	Qubit	1	NA	20161010pl2	05H	20170119norm2	06B	NA
+KAP2011_060	KAP2011_060	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	9.74	Qubit	1	NA	20161010pl2	06A	20170119norm2	06C	NA
+KAP2011_069	KAP2011_069	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	15.9	Qubit	1	NA	20161010pl2	06B	20170119norm2	06D	NA
+UPR2011_003	UPR2011_003	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	4.29	Qubit	2	NA	20161010pl2	06D	20170119norm2	06E	NA
+UPR2011_005	UPR2011_005	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	0.499	Qubit	NA	NA	20161010pl2	06E	NA	NA	NA
+UPR2011_006	UPR2011_006	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	19.3	Qubit	NA	NA	20161010pl2	06F	NA	NA	NA
+UPR2011_007	UPR2011_007	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	3.36	Qubit	NA	NA	20161010pl2	06G	NA	NA	NA
+UPR2011_008	UPR2011_008	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	4.33	Qubit	NA	NA	20161010pl2	06H	NA	NA	NA
+UPR2011_009	UPR2011_009	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	1.28	Qubit	NA	NA	20161010pl2	07A	NA	NA	NA
+UPR2011_010	UPR2011_010	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	12.1	Qubit	NA	NA	20161010pl2	07B	NA	NA	NA
+UPR2011_011	UPR2011_011	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	14.1	Qubit	NA	NA	20161010pl2	07C	NA	NA	NA
+UPR2011_012	UPR2011_012	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	9.32	Qubit	NA	NA	20161010pl2	07D	NA	NA	NA
+UPR2011_013	UPR2011_013	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	4.98	Qubit	NA	NA	20161010pl2	07E	NA	NA	NA
+UPR2011_014	UPR2011_014	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	23.8	Qubit	NA	NA	20161010pl2	07F	NA	NA	NA
+UPR2011_015	UPR2011_015	2016	10	10	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	40	14	Qubit	NA	NA	20161010pl2	07G	NA	NA	NA
+KAP2011_004	KAP2011_004	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	41.9	Qubit	1	NA	20161121 Plate1	01A	20161121 Plate1	01A	NA
+KAP2011_008	KAP2011_008	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	12.9	Qubit	1	NA	20161121 Plate1	01B	20161121 Plate1	01B	NA
+UPR2011_019	UPR2011_019	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.428	Qubit	2	NA	20161121 Plate1	01C	20161121 Plate1	01C	NA
+UPR2011_022	UPR2011_022	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.099	Qubit	0	NA	20161121 Plate1	01D	20161121 Plate1	01D	NA
+API2011_002	API2011_002	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	22.1	Qubit	3	NA	20161121 Plate1	01E	20161121 Plate1	01E	NA
+API2011_003	API2011_003	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	1.44	Qubit	3	NA	20161121 Plate1	01F	20161121 Plate1	01F	NA
+API2011_004	API2011_004	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	29.4	Qubit	2	NA	20161121 Plate1	01G	20161121 Plate1	01G	NA
+API2011_006	API2011_006	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	17.9	Qubit	2	NA	20161121 Plate1	01H	20161121 Plate1	01H	NA
+API2011_015	API2011_015	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	18.3	Qubit	2	NA	20161121 Plate1	02A	20161121 Plate1	02A	NA
+API2011_021	API2011_021	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	2.24	Qubit	3	NA	20161121 Plate1	02B	20161121 Plate1	02B	NA
+ATN2011_287	ATN2011_287	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	47.4	Qubit	1	NA	20161121 Plate1	02C	20161121 Plate1	02C	NA
+ATN2011_289	ATN2011_289	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	58	Qubit	1	NA	20161121 Plate1	02D	20161121 Plate1	02D	NA
+ATN2011_293	ATN2011_293	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	51	Qubit	1	NA	20161121 Plate1	02E	20161121 Plate1	02E	NA
+ATN2011_297	ATN2011_297	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	47	Qubit	1	NA	20161121 Plate1	02F	20161121 Plate1	02F	NA
+ATN2011_299	ATN2011_299	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	44.9	Qubit	1	NA	20161121 Plate1	02G	20161121 Plate1	02G	NA
+ATN2011_303	ATN2011_303	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	50	Qubit	1	NA	20161121 Plate1	02H	20161121 Plate1	02H	NA
+BUK2011_005	BUK2011_005	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	50	Qubit	1	NA	20161121 Plate1	03A	20161121 Plate1	03A	NA
+BUK2011_008	BUK2011_008	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	60	Qubit	1	NA	20161121 Plate1	03B	20161121 Plate1	03B	NA
+BUK2011_009	BUK2011_009	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	56	Qubit	1	NA	20161121 Plate1	03C	20161121 Plate1	03C	NA
+DAB2012_001	DAB2012_001	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	11	Qubit	1	NA	20161121 Plate1	03D	20161121 Plate1	03D	NA
+DAB2012_003	DAB2012_003	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	11.6	Qubit	2	NA	20161121 Plate1	03E	20161121 Plate1	03E	NA
+DAB2012_005	DAB2012_005	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	2.7	Qubit	1	NA	20161121 Plate1	03F	20161121 Plate1	03F	NA
+DAB2012_011	DAB2012_011	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	24.1	Qubit	2	NA	20161121 Plate1	03G	20161121 Plate1	03G	NA
+DAB2012_035	DAB2012_035	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	26.6	Qubit	2	NA	20161121 Plate1	03H	20161121 Plate1	03H	NA
+DAB2012_038	DAB2012_038	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	16.6	Qubit	2	NA	20161121 Plate1	04A	20161121 Plate1	04A	NA
+DAB2012_045	DAB2012_045	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.599	Qubit	2	NA	20161121 Plate1	04B	20161121 Plate1	04B	NA
+DAB2012_049a	DAB2012_049a	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	3.23	Qubit	2	NA	20161121 Plate1	04C	20161121 Plate1	04C	NA
+DAB2012_049b	DAB2012_049b	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	8	Qubit	2	NA	20161121 Plate1	04D	20161121 Plate1	04D	NA
+DAB2012_055	DAB2012_055	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	30.9	Qubit	1	NA	20161121 Plate1	04E	20161121 Plate1	04E	NA
+DAB2012_056	DAB2012_056	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	23.4	Qubit	1	NA	20161121 Plate1	04F	20161121 Plate1	04F	NA
+DAB2012_062	DAB2012_062	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	1.88	Qubit	1	NA	20161121 Plate1	04G	20161121 Plate1	04G	NA
+DAB2012_066	DAB2012_066	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	12.7	Qubit	3	NA	20161121 Plate1	04H	20161121 Plate1	04H	NA
+DAB2012_072	DAB2012_072	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	43.3	Qubit	1	NA	20161121 Plate1	05A	20161121 Plate1	05A	NA
+DAB2012_073	DAB2012_073	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	33.8	Qubit	1	NA	20161121 Plate1	05B	20161121 Plate1	05B	NA
+IKE2011_966	IKE2011_966	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	52	Qubit	1	NA	20161121 Plate1	05C	20161121 Plate1	05C	NA
+IKE2011_970	IKE2011_970	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	52	Qubit	1	NA	20161121 Plate1	05D	20161121 Plate1	05D	NA
+IKE2011_972	IKE2011_972	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	52	Qubit	1	NA	20161121 Plate1	05E	20161121 Plate1	05E	NA
+IKE2011_976	IKE2011_976	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	51	Qubit	1	NA	20161121 Plate1	05F	20161121 Plate1	05F	NA
+IKE2011_978	IKE2011_978	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	48.3	Qubit	1	NA	20161121 Plate1	05G	20161121 Plate1	05G	NA
+IKE2011_984	IKE2011_984	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	51	Qubit	1	NA	20161121 Plate1	05H	20161121 Plate1	05H	NA
+ILU2011_003	ILU2011_003	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	19.4	Qubit	3	NA	20161121 Plate1	06A	20161121 Plate1	06A	NA
+ILU2011_004	ILU2011_004	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	8.73	Qubit	2	NA	20161121 Plate1	06B	20161121 Plate1	06B	NA
+ILU2011_005	ILU2011_005	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	19.5	Qubit	1	NA	20161121 Plate1	06C	20161121 Plate1	06C	NA
+ILU2011_006	ILU2011_006	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	5.27	Qubit	1	NA	20161121 Plate1	06D	20161121 Plate1	06D	NA
+ILU2011_007	ILU2011_007	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	21.5	Qubit	2	NA	20161121 Plate1	06E	20161121 Plate1	06E	NA
+ILU2011_009	ILU2011_009	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	15.4	Qubit	1	NA	20161121 Plate1	06F	20161121 Plate1	06F	NA
+ILU2011_010	ILU2011_010	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	28.9	Qubit	1	NA	20161121 Plate1	06G	20161121 Plate1	06G	NA
+ILU2011_011	ILU2011_011	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	29.3	Qubit	1	NA	20161121 Plate1	06H	20161121 Plate1	06H	NA
+ILU2011_012	ILU2011_012	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	5.81	Qubit	2	NA	20161121 Plate1	07A	20161121 Plate1	07A	NA
+ILU2011_014	ILU2011_014	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	12.3	Qubit	1	NA	20161121 Plate1	07B	20161121 Plate1	07B	NA
+ILU2011_019	ILU2011_019	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	26.3	Qubit	1	NA	20161121 Plate1	07C	20161121 Plate1	07C	NA
+ILU2011_028	ILU2011_028	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	18.4	Qubit	2	NA	20161121 Plate1	07D	20161121 Plate1	07D	NA
+ILU2011_030	ILU2011_030	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	19.7	Qubit	1	NA	20161121 Plate1	07E	20161121 Plate1	07E	NA
+ILU2011_033	ILU2011_033	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	17.1	Qubit	1	NA	20161121 Plate1	07F	20161121 Plate1	07F	NA
+ILU2011_034	ILU2011_034	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	20.1	Qubit	2	NA	20161121 Plate1	07G	20161121 Plate1	07G	NA
+ITV2011_628	ITV2011_628	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	50	Qubit	1	NA	20161121 Plate1	07H	20161121 Plate1	07H	NA
+ITV2011_630	ITV2011_630	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	60	Qubit	1	NA	20161121 Plate1	08A	20161121 Plate1	08A	NA
+ITV2011_636	ITV2011_636	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	53	Qubit	1	NA	20161121 Plate1	08B	20161121 Plate1	08B	NA
+ITV2011_642	ITV2011_642	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	51	Qubit	1	NA	20161121 Plate1	08C	20161121 Plate1	08C	NA
+ITV2011_646	ITV2011_646	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	49.5	Qubit	1	NA	20161121 Plate1	08D	20161121 Plate1	08D	NA
+ITV2011_648	ITV2011_648	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	47.4	Qubit	1	NA	20161121 Plate1	08E	20161121 Plate1	08E	NA
+ITV2011_652	ITV2011_652	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	57	Qubit	1	NA	20161121 Plate1	08F	20161121 Plate1	08F	NA
+ITV2011_658	ITV2011_658	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	57	Qubit	1	NA	20161121 Plate1	08G	20161121 Plate1	08G	NA
+ITV2011_660	ITV2011_660	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	47.1	Qubit	1	NA	20161121 Plate1	08H	20161121 Plate1	08H	NA
+ITV2011_672	ITV2011_672	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	48.6	Qubit	1	NA	20161121 Plate1	09A	20161121 Plate1	09A	NA
+NAR2008_006	NAR2008_006	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	46.5	Qubit	1	NA	20161121 Plate1	09B	20161121 Plate1	09B	NA
+NAR2008_020	NAR2008_020	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.312	Qubit	0	NA	20161121 Plate1	09C	20161121 Plate1	09C	NA
+NOR2011_038	NOR2011_038	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	53	Qubit	1	NA	20161121 Plate1	09D	20161121 Plate1	09D	NA
+NOR2011_040	NOR2011_040	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	60	Qubit	1	NA	20161121 Plate1	09E	20161121 Plate1	09E	NA
+NOR2011_042	NOR2011_042	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	55	Qubit	1	NA	20161121 Plate1	09F	20161121 Plate1	09F	NA
+PAA2011_708	PAA2011_708	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	46.5	Qubit	1	NA	20161121 Plate1	09G	20161121 Plate1	09G	NA
+PAA2011_728	PAA2011_728	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	45.2	Qubit	1	NA	20161121 Plate1	09H	20161121 Plate1	09H	NA
+PAA2011_752	PAA2011_752	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	39.5	Qubit	1	NA	20161121 Plate1	10A	20161121 Plate1	10A	NA
+PAA2011_786	PAA2011_786	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	48.6	Qubit	1	NA	20161121 Plate1	10B	20161121 Plate1	10B	NA
+QAQ2010_017	QAQ2010_017	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	27	Qubit	1	NA	20161121 Plate1	10C	20161121 Plate1	10C	NA
+QAQ2010_021	QAQ2010_021	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	51	Qubit	1	NA	20161121 Plate1	10D	20161121 Plate1	10D	NA
+QAQ2010_023	QAQ2010_023	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	47.1	Qubit	1	NA	20161121 Plate1	10E	20161121 Plate1	10E	NA
+QAQ2010_036	QAQ2010_036	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	50	Qubit	1	NA	20161121 Plate1	10F	20161121 Plate1	10F	NA
+QAQ2010_038	QAQ2010_038	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	42.8	Qubit	1	NA	20161121 Plate1	10G	20161121 Plate1	10G	NA
+QAQ2010_059	QAQ2010_059	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	17.6	Qubit	1	NA	20161121 Plate1	10H	20161121 Plate1	10H	NA
+QAQ2010_061	QAQ2010_061	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	54	Qubit	1	NA	20161121 Plate1	11A	20161121 Plate1	11A	NA
+QQL2011_828	QQL2011_828	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	55	Qubit	1	NA	20161121 Plate1	11B	20161121 Plate1	11B	NA
+QQL2011_832	QQL2011_832	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	6.6	Qubit	1	NA	20161121 Plate1	11C	20161121 Plate1	11C	NA
+QQL2011_836	QQL2011_836	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	50	Qubit	1	NA	20161121 Plate1	11D	20161121 Plate1	11D	NA
+QQL2011_838	QQL2011_838	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	48.9	Qubit	1	NA	20161121 Plate1	11E	20161121 Plate1	11E	NA
+QQL2011_840	QQL2011_840	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	47.6	Qubit	1	NA	20161121 Plate1	11F	20161121 Plate1	11F	NA
+QQL2011_842	QQL2011_842	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	49.8	Qubit	1	NA	20161121 Plate1	11G	20161121 Plate1	11G	NA
+QQL2011_844	QQL2011_844	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	45.5	Qubit	1	NA	20161121 Plate1	11H	20161121 Plate1	11H	NA
+QQL2011_846	QQL2011_846	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	52	Qubit	1	NA	20161121 Plate1	12A	20161121 Plate1	12A	NA
+QQL2011_848	QQL2011_848	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	55	Qubit	1	NA	20161121 Plate1	12B	20161121 Plate1	12B	NA
+QQL2011_852	QQL2011_852	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	43.6	Qubit	1	NA	20161121 Plate1	12C	20161121 Plate1	12C	NA
+SIS2011_004	SIS2011_004	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	25	Qubit	2	NA	20161121 Plate1	12D	20161121 Plate1	12D	NA
+SIS2011_014	SIS2011_014	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	44.4	Qubit	2	NA	20161121 Plate1	12E	20161121 Plate1	12E	NA
+SIS2011_036	SIS2011_036	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	5.15	Qubit	3	NA	20161121 Plate1	12F	20161121 Plate1	12F	NA
+SIS2011_051	SIS2011_051	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	21.7	Qubit	2	NA	20161121 Plate1	12G	20161121 Plate1	12G	NA
+SIS2011_066	SIS2011_066	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	15.3	Qubit	3	NA	20161121 Plate1	12H	20161121 Plate1	12H	NA
+KAP2011_009	KAP2011_009	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	25.8	Qubit	1	NA	20161121 Plate2	01A	20161121 Plate2	01A	NA
+KAP2011_007	KAP2011_007	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	31.6	Qubit	1	NA	20161121 Plate2	01B	20161121 Plate2	01B	NA
+UPR2011_023	UPR2011_023	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	25.6	Qubit	2	NA	20161121 Plate2	01C	20161121 Plate2	01C	NA
+UPR2011_027	UPR2011_027	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0	Qubit	0	NA	20161121 Plate2	01D	20161121 Plate2	01D	NA
+API2011_022	API2011_022	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	5.33	Qubit	3	NA	20161121 Plate2	01E	20161121 Plate2	01E	NA
+API2011_023	API2011_023	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	20.2	Qubit	2	NA	20161121 Plate2	01F	20161121 Plate2	01F	NA
+API2011_024	API2011_024	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	4.8	Qubit	3	NA	20161121 Plate2	01G	20161121 Plate2	01G	NA
+API2011_026	API2011_026	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	18.1	Qubit	3	NA	20161121 Plate2	01H	20161121 Plate2	01H	NA
+API2011_044	API2011_044	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.684	Qubit	3	NA	20161121 Plate2	02A	20161121 Plate2	02A	NA
+ATN2011_305	ATN2011_305	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	45.3	Qubit	1	NA	20161121 Plate2	02B	20161121 Plate2	02B	NA
+ATN2011_307	ATN2011_307	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	48.9	Qubit	1	NA	20161121 Plate2	02C	20161121 Plate2	02C	NA
+ATN2011_309	ATN2011_309	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	48.2	Qubit	1	NA	20161121 Plate2	02D	20161121 Plate2	02D	NA
+ATN2011_311	ATN2011_311	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	51	Qubit	1	NA	20161121 Plate2	02E	20161121 Plate2	02E	NA
+ATN2011_313	ATN2011_313	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	50	Qubit	1	NA	20161121 Plate2	02F	20161121 Plate2	02F	NA
+ATN2011_357	ATN2011_357	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	48.1	Qubit	1	NA	20161121 Plate2	02G	20161121 Plate2	02G	NA
+BUK2011_015	BUK2011_015	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	54	Qubit	1	NA	20161121 Plate2	02H	20161121 Plate2	02H	NA
+BUK2011_016	BUK2011_016	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	46.8	Qubit	1	NA	20161121 Plate2	03A	20161121 Plate2	03A	NA
+BUK2011_021	BUK2011_021	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	78.6	Qubit	1	NA	20161121 Plate2	03B	20161121 Plate2	03B	NA
+DAB2012_074	DAB2012_074	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	31.1	Qubit	1	NA	20161121 Plate2	03C	20161121 Plate2	03C	NA
+DAB2012_076	DAB2012_076	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.34	Qubit	3	NA	20161121 Plate2	03D	20161121 Plate2	03D	NA
+DAB2012_078	DAB2012_078	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	28.1	Qubit	2	NA	20161121 Plate2	03E	20161121 Plate2	03E	NA
+DAB2012_081	DAB2012_081	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	5.59	Qubit	2	NA	20161121 Plate2	03F	20161121 Plate2	03F	NA
+DAB2012_082	DAB2012_082	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	28.9	Qubit	2	NA	20161121 Plate2	03G	20161121 Plate2	03G	NA
+DAB2012_084	DAB2012_084	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	31.7	Qubit	1	NA	20161121 Plate2	03H	20161121 Plate2	03H	NA
+DAB2012_086	DAB2012_086	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	37.8	Qubit	3	NA	20161121 Plate2	04A	20161121 Plate2	04A	NA
+DAB2012_091	DAB2012_091	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	29.5	Qubit	3	NA	20161121 Plate2	04B	20161121 Plate2	04B	NA
+DAB2012_102	DAB2012_102	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	40.5	Qubit	2	NA	20161121 Plate2	04C	20161121 Plate2	04C	NA
+DAB2012_124	DAB2012_124	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	6.96	Qubit	1	NA	20161121 Plate2	04D	20161121 Plate2	04D	NA
+DAB2012_129	DAB2012_129	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	42.6	Qubit	1	NA	20161121 Plate2	04E	20161121 Plate2	04E	NA
+DAB2012_130	DAB2012_130	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	23	Qubit	1	NA	20161121 Plate2	04F	20161121 Plate2	04F	NA
+DAB2012_134	DAB2012_134	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	29.2	Qubit	2	NA	20161121 Plate2	04G	20161121 Plate2	04G	NA
+DAB2012_135	DAB2012_135	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	22.2	Qubit	2	NA	20161121 Plate2	04H	20161121 Plate2	04H	NA
+DAB2012_139	DAB2012_139	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	4.62	Qubit	2	NA	20161121 Plate2	05A	20161121 Plate2	05A	NA
+IKE2011_986	IKE2011_986	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	51	Qubit	1	NA	20161121 Plate2	05B	20161121 Plate2	05B	NA
+IKE2011_998	IKE2011_998	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	52	Qubit	1	NA	20161121 Plate2	05C	20161121 Plate2	05C	NA
+IKE2011_000	IKE2011_000	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	52	Qubit	1	NA	20161121 Plate2	05D	20161121 Plate2	05D	NA
+IKE2011_002	IKE2011_002	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	52	Qubit	1	NA	20161121 Plate2	05E	20161121 Plate2	05E	NA
+IKE2011_006	IKE2011_006	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	49.1	Qubit	1	NA	20161121 Plate2	05F	20161121 Plate2	05F	NA
+IKE2011_032	IKE2011_032	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	55	Qubit	1	NA	20161121 Plate2	05G	20161121 Plate2	05G	NA
+ILU2011_038	ILU2011_038	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	22	Qubit	2	NA	20161121 Plate2	05H	20161121 Plate2	05H	NA
+ILU2011_039	ILU2011_039	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	19.1	Qubit	2	NA	20161121 Plate2	06A	20161121 Plate2	06A	NA
+ILU2011_040	ILU2011_040	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	20.2	Qubit	2	NA	20161121 Plate2	06B	20161121 Plate2	06B	NA
+ILU2011_041	ILU2011_041	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.915	Qubit	2	NA	20161121 Plate2	06C	20161121 Plate2	06C	NA
+ILU2011_042	ILU2011_042	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.948	Qubit	2	NA	20161121 Plate2	06D	20161121 Plate2	06D	NA
+ILU2011_044	ILU2011_044	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.704	Qubit	2	NA	20161121 Plate2	06E	20161121 Plate2	06E	NA
+ILU2011_045	ILU2011_045	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	23.4	Qubit	2	NA	20161121 Plate2	06F	20161121 Plate2	06F	NA
+ILU2011_046	ILU2011_046	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.625	Qubit	2	NA	20161121 Plate2	06G	20161121 Plate2	06G	NA
+ILU2011_047	ILU2011_047	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	12.3	Qubit	3	NA	20161121 Plate2	06H	20161121 Plate2	06H	NA
+ILU2011_048	ILU2011_048	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	5.69	Qubit	3	NA	20161121 Plate2	07A	20161121 Plate2	07A	NA
+ILU2011_049	ILU2011_049	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	8.64	Qubit	2	NA	20161121 Plate2	07B	20161121 Plate2	07B	NA
+ILU2011_050	ILU2011_050	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	24.8	Qubit	2	NA	20161121 Plate2	07C	20161121 Plate2	07C	NA
+ILU2011_065	ILU2011_065	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	18.3	Qubit	2	NA	20161121 Plate2	07D	20161121 Plate2	07D	NA
+ILU2011_078	ILU2011_078	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	5.77	Qubit	3	NA	20161121 Plate2	07E	20161121 Plate2	07E	NA
+ILU2011_096	ILU2011_096	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	12	Qubit	3	NA	20161121 Plate2	07F	20161121 Plate2	07F	NA
+ITV2011_674	ITV2011_674	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	60	Qubit	1	NA	20161121 Plate2	07G	20161121 Plate2	07G	NA
+ITV2011_676	ITV2011_676	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	59	Qubit	1	NA	20161121 Plate2	07H	20161121 Plate2	07H	NA
+ITV2011_678	ITV2011_678	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	91.6	Qubit	1	NA	20161121 Plate2	08A	20161121 Plate2	08A	NA
+ITV2011_682	ITV2011_682	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	55	Qubit	1	NA	20161121 Plate2	08B	20161121 Plate2	08B	NA
+ITV2011_686	ITV2011_686	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	98.8	Qubit	1	NA	20161121 Plate2	08C	20161121 Plate2	08C	NA
+ITV2011_690	ITV2011_690	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	99.8	Qubit	1	NA	20161121 Plate2	08D	20161121 Plate2	08D	NA
+ITV2011_708	ITV2011_708	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	104	Qubit	1	NA	20161121 Plate2	08E	20161121 Plate2	08E	NA
+ITV2011_714	ITV2011_714	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	116	Qubit	1	NA	20161121 Plate2	08F	20161121 Plate2	08F	NA
+ITV2011_722	ITV2011_722	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	58	Qubit	1	NA	20161121 Plate2	08G	20161121 Plate2	08G	NA
+ITV2011_782	ITV2011_782	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	59	Qubit	1	NA	20161121 Plate2	08H	20161121 Plate2	08H	NA
+NAR2008_032	NAR2008_032	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.692	Qubit	0	NA	20161121 Plate2	09A	20161121 Plate2	09A	NA
+NAR2008_034	NAR2008_034	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	37.1	Qubit	2	NA	20161121 Plate2	09B	20161121 Plate2	09B	NA
+NAR2008_036	NAR2008_036	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	28.5	Qubit	2	NA	20161121 Plate2	09C	20161121 Plate2	09C	NA
+NOR2011_044	NOR2011_044	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	58	Qubit	1	NA	20161121 Plate2	09D	20161121 Plate2	09D	NA
+NOR2011_126	NOR2011_126	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	95.8	Qubit	1	NA	20161121 Plate2	09E	20161121 Plate2	09E	NA
+PAA2011_824	PAA2011_824	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	50	Qubit	1	NA	20161121 Plate2	09F	20161121 Plate2	09F	NA
+PAA2011_826	PAA2011_826	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	57	Qubit	1	NA	20161121 Plate2	09G	20161121 Plate2	09G	NA
+PAA2011_854	PAA2011_854	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	56	Qubit	1	NA	20161121 Plate2	09H	20161121 Plate2	09H	NA
+PAA2011_856	PAA2011_856	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	47.5	Qubit	1	NA	20161121 Plate2	10A	20161121 Plate2	10A	NA
+PAA2011_858	PAA2011_858	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	50	Qubit	1	NA	20161121 Plate2	10B	20161121 Plate2	10B	NA
+QAQ2010_062	QAQ2010_062	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	27.2	Qubit	1	NA	20161121 Plate2	10C	20161121 Plate2	10C	NA
+QAQ2010_072	QAQ2010_072	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	49	Qubit	1	NA	20161121 Plate2	10D	20161121 Plate2	10D	NA
+QAQ2010_073	QAQ2010_073	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	37.1	Qubit	1	NA	20161121 Plate2	10E	20161121 Plate2	10E	NA
+QAQ2010_074	QAQ2010_074	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	43.7	Qubit	1	NA	20161121 Plate2	10F	20161121 Plate2	10F	NA
+QAQ2010_086	QAQ2010_086	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	28.5	Qubit	1	NA	20161121 Plate2	10G	20161121 Plate2	10G	NA
+QAQ2010_100	QAQ2010_100	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	40.9	Qubit	1	NA	20161121 Plate2	10H	20161121 Plate2	10H	NA
+QQL2011_860	QQL2011_860	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	57	Qubit	1	NA	20161121 Plate2	11A	20161121 Plate2	11A	NA
+QQL2011_864	QQL2011_864	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	56	Qubit	1	NA	20161121 Plate2	11B	20161121 Plate2	11B	NA
+QQL2011_876	QQL2011_876	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	54	Qubit	1	NA	20161121 Plate2	11C	20161121 Plate2	11C	NA
+QQL2011_878	QQL2011_878	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	90	Qubit	1	NA	20161121 Plate2	11D	20161121 Plate2	11D	NA
+QQL2011_884	QQL2011_884	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	91.6	Qubit	1	NA	20161121 Plate2	11E	20161121 Plate2	11E	NA
+QQL2011_886	QQL2011_886	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	90.8	Qubit	1	NA	20161121 Plate2	11F	20161121 Plate2	11F	NA
+QQL2011_888	QQL2011_888	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	59	Qubit	1	NA	20161121 Plate2	11G	20161121 Plate2	11G	NA
+QQL2011_892	QQL2011_892	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	52	Qubit	1	NA	20161121 Plate2	11H	20161121 Plate2	11H	NA
+QQL2011_894	QQL2011_894	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	51	Qubit	1	NA	20161121 Plate2	12A	20161121 Plate2	12A	NA
+QQL2011_896	QQL2011_896	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	53	Qubit	1	NA	20161121 Plate2	12B	20161121 Plate2	12B	NA
+SIS2011_068	SIS2011_068	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	23.6	Qubit	3	NA	20161121 Plate2	12C	20161121 Plate2	12C	NA
+SIS2011_071	SIS2011_071	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	1.57	Qubit	2	NA	20161121 Plate2	12D	20161121 Plate2	12D	NA
+SIS2011_075	SIS2011_075	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	15.5	Qubit	3	NA	20161121 Plate2	12E	20161121 Plate2	12E	NA
+SIS2011_077	SIS2011_077	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	6.68	Qubit	2	NA	20161121 Plate2	12F	20161121 Plate2	12F	NA
+SIS2011_080	SIS2011_080	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	4.02	Qubit	2	NA	20161121 Plate2	12G	20161121 Plate2	12G	NA
+SIS2011_084	SIS2011_084	2016	11	21	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	16.2	Qubit	3	NA	20161121 Plate2	12H	20161121 Plate2	12H	NA
+BUK2011_001	BUK2011_001	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	26	Qubit	1	NA	20161129 Plate1	01A	20170119norm1	01A	NA
+BUK2011_002	BUK2011_002	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	32.5	Qubit	1	NA	20161129 Plate1	01B	20170119norm1	01B	NA
+BUK2011_006	BUK2011_006	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	14.2	Qubit	1	NA	20161129 Plate1	01C	20170119norm1	01C	NA
+BUK2011_007	BUK2011_007	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	29.8	Qubit	1	NA	20161129 Plate1	01D	20170119norm1	01D	NA
+BUK2011_010	BUK2011_010	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	14.2	Qubit	1	NA	20161129 Plate1	01E	20170119norm1	01E	NA
+BUK2011_011	BUK2011_011	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	27.8	Qubit	1	NA	20161129 Plate1	01F	20170119norm1	01F	NA
+BUK2011_012	BUK2011_012	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	12.4	Qubit	1	NA	20161129 Plate1	01G	20170119norm1	01G	NA
+BUK2011_018	BUK2011_018	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	14	Qubit	1	NA	20161129 Plate1	01H	20170119norm1	02A	NA
+BUK2011_027	BUK2011_027	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	10.2	Qubit	1	NA	20161129 Plate1	02A	20170119norm1	02B	NA
+BUK2011_029	BUK2011_029	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	12.9	Qubit	1	NA	20161129 Plate1	02B	20170119norm1	02C	NA
+ATP2011_101	ATP2011_101	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	1.02	Qubit	2	NA	20161129 Plate1	02C	20170119norm1	02D	NA
+ATP2011_102	ATP2011_102	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.619	Qubit	2	NA	20161129 Plate1	02D	20170119norm1	02E	NA
+ATP2011_103	ATP2011_103	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.332	Qubit	NA	NA	20161129 Plate1	02E	NA	NA	NA
+ATP2011_104	ATP2011_104	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	6.11	Qubit	3	NA	20161129 Plate1	02F	20170119norm2	07C	NA
+ATP2011_105	ATP2011_105	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.16	Qubit	NA	NA	20161129 Plate1	02G	NA	NA	NA
+ATP2011_106	ATP2011_106	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.666	Qubit	3	NA	20161129 Plate1	02H	20170119norm2	07D	NA
+ATP2011_107	ATP2011_107	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.214	Qubit	NA	NA	20161129 Plate1	03A	NA	NA	NA
+ATP2011_108	ATP2011_108	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.489	Qubit	NA	NA	20161129 Plate1	03B	NA	NA	NA
+ATP2011_109	ATP2011_109	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.191	Qubit	NA	NA	20161129 Plate1	03C	NA	NA	NA
+ATP2011_110	ATP2011_110	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	1.47	Qubit	1	NA	20161129 Plate1	03D	20170119norm1	02F	NA
+ATP2011_119	ATP2011_119	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.222	Qubit	NA	NA	20161129 Plate1	03E	NA	NA	NA
+ATP2011_120	ATP2011_120	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	2.06	Qubit	1	NA	20161129 Plate1	03F	20170119norm1	02G	NA
+ATP2011_128	ATP2011_128	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.383	Qubit	NA	NA	20161129 Plate1	03G	NA	NA	NA
+ATP2011_121	ATP2011_121	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.703	Qubit	2	NA	20161129 Plate1	03H	20170119norm1	03A	NA
+ATP2011_122	ATP2011_122	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.415	Qubit	NA	NA	20161129 Plate1	04A	NA	NA	NA
+UUM2010_001	UUM2010_001	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	1.26	Qubit	3	NA	20161129 Plate1	04B	20170119norm2	07E	NA
+UUM2010_002	UUM2010_002	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.192	Qubit	NA	NA	20161129 Plate1	04C	NA	NA	NA
+UUM2010_003	UUM2010_003	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	1.57	Qubit	3	NA	20161129 Plate1	04D	20170119norm2	07F	NA
+UUM2010_009	UUM2010_009	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.371	Qubit	NA	NA	20161129 Plate1	04E	NA	NA	NA
+UUM2010_011	UUM2010_011	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	55	Qubit	3	NA	20161129 Plate1	04F	20170119norm2	07G	NA
+UUM2010_014	UUM2010_014	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.916	Qubit	1	NA	20161129 Plate1	04G	20170119norm1	03B	NA
+UUM2010_020	UUM2010_020	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.137	Qubit	NA	NA	20161129 Plate1	04H	NA	NA	NA
+UUM2010_026	UUM2010_026	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	26.3	Qubit	3	NA	20161129 Plate1	05A	20170119norm2	08A	NA
+UUM2010_030	UUM2010_030	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.673	Qubit	3	NA	20161129 Plate1	05B	20170119norm2	08B	NA
+UUM2010_032	UUM2010_032	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.141	Qubit	NA	NA	20161129 Plate1	05C	NA	NA	NA
+UUM2010_036	UUM2010_036	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	20.5	Qubit	1	NA	20161129 Plate1	05D	20170119norm1	03C	NA
+UUM2010_038	UUM2010_038	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	58	Qubit	1	NA	20161129 Plate1	05E	20170119norm1	03D	NA
+UUM2010_040	UUM2010_040	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.138	Qubit	NA	NA	20161129 Plate1	05F	NA	NA	NA
+UUM2010_045	UUM2010_045	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0	Qubit	NA	NA	20161129 Plate1	05G	NA	NA	NA
+UUM2010_046	UUM2010_046	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.359	Qubit	NA	NA	20161129 Plate1	05H	NA	NA	NA
+KNG2011_373	KNG2011_373	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	15.9	Qubit	1	NA	20161129 Plate1	06A	20170119norm1	03E	NA
+KNG2011_375	KNG2011_375	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	4.07	Qubit	1	NA	20161129 Plate1	06B	20170119norm1	03F	NA
+KNG2011_377	KNG2011_377	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	5.42	Qubit	1	NA	20161129 Plate1	06C	20170119norm1	03G	NA
+KNG2011_379	KNG2011_379	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	14.8	Qubit	1	NA	20161129 Plate1	06D	20170119norm1	04A	NA
+KNG2011_383	KNG2011_383	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	10.5	Qubit	1	NA	20161129 Plate1	06E	20170119norm1	04B	NA
+KNG2011_385	KNG2011_385	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	27.2	Qubit	1	NA	20161129 Plate1	06F	20170119norm1	04C	NA
+KNG2011_387	KNG2011_387	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	33.3	Qubit	1	NA	20161129 Plate1	06G	20170119norm1	04D	NA
+KNG2011_391	KNG2011_391	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	12.4	Qubit	1	NA	20161129 Plate1	06H	20170119norm1	04E	NA
+KNG2011_393	KNG2011_393	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	6.06	Qubit	1	NA	20161129 Plate1	07A	20170119norm1	04F	NA
+KNG2011_397	KNG2011_397	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	4.5	Qubit	1	NA	20161129 Plate1	07B	20170119norm1	04G	NA
+KNG2011_399	KNG2011_399	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	11	Qubit	1	NA	20161129 Plate1	07C	20170119norm1	05A	NA
+KNG2011_401	KNG2011_401	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	4.78	Qubit	1	NA	20161129 Plate1	07D	20170119norm1	05B	NA
+KNG2011_405	KNG2011_405	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	5.74	Qubit	1	NA	20161129 Plate1	07E	20170119norm1	05C	NA
+KNG2011_407	KNG2011_407	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	6.56	Qubit	1	NA	20161129 Plate1	07F	20170119norm1	05D	NA
+KNG2011_411	KNG2011_411	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	9.4	Qubit	1	NA	20161129 Plate1	07G	20170119norm1	05E	NA
+NAR2008_001	NAR2008_001	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	18.7	Qubit	1	NA	20161129 Plate1	07H	20170119norm1	05F	NA
+NAR2008_002	NAR2008_002	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	18.5	Qubit	1	NA	20161129 Plate1	08A	20170119norm1	05G	NA
+NAR2008_003	NAR2008_003	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.744	Qubit	2	NA	20161129 Plate1	08B	20170119norm1	06A	NA
+NAR2008_014	NAR2008_014	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	1.08	Qubit	2	NA	20161129 Plate1	08C	20170119norm1	06B	NA
+NAR2008_017	NAR2008_017	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.187	Qubit	NA	NA	20161129 Plate1	08D	NA	NA	NA
+NAR2008_026	NAR2008_026	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0	Qubit	NA	NA	20161129 Plate1	08E	NA	NA	NA
+NAR2008_030	NAR2008_030	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.124	Qubit	NA	NA	20161129 Plate1	08F	NA	NA	NA
+NAR2008_031	NAR2008_031	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.07	Qubit	NA	NA	20161129 Plate1	08G	NA	NA	NA
+NAR2008_032b	NAR2008_032b	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.316	Qubit	NA	NA	20161129 Plate1	08H	NA	NA	NA
+NAR2008_036b	NAR2008_036b	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0	Qubit	NA	NA	20161129 Plate1	09A	NA	NA	NA
+NAR2008_041	NAR2008_041	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0	Qubit	NA	NA	20161129 Plate1	09B	NA	NA	NA
+NAR2008_049	NAR2008_049	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0	Qubit	NA	NA	20161129 Plate1	09C	NA	NA	NA
+NAR2008_021	NAR2008_021	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.362	Qubit	NA	NA	20161129 Plate1	09D	NA	NA	NA
+NAR2008_022	NAR2008_022	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0	Qubit	NA	NA	20161129 Plate1	09E	NA	NA	NA
+NAR2008_023	NAR2008_023	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	4.44	Qubit	2	NA	20161129 Plate1	09F	20170119norm1	06C	NA
+ILU2011_037	ILU2011_037	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	1.93	Qubit	3	NA	20161129 Plate1	09G	20170119norm1	10H	NA
+ILU2011_036	ILU2011_036	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.686	Qubit	NA	NA	20161129 Plate1	09H	NA	NA	NA
+ILU2011_035	ILU2011_035	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.07	Qubit	NA	NA	20161129 Plate1	10A	NA	NA	NA
+DAB2012_084b	DAB2012_084b	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.602	Qubit	NA	NA	20161129 Plate1	10B	NA	NA	NA
+DAB2012_087	DAB2012_087	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.615	Qubit	NA	NA	20161129 Plate1	10C	NA	NA	NA
+DAB2012_089	DAB2012_089	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.679	Qubit	NA	NA	20161129 Plate1	10D	NA	NA	NA
+BUK2011_041	BUK2011_041	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	28.9	Qubit	1	NA	20161129 Plate2	01A	20170119norm1	06D	NA
+BUK2011_045	BUK2011_045	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	26.4	Qubit	1	NA	20161129 Plate2	01B	20170119norm1	06E	NA
+BUK2011_048	BUK2011_048	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	10.1	Qubit	1	NA	20161129 Plate2	01C	20170119norm1	06F	NA
+BUK2011_051	BUK2011_051	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	14.7	Qubit	1	NA	20161129 Plate2	01D	20170119norm1	06G	NA
+BUK2011_053	BUK2011_053	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	25.3	Qubit	1	NA	20161129 Plate2	01E	20170119norm1	07A	NA
+BUK2011_056	BUK2011_056	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	9.59	Qubit	1	NA	20161129 Plate2	01F	20170119norm1	07B	NA
+BUK2011_057	BUK2011_057	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	14.8	Qubit	1	NA	20161129 Plate2	01G	20170119norm1	07C	NA
+BUK2011_059	BUK2011_059	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	12.7	Qubit	1	NA	20161129 Plate2	01H	20170119norm1	07D	NA
+BUK2011_060	BUK2011_060	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	17.6	Qubit	1	NA	20161129 Plate2	02A	20170119norm1	07E	NA
+ATP2011_123	ATP2011_123	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	1.39	Qubit	2	NA	20161129 Plate2	02B	20170119norm1	07F	NA
+ATP2011_124	ATP2011_124	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	7.3	Qubit	2	NA	20161129 Plate2	02C	20170119norm1	07G	NA
+ATP2011_125	ATP2011_125	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	17.7	Qubit	1	NA	20161129 Plate2	02D	20170119norm1	08A	NA
+ATP2011_130	ATP2011_130	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	5.55	Qubit	1	NA	20161129 Plate2	02E	20170119norm1	08B	NA
+ATP2011_131	ATP2011_131	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.668	Qubit	2	NA	20161129 Plate2	02F	20170119norm1	08C	NA
+ATP2011_132	ATP2011_132	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	1.37	Qubit	1	NA	20161129 Plate2	02G	20170119norm1	08D	NA
+ATP2011_133	ATP2011_133	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	17.9	Qubit	1	NA	20161129 Plate2	02H	20170119norm1	08E	NA
+ATP2011_134	ATP2011_134	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.102	Qubit	NA	NA	20161129 Plate2	03A	NA	NA	NA
+ATP2011_135	ATP2011_135	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.392	Qubit	NA	NA	20161129 Plate2	03B	NA	NA	NA
+ATP2011_136	ATP2011_136	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	12	Qubit	1	NA	20161129 Plate2	03C	20170119norm1	08F	NA
+ATP2011_137	ATP2011_137	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.113	Qubit	NA	NA	20161129 Plate2	03D	NA	NA	NA
+ATP2011_138	ATP2011_138	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.088	Qubit	NA	NA	20161129 Plate2	03E	NA	NA	NA
+ATP2011_139	ATP2011_139	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.934	Qubit	2	NA	20161129 Plate2	03F	20170119norm1	08G	NA
+ATP2011_140	ATP2011_140	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.114	Qubit	NA	NA	20161129 Plate2	03G	NA	NA	NA
+ATP2011_141	ATP2011_141	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	5.95	Qubit	1	NA	20161129 Plate2	03H	20170119norm1	09A	NA
+UUM2010_054	UUM2010_054	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	1.08	Qubit	2	NA	20161129 Plate2	04A	20170119norm1	09B	NA
+UUM2010_057	UUM2010_057	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0	Qubit	NA	NA	20161129 Plate2	04B	NA	NA	NA
+UUM2010_068	UUM2010_068	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	5.68	Qubit	1	NA	20161129 Plate2	04C	20170119norm1	09C	NA
+UUM2010_069	UUM2010_069	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	2.49	Qubit	2	NA	20161129 Plate2	04D	20170119norm1	09D	NA
+UUM2010_073	UUM2010_073	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	13.8	Qubit	1	NA	20161129 Plate2	04E	20170119norm1	09E	NA
+UUM2010_074	UUM2010_074	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0	Qubit	NA	NA	20161129 Plate2	04F	NA	NA	NA
+UUM2010_075	UUM2010_075	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	5.92	Qubit	1	NA	20161129 Plate2	04G	20170119norm1	09F	NA
+UUM2010_080	UUM2010_080	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	22.7	Qubit	1	NA	20161129 Plate2	04H	20170119norm1	09G	NA
+UUM2010_082	UUM2010_082	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.2	Qubit	NA	NA	20161129 Plate2	05A	NA	NA	NA
+UUM2010_084	UUM2010_084	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	5.49	Qubit	2	NA	20161129 Plate2	05B	20170119norm1	10A	NA
+UUM2010_085	UUM2010_085	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	2.03	Qubit	2	NA	20161129 Plate2	05C	20170119norm1	10B	NA
+UUM2010_087	UUM2010_087	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	8.05	Qubit	2	NA	20161129 Plate2	05D	20170119norm1	10C	NA
+UUM2010_095	UUM2010_095	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.962	Qubit	2	NA	20161129 Plate2	05E	20170119norm1	10D	NA
+UUM2010_096	UUM2010_096	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	59	Qubit	1	NA	20161129 Plate2	05F	20170119norm1	10E	NA
+UUM2010_098	UUM2010_098	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	58	Qubit	1	NA	20161129 Plate2	05G	20170119norm1	10F	NA
+KNG2011_413	KNG2011_413	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	14.5	Qubit	1	NA	20161129 Plate2	05H	20170119norm1	10G	NA
+KNG2011_415	KNG2011_415	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	6.96	Qubit	1	NA	20161129 Plate2	06A	20170119norm1	11A	NA
+KNG2011_417	KNG2011_417	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	9.79	Qubit	1	NA	20161129 Plate2	06B	20170119norm1	11B	NA
+KNG2011_421	KNG2011_421	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	7.15	Qubit	1	NA	20161129 Plate2	06C	20170119norm1	11C	NA
+KNG2011_423	KNG2011_423	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	6.55	Qubit	1	NA	20161129 Plate2	06D	20170119norm1	11D	NA
+KNG2011_427	KNG2011_427	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	4.49	Qubit	1	NA	20161129 Plate2	06E	20170119norm1	11E	NA
+KNG2011_429	KNG2011_429	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	4.53	Qubit	1	NA	20161129 Plate2	06F	20170119norm1	11F	NA
+KNG2011_431	KNG2011_431	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	4.18	Qubit	1	NA	20161129 Plate2	06G	20170119norm1	11G	NA
+KNG2011_433	KNG2011_433	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.875	Qubit	1	NA	20161129 Plate2	06H	20170119norm1	12A	NA
+KNG2011_435	KNG2011_435	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	10.4	Qubit	1	NA	20161129 Plate2	07A	20170119norm1	12B	NA
+KNG2011_437	KNG2011_437	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	10.4	Qubit	1	NA	20161129 Plate2	07B	20170119norm1	12C	NA
+KNG2011_439	KNG2011_439	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	14.7	Qubit	1	NA	20161129 Plate2	07C	20170119norm1	12D	NA
+KNG2011_441	KNG2011_441	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	2.8	Qubit	1	NA	20161129 Plate2	07D	20170119norm1	12E	NA
+KNG2011_489	KNG2011_489	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	8.18	Qubit	1	NA	20161129 Plate2	07E	20170119norm1	12F	NA
+KNG2011_497	KNG2011_497	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	20.1	Qubit	1	NA	20161129 Plate2	07F	20170119norm1	12G	NA
+NAR2008_028	NAR2008_028	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.748	Qubit	3	NA	20161129 Plate2	07G	20170119norm2	08C	NA
+NAR2008_029	NAR2008_029	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.635	Qubit	3	NA	20161129 Plate2	07H	20170119norm2	08D	NA
+NAR2008_044	NAR2008_044	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	3.14	Qubit	3	NA	20161129 Plate2	08A	20170119norm2	08E	NA
+NAR2008_045	NAR2008_045	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.094	Qubit	NA	NA	20161129 Plate2	08B	NA	NA	NA
+NAR2008_050	NAR2008_050	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	2.78	Qubit	3	NA	20161129 Plate2	08C	20170119norm2	08F	NA
+NAR2008_051	NAR2008_051	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	8.82	Qubit	3	NA	20161129 Plate2	08D	20170119norm2	08G	NA
+NAR2008_052	NAR2008_052	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.471	Qubit	NA	NA	20161129 Plate2	08E	NA	NA	NA
+NAR2008_053	NAR2008_053	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	4.22	Qubit	3	NA	20161129 Plate2	08F	20170119norm2	09A	NA
+NAR2008_054	NAR2008_054	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.395	Qubit	NA	NA	20161129 Plate2	08G	NA	NA	NA
+NAR2008_055	NAR2008_055	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.489	Qubit	NA	NA	20161129 Plate2	08H	NA	NA	NA
+NAR2008_018	NAR2008_018	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0	Qubit	NA	NA	20161129 Plate2	09A	NA	NA	NA
+NAR2008_019	NAR2008_019	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	1.25	Qubit	3	NA	20161129 Plate2	09B	20170119norm2	09B	NA
+NAR2008_020b	NAR2008_020b	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.106	Qubit	NA	NA	20161129 Plate2	09C	NA	NA	NA
+NAR2008_024	NAR2008_024	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.774	Qubit	3	NA	20161129 Plate2	09D	20170119norm2	09C	NA
+NAR2008_025	NAR2008_025	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.247	Qubit	NA	NA	20161129 Plate2	09E	NA	NA	NA
+ILU2011_031	ILU2011_031	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	1.22	Qubit	1	NA	20161129 Plate2	09H	20170119norm1	08H	NA
+DAB2012_091b	DAB2012_091b	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	1.53	Qubit	2	NA	20161129 Plate2	10A	20170119norm2	01A	NA
+DAB2012_094	DAB2012_094	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	3.07	Qubit	1	NA	20161129 Plate2	10B	20170119norm2	01B	NA
+DAB2012_096	DAB2012_096	2016	11	29	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.17	Qubit	NA	NA	20161129 Plate2	10C	NA	NA	NA
+ATP2011_111	ATP2011_111	2017	11	12	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	32.3	Qubit	1	NA	20171112plate	01A	20170119norm2	01C	NA
+ATP2011_112	ATP2011_112	2017	11	12	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	18.3	Qubit	3	NA	20171112plate	01B	20170119norm2	09D	NA
+ATP2011_113	ATP2011_113	2017	11	12	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	19.7	Qubit	3	NA	20171112plate	01C	20170119norm2	09E	NA
+ATP2011_114	ATP2011_114	2017	11	12	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	6.25	Qubit	2	NA	20171112plate	01D	20170119norm2	01D	NA
+ATP2011_115	ATP2011_115	2017	11	12	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	8.76	Qubit	2	NA	20171112plate	01E	20170119norm2	01E	NA
+ATP2011_116	ATP2011_116	2017	11	12	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	6.87	Qubit	3	NA	20171112plate	01F	20170119norm2	09F	NA
+ATP2011_117	ATP2011_117	2017	11	12	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	19	Qubit	3	NA	20171112plate	01G	20170119norm2	09G	NA
+ATP2011_118	ATP2011_118	2017	11	12	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	18.6	Qubit	3	NA	20171112plate	01H	20170119norm2	10A	NA
+ATP2011_126	ATP2011_126	2017	11	12	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	9.05	Qubit	3	NA	20171112plate	02A	20170119norm2	10B	NA
+ATP2011_127	ATP2011_127	2017	11	12	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	13.7	Qubit	2	NA	20171112plate	02B	20170119norm2	01F	NA
+ATP2011_129	ATP2011_129	2017	11	12	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	17.6	Qubit	2	NA	20171112plate	02C	20170119norm2	01G	NA
+UUM2010_055	UUM2010_055	2017	11	12	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	21.2	Qubit	3	NA	20171112plate	02D	20170119norm2	10C	NA
+UUM2010_023	UUM2010_023	2017	11	12	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	42.7	Qubit	1	NA	20171112plate	02E	20170119norm2	02A	NA
+UUM2010_044	UUM2010_044	2017	11	12	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	32.3	Qubit	1	NA	20171112plate	02F	20170119norm2	02B	NA
+UUM2010_048	UUM2010_048	2017	11	12	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	38	Qubit	1	NA	20171112plate	02G	20170119norm2	02C	NA
+UUM2010_064	UUM2010_064	2017	11	12	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	23.8	Qubit	3	NA	20171112plate	02H	20170119norm2	10D	NA
+NAR2008_027	NAR2008_027	2017	11	12	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	22.1	Qubit	3	NA	20171112plate	03A	20170119norm2	10E	NA
+NAR2008_033	NAR2008_033	2017	11	12	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	0.145	Qubit	NA	NA	20171112plate	03B	NA	NA	NA
+NAR2008_035	NAR2008_035	2017	11	12	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	16.1	Qubit	3	NA	20171112plate	03C	20170119norm2	10F	NA
+NAR2008_039	NAR2008_039	2017	11	12	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	4.1	Qubit	3	NA	20171112plate	03D	20170119norm2	10G	NA
+NAR2008_040	NAR2008_040	2017	11	12	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	15.3	Qubit	3	NA	20171112plate	03E	20170119norm2	11A	NA
+NAR2008_042	NAR2008_042	2017	11	12	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	6.74	Qubit	3	NA	20171112plate	03F	20170119norm2	11B	NA
+NAR2008_043	NAR2008_043	2017	11	12	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	21.1	Qubit	3	NA	20171112plate	03G	20170119norm2	11C	NA
+NAR2008_047	NAR2008_047	2017	11	12	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	1.31	Qubit	3	NA	20171112plate	03H	20170119norm2	11D	NA
+ILU2011_015	ILU2011_015	2017	11	12	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	23.6	Qubit	1	NA	20171112plate	04A	20170119norm1	01H	NA
+ILU2011_017	ILU2011_017	2017	11	12	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	22	Qubit	3	NA	20171112plate	04B	20170119norm1	02H	NA
+ILU2011_023	ILU2011_023	2017	11	12	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	24.6	Qubit	1	NA	20171112plate	04C	20170119norm2	02D	NA
+ILU2011_024	ILU2011_024	2017	11	12	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	19.5	Qubit	2	NA	20171112plate	04D	20170119norm1	03H	NA
+ILU2011_025	ILU2011_025	2017	11	12	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	19.8	Qubit	1	NA	20171112plate	04E	20170119norm1	04H	NA
+ILU2011_026	ILU2011_026	2017	11	12	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	5.98	Qubit	1	NA	20171112plate	04F	20170119norm1	05H	NA
+ILU2011_027	ILU2011_027	2017	11	12	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	23.3	Qubit	1	NA	20171112plate	04G	20170119norm1	06H	NA
+ILU2011_029	ILU2011_029	2017	11	12	NA	Qiagen with AMPure purification of an aliquot	NA	Harmony	Tris HCl, pH 7.5	NA	5.58	Qubit	1	NA	20171112plate	04H	20170119norm1	07H	NA
+GRD2011_039	GRD2011_039	2016	10	6	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	12.6	Qubit	1	GRD2011_039	NA	NA	20170119norm2	02E	NA
+GRD2011_049	GRD2011_049	2016	10	6	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	14.9	Qubit	1	GRD2011_049	NA	NA	20170119norm2	02F	NA
+GRD2011_047	GRD2011_047	2016	10	6	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	44.7	Qubit	1	GRD2011_047	NA	NA	20170119norm2	02G	NA
+GRD2011_127	GRD2011_127	2016	10	6	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	50	Qubit	1	GRD2011_127	NA	NA	20170119norm2	03A	NA
+GRD2011_179	GRD2011_179	2016	10	6	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	60	Qubit	1	GRD2011_179	NA	NA	20170119norm2	03B	NA
+GRD2011_187	GRD2011_187	2016	10	6	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	121	Qubit	1	GRD2011_187	NA	NA	20170119norm2	03C	NA
+KAP2011_033	KAP2011_033	2016	9	21	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	75	4.32	Qubit	1	KAP2011_033	NA	NA	20170119norm2	03D	NA
+UPR2011_004	UPR2011_004	2016	10	6	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	29.3	Qubit	2	UPR2011_004	NA	NA	20170119norm2	03E	NA
+UPR2011_002	UPR2011_002	2016	10	6	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	20.1	Qubit	3	UPR2011_002	NA	NA	20170119norm2	06F	NA
+UPR2011_001	UPR2011_001	2016	10	6	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	26	Qubit	3	UPR2011_001	NA	NA	20170119norm2	06G	NA
+IS911_001	IS911_001	2017	4	18	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	33.1	Qubit	NA	NA	2017-04-18-pl1a	01A	NA	NA	NA
+IS911_002	IS911_002	2017	4	18	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	33.4	Qubit	NA	NA	2017-04-18-pl1a	01B	NA	NA	NA
+IS911_003	IS911_003	2017	4	18	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	38.1	Qubit	NA	NA	2017-04-18-pl1a	01C	NA	NA	NA
+IS911_004	IS911_004	2017	4	18	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	42.2	Qubit	NA	NA	2017-04-18-pl1a	01D	NA	NA	NA
+IS911_005	IS911_005	2017	4	18	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	38.5	Qubit	NA	NA	2017-04-18-pl1a	01E	NA	NA	NA
+IS911_006	IS911_006	2017	4	18	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	39.5	Qubit	NA	NA	2017-04-18-pl1a	01F	NA	NA	NA
+IS911_007	IS911_007	2017	4	18	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	14.2	Qubit	NA	NA	2017-04-18-pl1a	01G	NA	NA	NA
+IS911_008	IS911_008	2017	4	18	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	40.9	Qubit	NA	NA	2017-04-18-pl1a	01H	NA	NA	NA
+IS911_009	IS911_009	2017	4	18	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	20.7	Qubit	NA	NA	2017-04-18-pl1a	02A	NA	NA	NA
+IS911_010	IS911_010	2017	4	18	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	42	Qubit	NA	NA	2017-04-18-pl1a	02B	NA	NA	NA
+IS911_011	IS911_011	2017	4	18	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	40.1	Qubit	NA	NA	2017-04-18-pl1a	02C	NA	NA	NA
+IS911_012	IS911_012	2017	4	18	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	34.2	Qubit	NA	NA	2017-04-18-pl1a	02D	NA	NA	NA
+IS911_013	IS911_013	2017	4	18	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	37.6	Qubit	NA	NA	2017-04-18-pl1a	02E	NA	NA	NA
+IS911_014	IS911_014	2017	4	18	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	42.2	Qubit	NA	NA	2017-04-18-pl1a	02F	NA	NA	NA
+IS911_015	IS911_015	2017	4	18	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	40.9	Qubit	NA	NA	2017-04-18-pl1a	02G	NA	NA	NA
+IS911_016	IS911_016	2017	4	18	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	40.9	Qubit	NA	NA	2017-04-18-pl1a	02H	NA	NA	NA
+IS911_017	IS911_017	2017	4	18	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	38.4	Qubit	NA	NA	2017-04-18-pl1a	03A	NA	NA	NA
+IS911_018	IS911_018	2017	4	18	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	39	Qubit	NA	NA	2017-04-18-pl1a	03B	NA	NA	NA
+IS911_019	IS911_019	2017	4	18	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	48.5	Qubit	NA	NA	2017-04-18-pl1a	03C	NA	NA	NA
+IS911_020	IS911_020	2017	4	18	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	40.4	Qubit	NA	NA	2017-04-18-pl1a	03D	NA	NA	NA
+IS911_021	IS911_021	2017	4	18	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	39.3	Qubit	NA	NA	2017-04-18-pl1a	03E	NA	NA	NA
+IS911_022	IS911_022	2017	4	18	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	42.2	Qubit	NA	NA	2017-04-18-pl1a	03F	NA	NA	NA
+IS911_023	IS911_023	2017	4	18	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	42.8	Qubit	NA	NA	2017-04-18-pl1a	03G	NA	NA	NA
+IS911_024	IS911_024	2017	4	18	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	32.5	Qubit	NA	NA	2017-04-18-pl1a	03H	NA	NA	NA
+IS911_025	IS911_025	2017	4	18	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	43.3	Qubit	NA	NA	2017-04-18-pl1a	04A	NA	NA	NA
+IS911_026	IS911_026	2017	4	18	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	42.7	Qubit	NA	NA	2017-04-18-pl1a	04B	NA	NA	NA
+IS911_027	IS911_027	2017	4	18	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	40.8	Qubit	NA	NA	2017-04-18-pl1a	04C	NA	NA	NA
+IS911_028	IS911_028	2017	4	18	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	41.8	Qubit	NA	NA	2017-04-18-pl1a	04D	NA	NA	NA
+IS911_029	IS911_029	2017	4	18	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	45.3	Qubit	NA	NA	2017-04-18-pl1a	04E	NA	NA	NA
+IS911_030	IS911_030	2017	4	18	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	40.6	Qubit	NA	NA	2017-04-18-pl1a	04F	NA	NA	NA
+IS911_031	IS911_031	2017	4	18	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	41.8	Qubit	NA	NA	2017-04-18-pl1a	04G	NA	NA	NA
+IS911_032	IS911_032	2017	4	18	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	43.5	Qubit	NA	NA	2017-04-18-pl1a	04H	NA	NA	NA
+IS911_033	IS911_033	2017	4	18	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	39.8	Qubit	NA	NA	2017-04-18-pl1a	05A	NA	NA	NA
+IS911_034	IS911_034	2017	4	18	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	45.2	Qubit	NA	NA	2017-04-18-pl1a	05B	NA	NA	NA
+IS911_035	IS911_035	2017	4	18	NA	Qiagen Dneasy	NA	Harmony	Tris HCl, pH 7.5	100	44.2	Qubit	NA	NA	2017-04-18-pl1a	05C	NA	NA	NA
+FYB2018_06	FYB2018_06	2019	1	17	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	NA	3.46	Qubit	NA	FYB2018_06	NA	NA	2019-01-23norm	09A	NA
+FYB2018_10	FYB2018_10	2019	1	17	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	NA	6.57	Qubit	NA	FYB2018_10	NA	NA	2019-01-23norm	09B	NA
+FYB2018_11	FYB2018_11	2019	1	17	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	NA	26.9	Qubit	NA	FYB2018_11	NA	NA	2019-01-23norm	09C	NA
+FYB2018_15	FYB2018_15	2019	1	17	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	NA	21.2	Qubit	NA	FYB2018_15	NA	NA	2019-01-23norm	09D	NA
+FYB2018_16	FYB2018_16	2019	1	17	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	NA	6.84	Qubit	NA	FYB2018_16	NA	NA	2019-01-23norm	09E	NA
+FYB2018_16a	FYB2018_16a	2019	1	17	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	NA	4.86	Qubit	NA	FYB2018_16a	NA	NA	2019-01-23norm	09F	NA
+FYB2018_18	FYB2018_18	2019	1	17	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	NA	17.3	Qubit	NA	FYB2018_18	NA	NA	2019-01-23norm	09G	NA
+FYB2018_21	FYB2018_21	2019	1	17	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	NA	23.6	Qubit	NA	FYB2018_21	NA	NA	2019-01-23norm	09H	NA
+FYB2018_23	FYB2018_23	2019	1	17	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	NA	11.6	Qubit	NA	FYB2018_23	NA	NA	2019-01-23norm	10A	NA
+FYB2018_25	FYB2018_25	2019	1	17	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	NA	18.9	Qubit	NA	FYB2018_25	NA	NA	2019-01-23norm	10B	NA
+FYB2018_27a	FYB2018_27a	2019	1	17	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	NA	1.48	Qubit	NA	FYB2018_27a	NA	NA	2019-01-23norm	10C	NA
+FYB2018_29	FYB2018_29	2019	1	17	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	NA	3.08	Qubit	NA	FYB2018_29	NA	NA	2019-01-23norm	10D	NA
+FYB2018_31	FYB2018_31	2019	1	17	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	NA	9.86	Qubit	NA	FYB2018_31	NA	NA	2019-01-23norm	10E	NA
+FYB2018_34a	FYB2018_34a	2019	1	17	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	NA	8.27	Qubit	NA	FYB2018_34a	NA	NA	2019-01-23norm	10F	NA
+FYB2018_38	FYB2018_38	2019	1	17	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	NA	6.58	Qubit	NA	FYB2018_38	NA	NA	2019-01-23norm	10G	NA
+FYB2018_40	FYB2018_40	2019	1	17	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	NA	13.3	Qubit	NA	FYB2018_40	NA	NA	2019-01-23norm	10H	NA
+FYB2018_43	FYB2018_43	2019	1	17	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	NA	19.8	Qubit	NA	FYB2018_43	NA	NA	2019-01-23norm	11A	NA
+FYB2018_47	FYB2018_47	2019	1	17	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	NA	14	Qubit	NA	FYB2018_47	NA	NA	2019-01-23norm	11B	NA
+FYB2018_57	FYB2018_57	2019	1	17	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	NA	48.4	Qubit	NA	FYB2018_57	NA	NA	2019-01-23norm	11C	NA
+FYB2018_14	FYB2018_14	2019	1	17	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	NA	80.7	Qubit	NA	FYB2018_14	NA	NA	2019-01-23norm	11D	NA
+FYB2018_48	FYB2018_48	2019	1	17	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	NA	37.3	Qubit	NA	FYB2018_48	NA	NA	2019-01-23norm	11E	NA
+FYB2018_51	FYB2018_51	2019	1	17	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	NA	30.1	Qubit	NA	FYB2018_51	NA	NA	2019-01-23norm	11F	NA
+FYB2018_54	FYB2018_54	2019	1	17	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	NA	15.1	Qubit	NA	FYB2018_54	NA	NA	2019-01-23norm	11G	NA
+FYB2018_75	FYB2018_75	2019	1	17	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	NA	46.3	Qubit	NA	FYB2018_75	NA	NA	2019-01-23norm	11H	NA
+FYB2018_90	FYB2018_90	2019	1	17	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	NA	29	Qubit	NA	FYB2018_90	NA	NA	2019-01-23norm	12A	NA
+FYB2018_27	FYB2018_27	2019	1	17	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	NA	52	Qubit	NA	FYB2018_27	NA	NA	2019-01-23norm	12B	NA
+FYB2018_34	FYB2018_34	2019	1	17	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	NA	102	Qubit	NA	FYB2018_34	NA	NA	2019-01-23norm	12C	NA
+FYB2018_36	FYB2018_36	2019	1	17	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	NA	89.1	Qubit	NA	FYB2018_36	NA	NA	2019-01-23norm	12D	NA
+FYB2018_56	FYB2018_56	2019	1	17	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	NA	50	Qubit	NA	FYB2018_56	NA	NA	2019-01-23norm	12E	NA
+FYB2018_86	FYB2018_86	2019	1	17	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	NA	6.57	Qubit	NA	FYB2018_86	NA	NA	2019-01-23norm	12F	NA
+931_2013_47	931_2013_47	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	145	Qubit	NA	NA	2018-06-20 plate	01A	2019-01-23norm	01A	NA
+extraction blank1	extraction blank1	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	0	Qubit	NA	NA	2018-06-20 plate	01B	2019-01-23norm	01B	NA
+931_2013_16	931_2013_16	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	103	Qubit	NA	NA	2018-06-20 plate	01C	2019-01-23norm	01C	NA
+931_2013_17	931_2013_17	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	66.3	Qubit	NA	NA	2018-06-20 plate	01D	2019-01-23norm	01D	NA
+931_2013_18	931_2013_18	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	72.7	Qubit	NA	NA	2018-06-20 plate	01E	2019-01-23norm	01E	NA
+931_2013_19	931_2013_19	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	123	Qubit	NA	NA	2018-06-20 plate	01F	2019-01-23norm	01F	NA
+931_2013_20	931_2013_20	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	89.5	Qubit	NA	NA	2018-06-20 plate	01G	2019-01-23norm	01G	NA
+931_2013_22	931_2013_22	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	126	Qubit	NA	NA	2018-06-20 plate	01H	2019-01-23norm	01H	NA
+931_2013_24	931_2013_24	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	73.2	Qubit	NA	NA	2018-06-20 plate	02A	2019-01-23norm	02A	NA
+931_2013_31	931_2013_31	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	65.9	Qubit	NA	NA	2018-06-20 plate	02B	2019-01-23norm	02B	NA
+931_2013_37	931_2013_37	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	41.7	Qubit	NA	NA	2018-06-20 plate	02C	2019-01-23norm	02C	NA
+931_2013_41	931_2013_41	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	72.7	Qubit	NA	NA	2018-06-20 plate	02D	2019-01-23norm	02D	NA
+931_2013_2	931_2013_2	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	54.4	Qubit	NA	NA	2018-06-20 plate	02E	2019-01-23norm	02E	NA
+931_2013_7	931_2013_7	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	93.9	Qubit	NA	NA	2018-06-20 plate	02F	2019-01-23norm	02F	NA
+931_2013_8	931_2013_8	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	93.4	Qubit	NA	NA	2018-06-20 plate	02G	2019-01-23norm	02G	NA
+931_2013_9	931_2013_9	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	52	Qubit	NA	NA	2018-06-20 plate	02H	2019-01-23norm	02H	NA
+931_2013_10	931_2013_10	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	128	Qubit	NA	NA	2018-06-20 plate	03A	2019-01-23norm	03A	NA
+931_2013_11	931_2013_11	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	71.6	Qubit	NA	NA	2018-06-20 plate	03B	2019-01-23norm	03B	NA
+931_2013_12	931_2013_12	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	55	Qubit	NA	NA	2018-06-20 plate	03C	2019-01-23norm	03C	NA
+931_2013_13	931_2013_13	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	92	Qubit	NA	NA	2018-06-20 plate	03D	2019-01-23norm	03D	NA
+931_2013_14	931_2013_14	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	39.3	Qubit	NA	NA	2018-06-20 plate	03E	2019-01-23norm	03E	NA
+931_2013_15	931_2013_15	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	92.6	Qubit	NA	NA	2018-06-20 plate	03F	2019-01-23norm	03F	NA
+511_2013_32	511_2013_32	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	52.5	Qubit	NA	NA	2018-06-20 plate	03G	2019-01-23norm	03G	NA
+511_2013_36	511_2013_36	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	53.4	Qubit	NA	NA	2018-06-20 plate	03H	2019-01-23norm	03H	NA
+511_2013_37	511_2013_37	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	71.5	Qubit	NA	NA	2018-06-20 plate	04A	2019-01-23norm	04A	NA
+511_2013_38	511_2013_38	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	82.7	Qubit	NA	NA	2018-06-20 plate	04B	2019-01-23norm	04B	NA
+511_2013_40	511_2013_40	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	42.7	Qubit	NA	NA	2018-06-20 plate	04C	2019-01-23norm	04C	NA
+511_2013_43	511_2013_43	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	78.3	Qubit	NA	NA	2018-06-20 plate	04D	2019-01-23norm	04D	NA
+511_2013_44	511_2013_44	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	48.3	Qubit	NA	NA	2018-06-20 plate	04E	2019-01-23norm	04E	NA
+511_2013_47	511_2013_47	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	63.3	Qubit	NA	NA	2018-06-20 plate	04F	2019-01-23norm	04F	NA
+511_2013_48	511_2013_48	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	75.5	Qubit	NA	NA	2018-06-20 plate	04G	2019-01-23norm	04G	NA
+extraction blank2	extraction blank2	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	0	Qubit	NA	NA	2018-06-20 plate	04H	2019-01-23norm	04H	NA
+511_2013_50	511_2013_50	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	108	Qubit	NA	NA	2018-06-20 plate	05A	2019-01-23norm	05A	NA
+511_2013_4	511_2013_4	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	75.8	Qubit	NA	NA	2018-06-20 plate	05B	2019-01-23norm	05B	NA
+511_2013_10	511_2013_10	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	42	Qubit	NA	NA	2018-06-20 plate	05C	2019-01-23norm	05C	NA
+511_2013_12	511_2013_12	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	105	Qubit	NA	NA	2018-06-20 plate	05D	2019-01-23norm	05D	NA
+511_2013_16	511_2013_16	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	38.1	Qubit	NA	NA	2018-06-20 plate	05E	2019-01-23norm	05E	NA
+511_2013_19	511_2013_19	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	38.6	Qubit	NA	NA	2018-06-20 plate	05F	2019-01-23norm	05F	NA
+511_2013_20	511_2013_20	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	63	Qubit	NA	NA	2018-06-20 plate	05G	2019-01-23norm	05G	NA
+511_2013_21	511_2013_21	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	36.7	Qubit	NA	NA	2018-06-20 plate	05H	2019-01-23norm	05H	NA
+511_2013_25	511_2013_25	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	47.2	Qubit	NA	NA	2018-06-20 plate	06A	2019-01-23norm	06A	NA
+511_2013_28	511_2013_28	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	59	Qubit	NA	NA	2018-06-20 plate	06B	2019-01-23norm	06B	NA
+511_2013_30	511_2013_30	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	118	Qubit	NA	NA	2018-06-20 plate	06C	2019-01-23norm	06C	NA
+911_2013_58	911_2013_58	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	57.5	Qubit	NA	NA	2018-06-20 plate	06D	2019-01-23norm	06D	NA
+extraction blank3	extraction blank3	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	0	Qubit	NA	NA	2018-06-20 plate	06E	2019-01-23norm	06E	NA
+911_2013_65	911_2013_65	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	142	Qubit	NA	NA	2018-06-20 plate	06F	2019-01-23norm	06F	NA
+911_2013_72	911_2013_72	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	105	Qubit	NA	NA	2018-06-20 plate	06G	2019-01-23norm	06G	NA
+911_2013_74	911_2013_74	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	123	Qubit	NA	NA	2018-06-20 plate	06H	2019-01-23norm	06H	NA
+911_2013_81	911_2013_81	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	238	Qubit	NA	NA	2018-06-20 plate	07A	2019-01-23norm	07A	NA
+911_2013_76	911_2013_76	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	98.2	Qubit	NA	NA	2018-06-20 plate	07B	2019-01-23norm	07B	NA
+911_2013_87	911_2013_87	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	325	Qubit	NA	NA	2018-06-20 plate	07C	2019-01-23norm	07C	NA
+911_2013_89	911_2013_89	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	84.1	Qubit	NA	NA	2018-06-20 plate	07D	2019-01-23norm	07D	NA
+911_2013_90	911_2013_90	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	149	Qubit	NA	NA	2018-06-20 plate	07E	2019-01-23norm	07E	NA
+911_2013_92	911_2013_92	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	162	Qubit	NA	NA	2018-06-20 plate	07F	2019-01-23norm	07F	NA
+911_2013_94	911_2013_94	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	135	Qubit	NA	NA	2018-06-20 plate	07G	2019-01-23norm	07G	NA
+911_2013_102	911_2013_102	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	154	Qubit	NA	NA	2018-06-20 plate	07H	2019-01-23norm	07H	NA
+911_2013_107	911_2013_107	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	116.5	Qubit	NA	NA	2018-06-20 plate	08A	2019-01-23norm	08A	NA
+911_2013_108	911_2013_108	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	80.5	Qubit	NA	NA	2018-06-20 plate	08B	2019-01-23norm	08B	NA
+911_2013_111	911_2013_111	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	149.5	Qubit	NA	NA	2018-06-20 plate	08C	2019-01-23norm	08C	NA
+911_2013_113	911_2013_113	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	300	Qubit	NA	NA	2018-06-20 plate	08D	2019-01-23norm	08D	NA
+911_2013_115	911_2013_115	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	168.5	Qubit	NA	NA	2018-06-20 plate	08E	2019-01-23norm	08E	NA
+911_2013_117	911_2013_117	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	74	Qubit	NA	NA	2018-06-20 plate	08F	2019-01-23norm	08F	NA
+911_2013_118	911_2013_118	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	51.5	Qubit	NA	NA	2018-06-20 plate	08G	2019-01-23norm	08G	NA
+911_2013_119	911_2013_119	18	6	20	NA	Omega EZNA	T	Harmony	Tris HCl, pH 7.5	100	135.5	Qubit	NA	NA	2018-06-20 plate	08H	2019-01-23norm	08H	NA
+ITV2011_628	ITV2011_628	20	11	23	fin clip	Chan Tn5 bead	NA	NA	NA	NA	16.7	NA	NA	NA	NA	NA	NA	NA	NA
+ITV2011_636	ITV2011_636	20	11	23	fin clip	Chan Tn5 bead	NA	NA	NA	NA	30.8	NA	NA	NA	NA	NA	NA	NA	NA
+ITV2011_642	ITV2011_642	20	11	23	fin clip	Chan Tn5 bead	NA	NA	NA	NA	35.8	NA	NA	NA	NA	NA	NA	NA	NA
+ITV2011_646	ITV2011_646	20	11	23	fin clip	Chan Tn5 bead	NA	NA	NA	NA	19.8	NA	NA	NA	NA	NA	NA	NA	NA
+ITV2011_648	ITV2011_648	20	11	23	fin clip	Chan Tn5 bead	NA	NA	NA	NA	26.4	NA	NA	NA	NA	NA	NA	NA	NA

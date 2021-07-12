@@ -12,6 +12,7 @@ knitr::opts_chunk$set(echo = TRUE, eval=F, message=F, warning = F)
 ```{r eval=T}
 library(tidyverse)
 library(cowplot)
+library(googlesheets4)
 ```
 
 ## Come up with some sample lists and tables
@@ -121,6 +122,45 @@ bam_list_realigned %>%
 write_tsv(sample_table_unmerged, "../sample_lists/sample_table_unmerged.tsv")
 write_lines(fastq_list_pe, "../sample_lists/fastq_list_pe.txt")
 write_lines(fastq_list_se, "../sample_lists/fastq_list_se.txt")
+```
+
+```{r eval=FALSE}
+## Read in degradation score from Google Sheet and write it as a text file
+extraction_info <- read_sheet("https://docs.google.com/spreadsheets/d/1I3Pj5VUWfP2eUwwZj1ggAjqgbRmrT0MrLtbQ1lOGaPE/edit#gid=287879888", "dna_extraction")
+write_tsv(extraction_info, "../sample_lists/extraction_info.tsv")
+```
+
+```{r eval=TRUE, fig.width=12, fig.height=4}
+extraction_info <- read_tsv("../sample_lists/extraction_info.tsv") %>%
+  filter(extraction_method != "Chan Tn5 bead") %>%
+  dplyr::select(sample_id, degradation_level) %>%
+  mutate(degradation_level = as.character(degradation_level),
+         degradation_level = ifelse(degradation_level==0, "NA", degradation_level)) 
+sample_table_degradation <- left_join(sample_table_merged, extraction_info, by=c("sample_id_corrected"="sample_id"))
+sample_table_degradation %>%
+  mutate(data_type=ifelse(data_type=="pe", "NextSeq-150PE", "HiSeq-125SE")) %>%
+  mutate(sample_id_corrected=fct_reorder(sample_id_corrected, degradation_level)) %>%
+  ggplot(aes(x=population_new, fill=degradation_level, group=sample_id_corrected)) +
+  geom_bar(color="black") +
+  scale_fill_viridis_d(begin=0, end=1, direction = -1) +
+  xlab("population")+
+  ylab("sample size") +
+  facet_wrap(~data_type) +
+  theme_cowplot() +
+  coord_flip()
+sample_table_degradation %>%
+  mutate(data_type=ifelse(data_type=="pe", "NextSeq-150PE", "HiSeq-125SE")) %>%
+  left_join(base_count) %>%
+  arrange(desc(final_mapped_bases)) %>%
+  mutate(degradation_level=ifelse(degradation_level=="1", "well-preserved", "degraded")) %>%
+  mutate(sample_id_corrected=as_factor(sample_id_corrected)) %>%
+  ggplot(aes(x=population_new, y=final_mapped_bases/0.67/10^9, fill=degradation_level, group=sample_id_corrected)) +
+  geom_col(color="black") +
+  scale_fill_viridis_d(begin=0.5, end=1, direction = -1) +
+  labs(x="population", y="coverage", fill="degradation\nlevel")+
+  facet_wrap(~data_type) +
+  theme_cowplot() +
+  coord_flip()
 ```
 
 ## Process the PE data
@@ -281,79 +321,176 @@ gadMor3 \
 > /workdir/batch-effect/nohups/realign_indels.nohup &
 ```
 
-## Get genotype likelihoods
+## Get genotype likelihoods and SNP list with sliding window trimmed PE samples
 
-#### polyG trimmed PE samples (original)
+#### SNP calling
 
-This is with PE samples that went through polyG trimming instead of sliding window trimming.
-
-```{bash eval=F}
-## original setup
-cd /workdir/cod/greenland-cod/
-/workdir/programs/angsd0.931/angsd/angsd \
--b sample_lists/bam_list_realigned_mincov_contamination_filtered_batch_effect.txt \
--anc /workdir/cod/reference_seqs/gadMor3.fasta \
--out angsd/bam_list_realigned_mincov_contamination_filtered_batch_effect_mindp2_maxdp661_minind2_minq20 \
--GL 1 -doGlf 2 -doMaf 1 -doMajorMinor 3 -doCounts 1 -doDepth 1 -dumpCounts 1 \
--P 32 -setMinDepth 2 -setMaxDepth 661 -minInd 2 -minQ 20 -minMaf 0.01 \
--sites angsd/global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked.txt \
--rf angsd/global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked.chrs \
->& nohups/get_gl_bam_list_realigned_mincov_contamination_filtered_batch_effect.log &
-
-## more stringent filtering
-cd /workdir/cod/greenland-cod/
-/workdir/programs/angsd0.931/angsd/angsd \
--b sample_lists/bam_list_realigned_mincov_contamination_filtered_batch_effect.txt \
--anc /workdir/cod/reference_seqs/gadMor3.fasta \
--out angsd/bam_list_realigned_mincov_contamination_filtered_batch_effect_mindp2_maxdp661_minind2_stringent_filter \
--GL 1 -doGlf 2 -doMaf 1 -doMajorMinor 3 -doCounts 1 -doDepth 1 -dumpCounts 1 \
--P 32 -setMinDepth 2 -setMaxDepth 661 -minInd 2 -minMaf 0.01 \
--minQ 33 -minMapQ 25 -uniqueOnly 1 \
--sites angsd/global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked.txt \
--rf angsd/global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked.chrs \
->& nohups/get_gl_bam_list_realigned_mincov_contamination_filtered_batch_effect_stringent_filter.log &
-```
-
-#### Sliding window trimmed PE samples (new)
-
-This is with PE samples that went through sliding window trimming.
-
-I will first try the same LD-trimmed SNP list from the Greenland cod project
+Average depth per site across all individuals is ~92x before polyG trimming
 
 ```{bash eval=F}
 cd /workdir/batch-effect/
-## Run ANGSD as usual (with a minMapQ filter of 20)
+nohup bash /workdir/genomic-data-analysis/scripts/angsd_global_snp_calling.sh \
+/workdir/batch-effect/sample_lists/bam_list_realigned.txt \
+/workdir/batch-effect/ \
+/workdir/cod/reference_seqs/gadMor3.fasta \
+46 184 20 20 0.05 20 \
+> /workdir/batch-effect/nohups/global_snp_calling_bam_list_realigned.nohup &
+```
+
+
+#### Downsample the mafs file to ~1,000,000 SNPs
+
+```{r eval=TRUE}
+library(tidyverse)
+## Read in the mafs file
+mafs <- read_tsv("../angsd/bam_list_realigned_mindp46_maxdp184_minind20_minq20.mafs.gz")
+## Total number of SNPs
+nrow(mafs)
+## In a downsampled SNP list, keep 1 SNP in every 5 SNPs (this yields 1028474 SNPs)
+mafs_filtered <- mutate(mafs, 
+                        keep = knownEM >= 0.05,
+                        row_number = ifelse(keep, cumsum(keep), -1),
+                        keep = ifelse(row_number%%5!=0, F, keep),
+                        keep = ifelse(!str_detect(chromo, "LG"), F, keep)) %>%
+  dplyr::select(-row_number)
+filter(mafs_filtered, keep==T) %>% nrow()
+## Filter out SNPs in inversions
+lg = c("LG01", "LG02", "LG07", "LG12")
+min_pos = c(11495229, 641666, 16830817, 546885)
+max_pos = c(28834444, 4495925, 26562127, 13864687)
+for (i in 1:4){
+  if (i==1){
+      mafs_inversion_filtered <- mutate(mafs_filtered, keep = ifelse(chromo == lg[i] & position > min_pos[i] & position < max_pos[i], FALSE, keep))
+  } else {
+      mafs_inversion_filtered <- mutate(mafs_inversion_filtered, keep = ifelse(chromo == lg[i] & position > min_pos[i] & position < max_pos[i], FALSE, keep))
+  }
+}
+mafs_inversion_filtered %>%
+  filter(keep==T) %>%
+  ggplot(aes(x=position, y=chromo, fill=chromo)) +
+  ggridges::geom_density_ridges(alpha=0.5) +
+  scale_fill_viridis_d() +
+  theme_cowplot() +
+  theme(legend.position = "none")
+mafs_inversion_filtered %>%
+  filter(keep==T) %>%
+  nrow()
+```
+
+#### Write the filtered SNP list
+
+```{r eval=FALSE}
+mafs_inversion_filtered %>%
+  filter(keep==T) %>%
+  dplyr::select(1:4) %>%
+  write_tsv("../angsd/global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled.txt.gz", col_names = F)
+(which(mafs_inversion_filtered$keep)+1) %>% # +1 is necessary because the beagle file has a title line
+  as.integer() %>%
+  write_lines("../angsd/global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled.pos.idx")
+```
+
+#### Downsample the beagle file
+
+```{bash eval=FALSE}
+zcat /workdir/batch-effect/angsd/bam_list_realigned_mindp46_maxdp184_minind20_minq20.beagle.gz | \
+awk 'NR==FNR{ pos[$1]; next }FNR in pos' \
+/workdir/batch-effect/angsd/global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled.pos.idx - | \
+gzip \
+> /workdir/batch-effect/angsd/global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled.beagle.gz
+```
+
+#### Estimate LD
+
+```{bash eval=FALSE}
+nohup /workdir/programs/ngsLD/ngsLD \
+--geno /workdir/batch-effect/angsd/global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled.beagle.gz \
+--pos /workdir/batch-effect/angsd/global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled.txt.gz \
+--n_ind 163 \
+--n_sites 944554 \
+--out /workdir/batch-effect/angsd/bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled.ld \
+--probs \
+--rnd_sample 1 \
+--seed 42 \
+--max_kb_dist 10 \
+--n_threads 30 \
+> /workdir/batch-effect/nohups/run_ngsLD_bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled.nohup &
+```
+
+#### Remove some columns in the LD file
+
+```{r eval=FALSE}
+ld <- read_tsv("../angsd/bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled.ld", col_names = F)
+ld %>%
+  dplyr::select(-X2, -X3, -X5, -X6) %>%
+  write_tsv("../angsd/bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled_reformatted.ld", col_names = F)
+```
+
+#### Run the LD pruning script
+
+```{bash eval=FALSE}
+nohup perl /workdir/programs/ngsLD/scripts/prune_graph.pl \
+--in_file /workdir/batch-effect/angsd/bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled_reformatted.ld \
+--max_kb_dist 10 \
+--min_weight 0.5 \
+--out /workdir/batch-effect/angsd/bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled_unlinked.ld \
+> /workdir/batch-effect/nohups/ld_prune_bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled.nohup &
+```
+
+#### Generate LD pruned SNP list
+
+```{r eval=FALSE}
+downsampled_snp_list <- read_tsv("../angsd/global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled.txt.gz", col_names = c("lg", "position", "major", "minor"))
+ld_pruned_snp_list <- read_delim("../angsd/bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled_unlinked.ld", delim = ":", col_names = c("lg", "position")) %>%
+  arrange(lg, position) %>%
+  mutate(keep=TRUE) %>%
+  left_join(downsampled_snp_list, ., by = c("lg", "position")) %>%
+  mutate(keep=ifelse(is.na(keep), FALSE, keep))
+identical(downsampled_snp_list$lg, ld_pruned_snp_list$lg)
+identical(downsampled_snp_list$position, ld_pruned_snp_list$position)
+## Generate a SNP list
+ld_pruned_snp_list %>%
+  filter(keep == TRUE) %>%
+  dplyr::select(lg, position, major, minor) %>%
+  write_tsv("../angsd/global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled_unlinked.txt", col_names = F)
+## Generate a chromosome list
+ld_pruned_snp_list %>%
+  filter(keep == TRUE) %>%
+  .$lg %>%
+  unique() %>%
+  write_lines("../angsd/global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled_unlinked.chrs")
+```
+
+```{bash eval=FALSE}
+## Index the snp list
+/workdir/programs/angsd0.931/angsd/angsd sites index /workdir/batch-effect/angsd/global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled_unlinked.txt
+```
+
+## Get the covariance matrix with ANGSD
+
+```{bash eval=FALSE}
+cd /workdir/batch-effect/
+
 nohup /workdir/programs/angsd0.931/angsd/angsd \
 -b sample_lists/bam_list_realigned.txt \
 -anc /workdir/cod/reference_seqs/gadMor3.fasta \
--out angsd/bam_list_realigned \
+-out angsd/bam_list_realigned_downsampled_unlinked \
 -GL 1 -doGlf 2 -doMaf 1 -doMajorMinor 3 -doCounts 1 -doDepth 1 -dumpCounts 1 \
--P 16 -setMinDepth 2 -setMaxDepth 661 -minInd 2 -minQ 20 -minMapQ 20 -minMaf 0.05 \
+-P 16 -setMinDepth 46 -setMaxDepth 184 -minInd 20 -minQ 20 -minMapQ 20 -minMaf 0.05 \
 -doIBS 2 -makematrix 1 -doCov 1 \
--sites /workdir/cod/greenland-cod/angsd/global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked.txt \
--rf /workdir/cod/greenland-cod/angsd/global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked.chrs \
->& nohups/get_gl_bam_list_realigned.log &
-## Get the matrices with more stringent filtering
-nohup /workdir/programs/angsd0.931/angsd/angsd \
--b sample_lists/bam_list_realigned.txt \
--anc /workdir/cod/reference_seqs/gadMor3.fasta \
--out angsd/bam_list_realigned_stringent \
--doMajorMinor 3 -doCounts 1 -doDepth 1 -dumpCounts 1 \
--P 16 -setMinDepth 40 -setMaxDepth 326 -minInd 20 -minQ 33 -minMapQ 30 \
--doIBS 2 -makematrix 1 -doCov 1 \
--sites /workdir/cod/greenland-cod/angsd/global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked.txt \
--rf /workdir/cod/greenland-cod/angsd/global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked.chrs \
->& nohups/get_matrix_stringent_bam_list_realigned.log &
+-sites /workdir/batch-effect/angsd/global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled_unlinked.txt \
+-rf /workdir/batch-effect/angsd/global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled_unlinked.chrs \
+>& nohups/run_pca_bam_list_realigned_downsampled_unlinked.log &
+
 ## Get depth count without mapping quality filter
 nohup /workdir/programs/angsd0.931/angsd/angsd \
 -b sample_lists/bam_list_realigned.txt \
 -anc /workdir/cod/reference_seqs/gadMor3.fasta \
--out angsd/bam_list_realigned_anymapq \
+-out angsd/bam_list_realigned_downsampled_unlinked_anymapq \
 -doCounts 1 -doDepth 1 -dumpCounts 1 \
 -P 16 -setMinDepth 2 -minInd 2 -minQ 20 \
--sites /workdir/cod/greenland-cod/angsd/global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked.txt \
--rf /workdir/cod/greenland-cod/angsd/global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked.chrs \
->& nohups/get_depth_anymapq_bam_list_realigned.log &
+-sites /workdir/batch-effect/angsd/global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled_unlinked.txt \
+-rf /workdir/batch-effect/angsd/global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled_unlinked.chrs \
+>& nohups/get_depth_anymapq_bam_list_realigned_downsampled_unlinked.log &
 ```
 
 ## Run PCAngsd

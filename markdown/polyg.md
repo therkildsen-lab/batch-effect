@@ -57,8 +57,7 @@ fastqc /workdir/batch-effect/qual_filtered/IKE2011_976_55124_7_adapter_clipped_q
 ## Compile FastQC result
 
 ``` r
-set.seed(0)
-random_sample <- sample_table_unmerged_pe[sample(1:75, 3), ]
+random_sample <- filter(sample_table_unmerged_pe, sample_id %in% c("QQL2011_884", "UUM2010_068", "IKE2011_976"))
 paths <- c("../../cod/greenland-cod/adapter_clipped/", "../polyg_trimmed/", "../cut_right/")
 suffice <- c("_adapter_clipped_f_paired_fastqc", "_adapter_clipped_qual_filtered_f_paired_fastqc", "_adapter_clipped_qual_filtered_f_paired_fastqc")
 types <- c("no trimming", "polyG trimming", "sliding window trimming")
@@ -192,16 +191,19 @@ top2 <- tibble(base=sequence_vector, quality=quality_vector) %>%
   {mutate(., position=seq(nrow(.)))} %>%
   ggplot(aes(x=position, y=quality)) +
   geom_line(color="grey") +
-  #geom_text(aes(label=base, color=base)) +
-  geom_point(aes(label=base, color=base)) +
-  scale_color_manual(values = c("#749dae", "#5445b1", "orange", "#cd3341")) +
+  #geom_text(aes(label=base, color=base), size=2, fontface = "bold") +
+  geom_point(aes(fill=base), color="white", shape=22, size=2) +
+  scale_fill_manual(values = c("#749dae", "#5445b1", "orange", "#cd3341")) +
   geom_vline(xintercept = 48.5) +
   geom_vline(xintercept = 101.5) +
   #coord_cartesian(clip = 'off') +
-  annotate("text", 38, 42, label="sliding window\ntrimming", lineheight = 0.8) +
-  annotate("text", 94, 42, label="polyG\ntrimming", lineheight = 0.8) +
-  ylim(c(NA, 44)) +
-  theme_cowplot()
+  annotate("text", 38, 45.5, label="sliding window\ntrimming", lineheight = 0.8) +
+  annotate("text", 94, 45.5, label="polyG\ntrimming", lineheight = 0.8) +
+  scale_x_continuous(limits=c(0, 151), expand = c(0, 1)) +
+  scale_y_continuous(limits=c(NA, 50.5)) +
+  theme_cowplot() +
+  theme(legend.title = element_text(size=10),
+        legend.text = element_text(size=10))
 top2
 ```
 
@@ -217,7 +219,7 @@ plot_grid(top, seq_content_p, labels = c('A', 'B'), label_size = 15, nrow = 2, r
 ![](polyg_files/figure-gfm/unnamed-chunk-13-1.svg)<!-- -->
 
 ``` r
-plot_grid(top2, seq_content_p, labels = c('A', 'B'), label_size = 15, nrow = 2, rel_heights = c(2, 5))
+plot_grid(top2, seq_content_p, labels = c('A', 'B'), label_size = 15, nrow = 2, rel_heights = c(1.5, 4.5))
 ```
 
 ![](polyg_files/figure-gfm/unnamed-chunk-14-1.svg)<!-- -->
@@ -234,8 +236,7 @@ mv /workdir/cod/greenland-cod/bam/*fastqc* /workdir/cod/greenland-cod/fastqc/
 ## Compile FastQC result
 
 ``` r
-set.seed(0)
-random_sample <- sample_table_unmerged_pe[sample(1:75, 3), ]
+random_sample <- filter(sample_table_unmerged_pe, sample_id %in% c("QQL2011_884", "UUM2010_068", "IKE2011_976"))
 path <- "../../cod/greenland-cod/fastqc/"
 suffix <- "_pe_bt2_gadMor3_minq20_sorted_dedup_overlapclipped_realigned_fastqc"
 type <- "polyG trimming, mapped"

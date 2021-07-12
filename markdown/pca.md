@@ -37,10 +37,10 @@ nohup python2 /workdir/programs/pcangsd/pcangsd.py \
 #### Come up with a new SNP list
 
 ``` r
-maf_pe <- read_tsv("../angsd/popminind20/pe_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked_popminind20.mafs.gz") %>%
+maf_pe <- read_tsv("../angsd/popminind20/pe_global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled_unlinked_popminind20.mafs.gz") %>%
   transmute(lg = chromo, position = position, major=major, minor = minor, pe_maf = knownEM, pe_nind=nInd)
 
-maf_se <- read_tsv("../angsd/popminind20/se_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked_popminind20.mafs.gz") %>%
+maf_se <- read_tsv("../angsd/popminind20/se_global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled_unlinked_popminind20.mafs.gz") %>%
   transmute(lg = chromo, position = position, major=major, minor = minor, se_maf = knownEM, se_nind=nInd)
 
 maf_joined <- inner_join(maf_pe, maf_se) %>% 
@@ -57,7 +57,7 @@ maf_excluding_se <-  maf_pe %>%
 
 anymapq_depth <- read_tsv("../angsd/popminind2/bam_list_realigned_se_anymapq.pos.gz") %>%
   rename(lg=chr, position=pos, total_depth_anymapq=totDepth)
-mapq20_depth <- read_tsv("../angsd/popminind20/se_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked_popminind20.pos.gz") %>%
+mapq20_depth <- read_tsv("../angsd/popminind20/se_global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled_unlinked_popminind20.pos.gz") %>%
   rename(lg=chr, position=pos, total_depth_mapq20=totDepth)
 depth <- inner_join(anymapq_depth, mapq20_depth) %>%
   mutate(depth_ratio=total_depth_mapq20/total_depth_anymapq)
@@ -66,7 +66,7 @@ maf_joined_excluding_private_filtering_depth <- maf_joined_excluding_private %>%
   left_join(depth) %>%
   filter(depth_ratio > 0.9)
   
-original_snp_list <- read_tsv("/workdir/cod/greenland-cod/angsd/global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked.txt", col_names = c("lg", "position", "major", "minor")) 
+original_snp_list <- read_tsv("/workdir/batch-effect/angsd/global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled_unlinked.txt", col_names = c("lg", "position", "major", "minor")) 
   
 new_snp_list <- semi_join(original_snp_list, maf_joined_excluding_private_filtering_depth)
 write_tsv(new_snp_list, "../angsd/global_snp_list_private_snps_depth_ratio_filtered.txt", col_names = F)
@@ -92,7 +92,7 @@ nohup /workdir/programs/angsd0.931/angsd/angsd \
 -P 16 -setMinDepth 2 -setMaxDepth 661 -minInd 2 -minQ 20 -minMapQ 20 -minMaf 0.05 \
 -doIBS 2 -makematrix 1 -doCov 1 \
 -sites /workdir/batch-effect/angsd/global_snp_list_private_snps_depth_ratio_filtered.txt \
--rf /workdir/cod/greenland-cod/angsd/global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked.chrs \
+-rf /workdir/batch-effect/angsd/global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled_unlinked.chrs \
 >& nohups/get_gl_bam_list_realigned_private_snps_depth_ratio_filtered.log &
 ## SE SNPs
 cd /workdir/batch-effect/
@@ -135,13 +135,16 @@ nohup python2 /workdir/programs/pcangsd/pcangsd.py \
 
 ## PCA with sliding window trimmed PE samples
 
+#### original setup
+
 ``` r
 sample_table <- read_tsv("../sample_lists/sample_table_merged.tsv")
-## original setup
-#genome_cov <- npyLoad("../angsd/bam_list_realigned_pcangsd.cov.npy")
-genome_cov <- read_tsv("../angsd/bam_list_realigned.covMat", col_names = F)[1:163,]
+genome_cov <- read_tsv("../angsd/bam_list_realigned_downsampled_unlinked.covMat", col_names = F)[1:163,]
 PCA(genome_cov, sample_table$sample_id_corrected, sample_table$data_type, 1, 2, show.ellipse = F, show.line = T)
 ```
+
+    ## Warning: Computation failed in `stat_conline()`:
+    ## there is no package called 'miscTools'
 
 ![](pca_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
@@ -150,20 +153,29 @@ pca_table_data_type <- pca_table[,1:6] %>% rename(data_type=population)
 PCA(genome_cov, sample_table$sample_id_corrected, sample_table$population, 1, 2, show.ellipse = F, show.line = T)
 ```
 
+    ## Warning: Computation failed in `stat_conline()`:
+    ## there is no package called 'miscTools'
+
 ![](pca_files/figure-gfm/unnamed-chunk-6-2.png)<!-- -->
 
 ``` r
 pca_table_population <- pca_table[,1:6]
 
-genome_dist <- read_tsv("../angsd/bam_list_realigned.ibsMat", col_names = F)[1:163,]
+genome_dist <- read_tsv("../angsd/bam_list_realigned_downsampled_unlinked.ibsMat", col_names = F)[1:163,]
 PCoA(genome_dist, sample_table$sample_id_corrected, sample_table$data_type, 10, 1, 2, show.ellipse = F, show.line = T)
 ```
+
+    ## Warning: Computation failed in `stat_conline()`:
+    ## there is no package called 'miscTools'
 
 ![](pca_files/figure-gfm/unnamed-chunk-6-3.png)<!-- -->
 
 ``` r
 PCoA(genome_dist, sample_table$sample_id_corrected, sample_table$population, 10, 1, 2, show.ellipse = F, show.line = T)
 ```
+
+    ## Warning: Computation failed in `stat_conline()`:
+    ## there is no package called 'miscTools'
 
 ![](pca_files/figure-gfm/unnamed-chunk-6-4.png)<!-- -->
 
@@ -180,9 +192,13 @@ pca_table_combined %>%
   geom_point(aes(x=PC1, y=PC2, color=population)) +
   geom_segment(aes(x=PC1, y=PC2, xend=PC1_mean, yend=PC2_mean, color=population), size = 0.1) +
   geom_label(aes(x=PC1_mean, y=PC2_mean, label=data_type)) +
-  ylim(NA, 0.15) +
+  ylim(-0.15, NA) +
   theme_cowplot()
 ```
+
+    ## Warning: Removed 2 rows containing missing values (geom_point).
+
+    ## Warning: Removed 2 rows containing missing values (geom_segment).
 
 ![](pca_files/figure-gfm/unnamed-chunk-6-5.png)<!-- -->
 
@@ -193,9 +209,13 @@ pca_table_combined %>%
   geom_point(aes(x=PC1, y=PC2, color=data_type)) +
   geom_segment(aes(x=PC1, y=PC2, xend=PC1_mean, yend=PC2_mean, color=data_type), size = 0.1) +
   geom_label(aes(x=PC1_mean, y=PC2_mean, label=population)) +
-  ylim(NA, 0.15) +
+  ylim(-0.15, NA) +
   theme_cowplot()
 ```
+
+    ## Warning: Removed 2 rows containing missing values (geom_point).
+    
+    ## Warning: Removed 2 rows containing missing values (geom_segment).
 
 ![](pca_files/figure-gfm/unnamed-chunk-6-6.png)<!-- -->
 
@@ -206,10 +226,14 @@ pca_table_combined %>%
   geom_point(aes(x=PC1, y=PC2, color=population)) +
   geom_segment(aes(x=PC1, y=PC2, xend=PC1_mean, yend=PC2_mean, color=population), size = 0.1) +
   #geom_label(aes(x=PC1_mean, y=PC2_mean, label=data_type)) +
-  ylim(NA, 0.15) +
+  ylim(-0.15, NA) +
   facet_wrap(~data_type) +
   theme_cowplot()
 ```
+
+    ## Warning: Removed 2 rows containing missing values (geom_point).
+    
+    ## Warning: Removed 2 rows containing missing values (geom_segment).
 
 ![](pca_files/figure-gfm/unnamed-chunk-6-7.png)<!-- -->
 
@@ -220,9 +244,90 @@ pca_table_combined %>%
   geom_point(aes(x=PC1, y=PC2, color=data_type)) +
   geom_segment(aes(x=PC1, y=PC2, xend=PC1_mean, yend=PC2_mean, color=data_type), size = 0.1) +
   #geom_label(aes(x=PC1_mean, y=PC2_mean, label=population)) +
+  ylim(-0.15, NA) +
+  facet_wrap(~population) +
+  theme_cowplot()
+```
+
+    ## Warning: Removed 2 rows containing missing values (geom_point).
+    
+    ## Warning: Removed 2 rows containing missing values (geom_segment).
+
+![](pca_files/figure-gfm/unnamed-chunk-6-8.png)<!-- -->
+
+#### With subsetted SNP lists
+
+``` r
+genome_cov <- read_tsv("../angsd/bam_list_realigned_private_snps_depth_ratio_filtered.covMat", col_names = F)[1:163,]
+PCA(genome_cov, sample_table$sample_id_corrected, sample_table$data_type, 1, 2, show.ellipse = F, show.line = T)
+```
+
+    ## Warning: Computation failed in `stat_conline()`:
+    ## there is no package called 'miscTools'
+
+![](pca_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
+``` r
+pca_table %>%
+  dplyr::select(1:4) %>%
+  mutate(data_type=population, population=str_sub(individual, 1, 7)) %>%
+  ggplot() +
+  geom_point(aes(x=PC1, y=PC2, color=data_type)) +
   ylim(NA, 0.15) +
   facet_wrap(~population) +
   theme_cowplot()
 ```
 
-![](pca_files/figure-gfm/unnamed-chunk-6-8.png)<!-- -->
+    ## Warning: Removed 2 rows containing missing values (geom_point).
+
+![](pca_files/figure-gfm/unnamed-chunk-7-2.png)<!-- -->
+
+``` r
+genome_cov <- read_tsv("../angsd/bam_list_realigned_se_snps.covMat", col_names = F)[1:163,]
+PCA(genome_cov, sample_table$sample_id_corrected, sample_table$data_type, 1, 2, show.ellipse = F, show.line = T)
+```
+
+    ## Warning: Computation failed in `stat_conline()`:
+    ## there is no package called 'miscTools'
+
+![](pca_files/figure-gfm/unnamed-chunk-7-3.png)<!-- -->
+
+``` r
+pca_table %>%
+  dplyr::select(1:4) %>%
+  mutate(data_type=population, population=str_sub(individual, 1, 7)) %>%
+  ggplot() +
+  geom_point(aes(x=PC1, y=PC2, color=data_type)) +
+  ylim(NA, 0.15) +
+  facet_wrap(~population) +
+  theme_cowplot()
+```
+
+    ## Warning: Removed 3 rows containing missing values (geom_point).
+
+![](pca_files/figure-gfm/unnamed-chunk-7-4.png)<!-- -->
+
+``` r
+genome_cov <- read_tsv("../angsd/bam_list_realigned_pe_snps.covMat", col_names = F)[1:163,]
+PCA(genome_cov, sample_table$sample_id_corrected, sample_table$data_type, 1, 2, show.ellipse = F, show.line = T)
+```
+
+    ## Warning: Computation failed in `stat_conline()`:
+    ## there is no package called 'miscTools'
+
+![](pca_files/figure-gfm/unnamed-chunk-7-5.png)<!-- -->
+
+``` r
+pca_table %>%
+  dplyr::select(1:4) %>%
+  mutate(data_type=population, population=str_sub(individual, 1, 7)) %>%
+  ggplot() +
+  geom_point(aes(x=PC1, y=PC2, color=data_type)) +
+  ylim(NA, 0.15) +
+  facet_wrap(~population) +
+  theme_cowplot()
+```
+
+    ## Warning: Removed 2 rows containing missing values (geom_point).
+
+![](pca_files/figure-gfm/unnamed-chunk-7-6.png)<!-- -->

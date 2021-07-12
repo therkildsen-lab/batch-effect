@@ -1,0 +1,4 @@
+/workdir/batch-effect/bam/BUK2011_015_55230_7_pe_bt2_gadMor3_sorted_dedup_overlapclipped_realigned.bam
+/workdir/batch-effect/bam/ITV2011_782_55236_7_pe_bt2_gadMor3_sorted_dedup_overlapclipped_realigned.bam
+/workdir/batch-effect/bam/BUK2011_051_55157_7_pe_bt2_gadMor3_sorted_dedup_overlapclipped_realigned.bam
+/workdir/batch-effect/bam/KNG2011_397_14247X129_4_se_bt2_gadMor3_sorted_dedup_realigned.bam

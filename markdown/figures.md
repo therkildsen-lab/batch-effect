@@ -19,8 +19,8 @@ Here, I am comparing heterozygosity estimated from:
 2.  sliding window trimmed, stringent read quality filtering of 33
     (after)
 
-Both have transitions filtered, have a stringent maximum depth filter of
-10, and a stringent mapping quality filter of 30.
+Neither have transitions filtered, have a stringent maximum depth filter
+of 10, and a stringent mapping quality filter of 30.
 
 ``` r
 sample_table <- read_tsv("../sample_lists/sample_table_merged.tsv")
@@ -38,10 +38,10 @@ for (i in 1:nrow(sample_table)){
     path <- str_c("../../cod/greenland-cod/angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_minq20_sorted_dedup_realigned_mindp2_maxdp10_minq20_minmapq30")
     path_stringent <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_realigned_mindp2_maxdp10_minq33_minmapq30")
   }
-  het_relaxed <- read_delim(str_c(path, "_notrans.ml"), col_names = F, delim = " ") %>% 
+  het_relaxed <- read_delim(str_c(path, ".ml"), col_names = F, delim = " ") %>% 
     transmute(n_sites=(X1+X2+X3), n_snp=X2, het=n_snp/n_sites) %>%
     mutate(sample_id=sample_id, population=population, data_type=data_type, type="Before")
-  het_stringent_notrans <- read_delim(str_c(path_stringent, "_notrans.ml"), col_names = F, delim = " ") %>% 
+  het_stringent_notrans <- read_delim(str_c(path_stringent, ".ml"), col_names = F, delim = " ") %>% 
     transmute(n_sites=(X1+X2+X3), n_snp=X2, het=n_snp/n_sites) %>%
     mutate(sample_id=sample_id, population=population, data_type=data_type, type="After")
   het_combined <- bind_rows(het_relaxed, het_stringent_notrans)
@@ -66,7 +66,7 @@ het_plot <- het_gg %>%
   ylab("heterozygosity") +
   facet_grid(population_new~type, scales = "free_y") +
   xlab(" ") +
-  scale_y_continuous(limits = c(0, 0.005), breaks = 0.001*(0:5), labels = c("0", "0.001", "0.002", "0.003", "0.004", "0.005")) +
+  #scale_y_continuous(limits = c(0, 0.005), breaks = 0.001*(0:5), labels = c("0", "0.001", "0.002", "0.003", "0.004", "0.005")) +
   coord_flip() +
   theme_cowplot() +
   theme(panel.background=element_rect(colour="black", size=0.8),
@@ -99,6 +99,33 @@ Also, note that two outlier individuals from UUM2010 are removed from
 these plots for clearer results.
 
 ``` r
+genome_cov <- read_tsv("../angsd/bam_list_realigned_downsampled_unlinked.covMat", col_names = F) %>%
+  as.matrix()
+PCA(genome_cov, sample_table$sample_id_corrected, sample_table$data_type, 1, 2, show.ellipse = F, show.line = F)
+```
+
+![](figures_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+
+``` r
+pca_before <- pca_table[,1:4] %>%
+  rename(data_type=population) %>%
+  left_join(transmute(sample_table, individual=sample_id_corrected, population=population)) %>%
+  mutate(PC2=-PC2)
+
+genome_cov <- read_tsv("../angsd/bam_list_realigned_private_snps_depth_ratio_filtered.covMat", col_names = F) %>%
+  as.matrix()
+PCA(genome_cov, sample_table$sample_id_corrected, sample_table$data_type, 1, 2, show.ellipse = F, show.line = F)
+```
+
+![](figures_files/figure-gfm/unnamed-chunk-3-2.png)<!-- -->
+
+``` r
+pca_after <- pca_table[,1:4] %>%
+  rename(data_type=population) %>%
+  left_join(transmute(sample_table, individual=sample_id_corrected, population=population))
+```
+
+``` r
 pca_combined <- bind_rows(bind_cols(pca_before, type="Before"), 
                           bind_cols(pca_after, type="After")) %>%
   mutate(type=fct_relevel(type, c("Before", "After"))) %>%
@@ -111,7 +138,7 @@ pca_plot <- pca_combined_select_pops %>%
   geom_point(aes(color=batch), size=2) +
   scale_color_viridis_d(begin=0.25, end=0.75) +
   facet_grid(population_new~type) +
-  ylim(NA, 0.2) +
+  ylim(NA, 0.15) +
   xlim(-0.15, NA) +
   theme_cowplot() +
   theme(axis.text = element_blank(),
@@ -137,27 +164,36 @@ compare the Fst result before and after applying a depth ratio filter of
 0.9.
 
 ``` r
-maf_se <- read_tsv("../angsd/popminind20/se_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked_popminind20.mafs.gz") %>%
+fixed_windowed_fst <- function(x, window_length){
+  mutate(x, position=cut(position, breaks=seq(0,50*10^6,window_length), labels=seq(window_length/2,50*10^6-window_length/2,window_length))) %>%
+  group_by(lg, position, type) %>%
+  summarise(fst=sum(alpha)/sum(beta)) %>%
+  mutate(position=as.numeric(as.character(position)))
+}
+maf_se <- read_tsv("../angsd/popminind20/se_global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_popminind20.mafs.gz") %>%
   transmute(lg = chromo, position = position, major=major, minor = minor, se_maf = knownEM, se_nind=nInd)
-maf_pe <- read_tsv("../angsd/popminind20/pe_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked_popminind20.mafs.gz")%>%
+maf_pe <- read_tsv("../angsd/popminind20/pe_global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_popminind20.mafs.gz")%>%
   transmute(lg = chromo, position = position, major=major, minor = minor, pe_maf = knownEM, pe_nind=nInd)
-fst <- read_tsv("../angsd/popminind20/pe_se_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked_popminind20.alpha_beta.txt", col_names = F) %>%
+fst <- read_tsv("../angsd/popminind20/pe_se_global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_popminind20.alpha_beta.txt", col_names = F) %>%
   mutate(X5=X3/X4) %>%
   transmute(lg=X1, position = X2, alpha=X3, beta=X4, fst = X5)
 anymapq_depth <- read_tsv("../angsd/popminind2/bam_list_realigned_se_anymapq.pos.gz") %>%
   rename(lg=chr, position=pos, total_depth_anymapq=totDepth)
-mapq20_depth <- read_tsv("../angsd/popminind20/se_global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked_popminind20.pos.gz") %>%
+mapq20_depth <- read_tsv("../angsd/popminind20/se_global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_popminind20.pos.gz") %>%
   rename(lg=chr, position=pos, total_depth_mapq20=totDepth)
 maf_joined <- inner_join(maf_se, maf_pe) %>%
-  left_join(fst)
+  left_join(fst) %>%
+  filter(str_detect(lg, "LG"))
 depth <- inner_join(anymapq_depth, mapq20_depth) %>%
   mutate(depth_ratio=total_depth_mapq20/total_depth_anymapq)
-fst_plot <- maf_joined %>%
+fst_combined <- maf_joined %>%
   left_join(depth) %>%
   filter(depth_ratio > 0.9) %>%
   mutate(type="After") %>%
   bind_rows(maf_joined %>% left_join(depth) %>% mutate(type="Before")) %>%
-  mutate(type=fct_relevel(type, c("Before", "After"))) %>%
+  mutate(type=fct_relevel(type, c("Before", "After")))
+## per SNP
+fst_plot <- fst_combined %>%
   ggplot(aes(x=position/10^6, y=fst, color=lg)) +
   geom_point(size = 0.5) +
   scale_color_manual(values = rep(c("black", "darkgrey"), 12)) +
@@ -173,6 +209,25 @@ fst_plot
 ```
 
 ![](figures_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+
+``` r
+## in 10kb windows
+fst_combined %>%
+  fixed_windowed_fst(10000) %>%
+  ggplot(aes(x=position/10^6, y=fst, color=lg)) +
+  geom_point(size = 0.5) +
+  scale_color_manual(values = rep(c("black", "darkgrey"), 12)) +
+  scale_x_continuous(breaks = c(0,15)) +
+  facet_grid(type~lg, scales = "free_x", space = "free_x") +
+  xlab("position (in Mb)") +
+  ylab("Fst") +
+  theme_cowplot() +
+  theme(panel.spacing = unit(0.0, "lines")) +
+  theme(legend.position = "none",
+        strip.text.y = element_text(face = "bold", size=15))
+```
+
+![](figures_files/figure-gfm/unnamed-chunk-5-2.png)<!-- -->
 
 #### Combine the plots
 

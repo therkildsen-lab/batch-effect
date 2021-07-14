@@ -1,4 +1,4 @@
-## Batch effects in population genomic studies with low-coverage whole genome sequencing data: their causes, identification, and remedy
+## Batch effects in population genomic studies with low-coverage whole genome sequencing data: causes, detection, and mitigation
 
 <br>
 

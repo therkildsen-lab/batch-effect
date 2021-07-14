@@ -1,15 +1,15 @@
 ## Batch effects in population genomic studies with low-coverage whole genome sequencing data: their causes, identification, and remedy
 
-[Core pipeline](https://github.com/therkildsen-lab/batch-effect/blob/main/markdown/pipeline.md)
+[Original "batch-effect-naive" pipeline](https://github.com/therkildsen-lab/batch-effect/blob/main/markdown/original_pipeline.md)
 
-[Poly G trimming comparison](https://github.com/therkildsen-lab/batch-effect/blob/main/markdown/polyg.md)
+[Presence/absence of poly-G tails](https://github.com/therkildsen-lab/batch-effect/blob/main/markdown/polyg.md)
 
-[SFS-bases analyses](https://github.com/therkildsen-lab/batch-effect/blob/main/markdown/sfs.md)
+[Difference in levels of base quality score miscalibration](https://github.com/therkildsen-lab/batch-effect/blob/main/markdown/base_quality.md)
 
-[PCA-based analyses](https://github.com/therkildsen-lab/batch-effect/blob/main/markdown/pca.md)
+[Difference in levels of reference bias](https://github.com/therkildsen-lab/batch-effect/blob/main/markdown/reference_bias.md)
 
-[Fst-based analyses](https://github.com/therkildsen-lab/batch-effect/blob/main/markdown/fst.md)
+[Difference in levels of DNA degradation](https://github.com/therkildsen-lab/batch-effect/blob/main/markdown/degradation.md)
 
-[Figures for publication](https://github.com/therkildsen-lab/batch-effect/blob/main/markdown/figures.md)
+[Difference in sequencing depth](https://github.com/therkildsen-lab/batch-effect/blob/main/markdown/depth.md)
 
-[Supplementary figures](https://github.com/therkildsen-lab/batch-effect/blob/main/markdown/supplementary_figures.md)
+[Miscellaneous](https://github.com/therkildsen-lab/batch-effect/blob/main/markdown/figures.md)

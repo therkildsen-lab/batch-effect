@@ -109,10 +109,8 @@ PCA(genome_cov, sample_table$sample_id_corrected, sample_table$data_type, 1, 2, 
 ``` r
 pca_before <- pca_table[,1:4] %>%
   rename(data_type=population) %>%
-  left_join(transmute(sample_table, individual=sample_id_corrected, population=population)) %>%
-  mutate(PC2=-PC2)
-
-genome_cov <- read_tsv("../angsd/bam_list_realigned_private_snps_depth_ratio_filtered.covMat", col_names = F) %>%
+  left_join(transmute(sample_table, individual=sample_id_corrected, population=population))
+genome_cov <- read_tsv("../angsd/bam_list_realigned_private_snps.covMat", col_names = F) %>%
   as.matrix()
 PCA(genome_cov, sample_table$sample_id_corrected, sample_table$data_type, 1, 2, show.ellipse = F, show.line = F)
 ```
@@ -138,7 +136,7 @@ pca_plot <- pca_combined_select_pops %>%
   geom_point(aes(color=batch), size=2) +
   scale_color_viridis_d(begin=0.25, end=0.75) +
   facet_grid(population_new~type) +
-  ylim(NA, 0.15) +
+  ylim(-0.1, NA) +
   xlim(-0.15, NA) +
   theme_cowplot() +
   theme(axis.text = element_blank(),
@@ -164,12 +162,6 @@ compare the Fst result before and after applying a depth ratio filter of
 0.9.
 
 ``` r
-fixed_windowed_fst <- function(x, window_length){
-  mutate(x, position=cut(position, breaks=seq(0,50*10^6,window_length), labels=seq(window_length/2,50*10^6-window_length/2,window_length))) %>%
-  group_by(lg, position, type) %>%
-  summarise(fst=sum(alpha)/sum(beta)) %>%
-  mutate(position=as.numeric(as.character(position)))
-}
 maf_se <- read_tsv("../angsd/popminind20/se_global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_popminind20.mafs.gz") %>%
   transmute(lg = chromo, position = position, major=major, minor = minor, se_maf = knownEM, se_nind=nInd)
 maf_pe <- read_tsv("../angsd/popminind20/pe_global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_popminind20.mafs.gz")%>%
@@ -209,25 +201,6 @@ fst_plot
 ```
 
 ![](figures_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
-
-``` r
-## in 10kb windows
-fst_combined %>%
-  fixed_windowed_fst(10000) %>%
-  ggplot(aes(x=position/10^6, y=fst, color=lg)) +
-  geom_point(size = 0.5) +
-  scale_color_manual(values = rep(c("black", "darkgrey"), 12)) +
-  scale_x_continuous(breaks = c(0,15)) +
-  facet_grid(type~lg, scales = "free_x", space = "free_x") +
-  xlab("position (in Mb)") +
-  ylab("Fst") +
-  theme_cowplot() +
-  theme(panel.spacing = unit(0.0, "lines")) +
-  theme(legend.position = "none",
-        strip.text.y = element_text(face = "bold", size=15))
-```
-
-![](figures_files/figure-gfm/unnamed-chunk-5-2.png)<!-- -->
 
 #### Combine the plots
 

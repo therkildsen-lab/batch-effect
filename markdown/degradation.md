@@ -740,8 +740,8 @@ p_d
 ## Assemble Figure 5
 
 ``` r
-top <- cowplot::plot_grid(p_a, p_b,nrow = 1, labels = c("A", "B"), scale = 0.9)
-bottom <- cowplot::plot_grid(p_c, p_d, nrow = 1, labels = c("C", "D"), scale = 0.9)
+bottom <- cowplot::plot_grid(p_b, p_a,nrow = 1, labels = c("C", "D"), scale = 0.9)
+top <- cowplot::plot_grid(p_c, p_d, nrow = 1, labels = c("A", "B"), scale = 0.9)
 ```
 
     ## Warning: Removed 12 rows containing missing values (geom_point).
@@ -749,7 +749,7 @@ bottom <- cowplot::plot_grid(p_c, p_d, nrow = 1, labels = c("C", "D"), scale = 0
     ## Warning: Removed 4 rows containing missing values (geom_point).
 
 ``` r
-figure <- cowplot::plot_grid(top, bottom, nrow = 2, rel_heights = c(7, 5.3))
+figure <- cowplot::plot_grid(top, bottom, nrow = 2, rel_heights = c(5.3, 7))
 print(figure)
 ```
 

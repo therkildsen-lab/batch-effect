@@ -226,8 +226,8 @@ maf_pe <- read_tsv("../angsd/popminind20/pe_global_snp_list_bam_list_realigned_m
   transmute(lg = chromo, position = position, major=major, minor = minor, pe_maf = knownEM, pe_nind=nInd)
 maf_joined <- inner_join(maf_se, maf_pe) %>%
   mutate(delta = abs(se_maf- pe_maf))
-private_alleles <- bind_rows((filter(maf_joined, pe_maf<0.01 | pe_maf>0.99) %>% filter(se_maf>0.1 & se_maf<0.9) %>% transmute(major=major, minor=minor, batch = "HiSeq-125SE\n(more degraded,\nless base calling bias)")),
-          (filter(maf_joined, se_maf<0.01 | se_maf>0.99) %>% filter(pe_maf>0.1 & pe_maf<0.9) %>% transmute(major=major, minor=minor, batch = "NextSeq-150PE\n(well-preserved,\nmore base calling bias)"))) %>%
+private_alleles <- bind_rows((filter(maf_joined, pe_maf<0.01 | pe_maf>0.99) %>% filter(se_maf>0.1 & se_maf<0.9) %>% transmute(major=major, minor=minor, batch = "HiSeq-125SE\n(a subset of samples\nare degraded)")),
+          (filter(maf_joined, se_maf<0.01 | se_maf>0.99) %>% filter(pe_maf>0.1 & pe_maf<0.9) %>% transmute(major=major, minor=minor, batch = "NextSeq-150PE\n(well-preserved)"))) %>%
   mutate(base_substitution = str_c(major, "-to-", minor)) %>%
   mutate(base_substitution = case_when(
     base_substitution %in% c("A-to-C", "T-to-G") ~ "A-to-C\nT-to-G", 
@@ -522,7 +522,7 @@ set.seed(42)
 p_c <- het_final %>%
   left_join(rename_pop) %>%
   filter(!is.na(population_new), filter=="stringent") %>%
-  mutate(batch=ifelse(data_type=="pe", "NextSeq-150PE", "HiSeq-125SE")) %>%
+  mutate(batch=ifelse(data_type=="pe", "well-preserved", "degraded")) %>%
   mutate(type=ifelse(tran=="Including transitions", "Before", "After")) %>%
   mutate(type=fct_relevel(type, c("Before", "After"))) %>%
   ggplot(aes(x=population, y=het)) +
@@ -565,7 +565,7 @@ pca_after <- pca_table[,1:4] %>%
 pca_combined <- bind_rows(bind_cols(pca_before, type="Before"), 
                           bind_cols(pca_after, type="After")) %>%
   mutate(type=fct_relevel(type, c("Before", "After"))) %>%
-  mutate(batch=ifelse(data_type=="se", "HiSeq-125SE", "NextSeq-150PE"))
+  mutate(batch=ifelse(data_type=="se", "degraded", "well-preserved"))
 pca_combined_select_pops <- filter(pca_combined, population %in% c("ATP2011", "NAR2008", "UUM2010"))
 ```
 

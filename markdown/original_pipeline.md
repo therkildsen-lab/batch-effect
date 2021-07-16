@@ -631,9 +631,10 @@ sample_table_degradation <- left_join(sample_table_merged, extraction_info, by=c
 degradation_sample_size <- sample_table_degradation %>%
   mutate(data_type=ifelse(data_type=="pe", "NextSeq-150PE", "HiSeq-125SE")) %>%
   mutate(sample_id_corrected=fct_reorder(sample_id_corrected, degradation_level)) %>%
+  mutate(degradation_level=ifelse(degradation_level=="1", "well-preserved", "degraded")) %>%
   ggplot(aes(x=population_new, fill=degradation_level, group=sample_id_corrected)) +
   geom_bar(color="black") +
-  scale_fill_viridis_d(begin=0, end=1, direction = -1) +
+  scale_fill_viridis_d(begin=0.5, end=1, direction = -1) +
   xlab("population")+
   ylab("sample size") +
   facet_wrap(~data_type) +

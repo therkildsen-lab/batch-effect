@@ -1,9 +1,6 @@
 Reference bias
 ================
 
-  - [Get saf, maf, and Fst with ANGSD](#get-saf-maf-and-fst-with-angsd)
-      - [Sliding window trimmed PE samples
-        (new)](#sliding-window-trimmed-pe-samples-new)
   - [Plot Fst with sliding window trimmed PE
     samples](#plot-fst-with-sliding-window-trimmed-pe-samples)
       - [Without filtering](#without-filtering)
@@ -22,41 +19,6 @@ library(statsExpressions)
 
 Here, we examine the effect of reference bias by estimating Fst between
 two batches of data, and study the source of Fst outliers.
-
-## Get saf, maf, and Fst with ANGSD
-
-#### Sliding window trimmed PE samples (new)
-
-``` bash
-## MAF and SAF (minInd=20)
-nohup bash /workdir/genomic-data-analysis/scripts/get_maf_per_pop.sh \
-/workdir/batch-effect/ \
-/workdir/batch-effect/sample_lists/sample_table_merged.tsv \
-6 \
-bam_list_realigned_ \
-/workdir/cod/reference_seqs/gadMor3.fasta \
-/workdir/batch-effect/angsd/global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20.txt \
-20 184 20 20 \
-> /workdir/batch-effect/nohups/get_maf_per_pop.nohup &
-## Fst
-nohup bash /workdir/genomic-data-analysis/scripts/get_fst.sh \
-/workdir/batch-effect/angsd/popminind20/ \
-/workdir/batch-effect/sample_lists/sample_table_merged.tsv \
-6 \
-_global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_popminind20 \
-> /workdir/batch-effect/nohups/get_fst.nohup &
-## Get depth count from se samples without a mapping quality filter (minInd=2)
-cd /workdir/batch-effect
-nohup /workdir/programs/angsd0.931/angsd/angsd \
--b sample_lists/bam_list_per_pop/bam_list_realigned_se.txt \
--anc /workdir/cod/reference_seqs/gadMor3.fasta \
--out angsd/popminind2/bam_list_realigned_se_anymapq \
--doCounts 1 -doDepth 1 -dumpCounts 1 \
--P 16 -setMinDepth 2 -minInd 2 -minQ 20 \
--sites /workdir/batch-effect/angsd/global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20.txt \
--rf /workdir/batch-effect/angsd/global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20.chrs \
->& nohups/get_depth_anymapq_bam_list_realigned_se.log &
-```
 
 ## Plot Fst with sliding window trimmed PE samples
 
@@ -118,7 +80,7 @@ maf_joined %>%
   theme(panel.spacing = unit(0.0, "lines"))
 ```
 
-![](reference_bias_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+![](reference_bias_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
 
 ``` r
 fixed_windowed_fst <- function(x, window_length){
@@ -135,7 +97,7 @@ fixed_windowed_fst(maf_joined, 10000) %>%
   theme(panel.spacing = unit(0.0, "lines"))
 ```
 
-![](reference_bias_files/figure-gfm/unnamed-chunk-4-2.png)<!-- -->
+![](reference_bias_files/figure-gfm/unnamed-chunk-3-2.png)<!-- -->
 
 #### Check correlation with read depth distribution before mapping quality filter
 
@@ -157,7 +119,7 @@ p <- maf_joined %>%
 ggExtra::ggMarginal(p, type = "histogram", size=5, margins="x", fill="white")
 ```
 
-![](reference_bias_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+![](reference_bias_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
 ``` r
 maf_divided <- maf_joined %>%
@@ -183,7 +145,7 @@ maf_divided %>%
         axis.line = element_line())
 ```
 
-![](reference_bias_files/figure-gfm/unnamed-chunk-5-2.png)<!-- -->
+![](reference_bias_files/figure-gfm/unnamed-chunk-4-2.png)<!-- -->
 
 ``` r
 ## To get the test stats
@@ -211,7 +173,7 @@ maf_joined %>%
   theme(panel.spacing = unit(0.0, "lines"))
 ```
 
-![](reference_bias_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](reference_bias_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
 ``` r
 maf_joined %>%
@@ -225,7 +187,7 @@ maf_joined %>%
   theme(panel.spacing = unit(0.0, "lines"))
 ```
 
-![](reference_bias_files/figure-gfm/unnamed-chunk-7-2.png)<!-- -->
+![](reference_bias_files/figure-gfm/unnamed-chunk-6-2.png)<!-- -->
 
 ``` r
 maf_joined %>%

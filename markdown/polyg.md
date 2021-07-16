@@ -23,6 +23,8 @@ Poly-G tail
       - [Deduplicate](#deduplicate)
       - [Indel realignment](#indel-realignment)
       - [SNP calling](#snp-calling)
+      - [SAF, MAF, Fst estimation, and read depth count in each batch of
+        data](#saf-maf-fst-estimation-and-read-depth-count-in-each-batch-of-data)
       - [LD pruning](#ld-pruning)
       - [Get the covariance matrix with ANGSD using LD pruned SNP
         list](#get-the-covariance-matrix-with-angsd-using-ld-pruned-snp-list)
@@ -469,6 +471,39 @@ nohup bash /workdir/genomic-data-analysis/scripts/angsd_global_snp_calling.sh \
 > /workdir/batch-effect/nohups/global_snp_calling_bam_list_realigned.nohup &
 ```
 
+#### SAF, MAF, Fst estimation, and read depth count in each batch of data
+
+``` bash
+## MAF and SAF (minInd=20)
+nohup bash /workdir/genomic-data-analysis/scripts/get_maf_per_pop.sh \
+/workdir/batch-effect/ \
+/workdir/batch-effect/sample_lists/sample_table_merged.tsv \
+6 \
+bam_list_realigned_ \
+/workdir/cod/reference_seqs/gadMor3.fasta \
+/workdir/batch-effect/angsd/global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20.txt \
+20 184 20 20 \
+> /workdir/batch-effect/nohups/get_maf_per_pop.nohup &
+## Fst
+nohup bash /workdir/genomic-data-analysis/scripts/get_fst.sh \
+/workdir/batch-effect/angsd/popminind20/ \
+/workdir/batch-effect/sample_lists/sample_table_merged.tsv \
+6 \
+_global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_popminind20 \
+> /workdir/batch-effect/nohups/get_fst.nohup &
+## Get depth count from se samples without a mapping quality filter (minInd=2)
+cd /workdir/batch-effect
+nohup /workdir/programs/angsd0.931/angsd/angsd \
+-b sample_lists/bam_list_per_pop/bam_list_realigned_se.txt \
+-anc /workdir/cod/reference_seqs/gadMor3.fasta \
+-out angsd/popminind2/bam_list_realigned_se_anymapq \
+-doCounts 1 -doDepth 1 -dumpCounts 1 \
+-P 16 -setMinDepth 2 -minInd 2 -minQ 20 \
+-sites /workdir/batch-effect/angsd/global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20.txt \
+-rf /workdir/batch-effect/angsd/global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20.chrs \
+>& nohups/get_depth_anymapq_bam_list_realigned_se.log &
+```
+
 #### LD pruning
 
 ###### Downsample the mafs file to \~1,000,000 SNPs
@@ -517,7 +552,7 @@ mafs_inversion_filtered %>%
   theme(legend.position = "none")
 ```
 
-![](polyg_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
+![](polyg_files/figure-gfm/unnamed-chunk-25-1.png)<!-- -->
 
 ``` r
 mafs_inversion_filtered %>%
@@ -630,15 +665,4 @@ nohup /workdir/programs/angsd0.931/angsd/angsd \
 -sites /workdir/batch-effect/angsd/global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled_unlinked.txt \
 -rf /workdir/batch-effect/angsd/global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled_unlinked.chrs \
 >& nohups/run_pca_bam_list_realigned_downsampled_unlinked.log &
-
-## Get depth count without mapping quality filter
-nohup /workdir/programs/angsd0.931/angsd/angsd \
--b sample_lists/bam_list_realigned.txt \
--anc /workdir/cod/reference_seqs/gadMor3.fasta \
--out angsd/bam_list_realigned_downsampled_unlinked_anymapq \
--doCounts 1 -doDepth 1 -dumpCounts 1 \
--P 16 -setMinDepth 2 -minInd 2 -minQ 20 \
--sites /workdir/batch-effect/angsd/global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled_unlinked.txt \
--rf /workdir/batch-effect/angsd/global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled_unlinked.chrs \
->& nohups/get_depth_anymapq_bam_list_realigned_downsampled_unlinked.log &
 ```

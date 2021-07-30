@@ -45,3 +45,5 @@ nohups/
 cut_right/
 angsd_old/
 .DS_Store
+misc/gadMor3_snp_masked*
+angsd_tmpdir*/

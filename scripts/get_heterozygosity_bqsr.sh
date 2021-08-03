@@ -4,7 +4,7 @@ SAMPLESIZE=$2
 
 OUTDIR=/workdir/batch-effect/angsd/heterozygosity/
 JOB_INDEX=0
-JOBS=20
+JOBS=10
 MINDP=2
 MAXDP=10
 MINQ=0

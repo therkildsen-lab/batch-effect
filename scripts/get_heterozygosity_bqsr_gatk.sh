@@ -2,7 +2,7 @@
 BAMLIST=/workdir/batch-effect/sample_lists/bam_list_realigned.txt
 OUTDIR=/workdir/batch-effect/angsd/heterozygosity/
 JOB_INDEX=0
-JOBS=40
+JOBS=10
 MINDP=2
 MAXDP=10
 MINQ=0

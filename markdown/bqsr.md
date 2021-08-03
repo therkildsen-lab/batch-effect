@@ -1,6 +1,8 @@
 Base quality score recalibration
 ================
 
+  - [SNP calling with the entire Greenland dataset and relaxed
+    filters](#snp-calling-with-the-entire-greenland-dataset-and-relaxed-filters)
   - [SoapSNP GL model in ANGSD](#soapsnp-gl-model-in-angsd)
       - [Create a bed formatted SNP
         list](#create-a-bed-formatted-snp-list)
@@ -23,6 +25,17 @@ library(tidyverse)
 library(cowplot)
 ```
 
+## SNP calling with the entire Greenland dataset and relaxed filters
+
+``` bash
+nohup /workdir/programs/angsd0.931/angsd/angsd \
+-b /workdir/cod/greenland-cod/sample_lists/bam_list_realigned_mincov_filtered.txt \
+-anc /workdir/cod/reference_seqs/gadMor3.fasta \
+-out /workdir/batch-effect/angsd/global_snp_list_bqsr \
+-GL 1 -doMaf 1 -doMajorMinor 1 -P 8 -SNP_pval 1e-6 -minQ 20 -minMapQ 20 \
+> /workdir/batch-effect/nohups/global_snp_list_bqsr.nohup &
+```
+
 ## SoapSNP GL model in ANGSD
 
 #### Create a bed formatted SNP list
@@ -37,16 +50,20 @@ bed_snp_list <- read_tsv("../../cod/greenland-cod/angsd/global_snp_list_bam_list
   dplyr::select(1:2) %>%
   mutate(X2=X2-1, X3=X2+1)
 write_tsv(bed_snp_list, "../angsd/global_snp_list_bam_list_realigned_mincov_filtered_mindp249_maxdp1142_minind111_minq20.bed", col_names = FALSE)
+
+bed_snp_list <- read_tsv("../angsd/global_snp_list_bqsr.mafs.gz") %>%
+  transmute(chromo=chromo, position_start=position-1, position_end=position)
+write_tsv(bed_snp_list, "../angsd/global_snp_list_bqsr.bed", col_names = FALSE)
 ```
 
 #### Mask SNPs in reference genome
 
 ``` bash
-bedtools maskfasta \
+nohup bedtools maskfasta \
 -fi /workdir/cod/reference_seqs/gadMor3.fasta \
--bed /workdir/batch-effect/angsd/global_snp_list_bam_list_realigned_mincov_filtered_mindp249_maxdp1142_minind111_minq20.bed \
+-bed /workdir/batch-effect/angsd/global_snp_list_bqsr.bed \
 -fo /workdir/batch-effect/misc/gadMor3_snp_masked.fasta \
-> /workdir/batch-effect/nohups/maskfasta.nohup
+> /workdir/batch-effect/nohups/maskfasta.nohup &
 samtools faidx /workdir/batch-effect/misc/gadMor3_snp_masked.fasta 
 ```
 
@@ -142,7 +159,7 @@ SAMPLESIZE=$2
 
 OUTDIR=/workdir/batch-effect/angsd/heterozygosity/
 JOB_INDEX=0
-JOBS=20
+JOBS=10
 MINDP=2
 MAXDP=10
 MINQ=0
@@ -246,7 +263,7 @@ het_final %>%
   theme(panel.background=element_rect(colour="black", size=0.8))
 ```
 
-![](bqsr_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+![](bqsr_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
 ``` r
 het_final %>%
@@ -260,7 +277,7 @@ het_final %>%
 
     ## Warning: Ignoring unknown parameters: height
 
-![](bqsr_files/figure-gfm/unnamed-chunk-8-2.png)<!-- -->
+![](bqsr_files/figure-gfm/unnamed-chunk-9-2.png)<!-- -->
 
 ## GATK BQSR
 
@@ -268,19 +285,19 @@ het_final %>%
 
 ``` bash
 echo -e "##fileformat=VCFv4.2
-#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO" > /workdir/batch-effect/angsd/global_snp_list_bam_list_realigned_mincov_filtered_mindp249_maxdp1142_minind111_minq20.vcf
+#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO" > /workdir/batch-effect/angsd/global_snp_list_bqsr.vcf
 ```
 
 ``` r
-vcf_snp_list <- read_tsv("../../cod/greenland-cod/angsd/global_snp_list_bam_list_realigned_mincov_filtered_mindp249_maxdp1142_minind111_minq20.txt", col_names = FALSE) %>%
-  mutate(X5=".", X6=".", X7="PASS", X8=".") %>%
+vcf_snp_list <- read_tsv("../angsd/global_snp_list_bqsr.mafs.gz", col_names = TRUE) %>%
+  transmute(X1=chromo, X2=position, X3=major, X4=minor, X5=".", X6=".", X7="PASS", X8=".") %>%
   relocate(X1, X2, X5)
-write_tsv(vcf_snp_list, "../angsd/global_snp_list_bam_list_realigned_mincov_filtered_mindp249_maxdp1142_minind111_minq20.vcf", col_names = FALSE, append = TRUE)
+write_tsv(vcf_snp_list, "../angsd/global_snp_list_bqsr.vcf", col_names = FALSE, append = TRUE)
 ```
 
 ``` bash
 /programs/gatk-4.2.0.0/gatk IndexFeatureFile \
--I /workdir/batch-effect/angsd/global_snp_list_bam_list_realigned_mincov_filtered_mindp249_maxdp1142_minind111_minq20.vcf
+-I /workdir/batch-effect/angsd/global_snp_list_bqsr.vcf
 ```
 
 #### Test one sample
@@ -311,7 +328,7 @@ Save the following script as
 BAMLIST=/workdir/batch-effect/sample_lists/bam_list_realigned.txt
 BASEDIR=/workdir/batch-effect/
 REFERENCE=/workdir/cod/reference_seqs/gadMor3.fasta
-VCF=/workdir/batch-effect/angsd/global_snp_list_bam_list_realigned_mincov_filtered_mindp249_maxdp1142_minind111_minq20.vcf
+VCF=/workdir/batch-effect/angsd/global_snp_list_bqsr.vcf
 
 JOB_INDEX=0
 JOBS=20
@@ -369,7 +386,7 @@ Save the following script as
 BAMLIST=/workdir/batch-effect/sample_lists/bam_list_realigned.txt
 OUTDIR=/workdir/batch-effect/angsd/heterozygosity/
 JOB_INDEX=0
-JOBS=40
+JOBS=10
 MINDP=2
 MAXDP=10
 MINQ=0
@@ -468,7 +485,7 @@ het_final %>%
   theme(panel.background=element_rect(colour="black", size=0.8))
 ```
 
-![](bqsr_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+![](bqsr_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
 
 ``` r
 het_final %>%
@@ -482,7 +499,7 @@ het_final %>%
 
     ## Warning: Ignoring unknown parameters: height
 
-![](bqsr_files/figure-gfm/unnamed-chunk-17-2.png)<!-- -->
+![](bqsr_files/figure-gfm/unnamed-chunk-18-2.png)<!-- -->
 
 ## Conclusion for now
 
@@ -497,10 +514,14 @@ together for BQSR as a next step.
 
 But even then, it seems that the base quality scores for all samples are
 downward biased after BQSR, because we do not have an exhaustive
-database of variants in the data. This may also be due to the fact that
-we have a depth filter in our SNP calling step. We should consider
-filtering out these sites that didn’t pass the depth filter from BQSR (I
-will do this next).
+database of variants in the data. I have now tried this with SNP lists
+called with the batch-effect samples
+(`global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20.txt`,
+minMaf=0.05), Greenlands samples with depth filters
+(`global_snp_list_bam_list_realigned_mincov_filtered_mindp249_maxdp1142_minind111_minq20.txt`,
+minMaf=0.01), and Greenland samples with only a SNP p-value filter
+(`global_snp_list_bqsr.mafs.gz`). In terms of variant database, this is
+perhaps the best that we can do.
 
 Some methods that do not depend on such a database, such as KBBQ and
 Lacer, are not built for low-coverage data. Therefore, BQSR based on

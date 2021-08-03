@@ -2,7 +2,7 @@
 BAMLIST=/workdir/batch-effect/sample_lists/bam_list_realigned.txt
 BASEDIR=/workdir/batch-effect/
 REFERENCE=/workdir/cod/reference_seqs/gadMor3.fasta
-VCF=/workdir/batch-effect/angsd/global_snp_list_bam_list_realigned_mincov_filtered_mindp249_maxdp1142_minind111_minq20.vcf
+VCF=/workdir/batch-effect/angsd/global_snp_list_bqsr.vcf
 
 JOB_INDEX=0
 JOBS=20

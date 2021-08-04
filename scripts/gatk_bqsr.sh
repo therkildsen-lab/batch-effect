@@ -11,31 +11,10 @@ for LINE in `cat $BAMLIST`; do
   NAME_TEMP=`echo "${LINE%.*}"`
   NAME=`echo "${NAME_TEMP##*/}"`
 	echo $NAME
-
-  /programs/gatk-4.2.0.0/gatk BaseRecalibrator \
-  -I $LINE \
-  -R $REFERENCE \
-  --known-sites $VCF \
-  -O ${BASEDIR}/bam/${NAME}_recal_data.table &
-  
-  JOB_INDEX=$(( JOB_INDEX + 1 ))
-	if [ $JOB_INDEX == $JOBS ]; then
-		wait
-		JOB_INDEX=0
-	fi
-done
-
-wait
-
-JOB_INDEX=0
-for LINE in `cat $BAMLIST`; do
-  NAME_TEMP=`echo "${LINE%.*}"`
-  NAME=`echo "${NAME_TEMP##*/}"`
-	echo $NAME
   /programs/gatk-4.2.0.0/gatk ApplyBQSR \
   -R $REFERENCE \
   -I $LINE \
-  --bqsr-recal-file ${BASEDIR}/bam/${NAME}_recal_data.table \
+  --bqsr-recal-file ${BASEDIR}/bam/recal_data_all_samples.table \
   -O ${BASEDIR}/bam/${NAME}_bqsr.bam &
   
   JOB_INDEX=$(( JOB_INDEX + 1 ))

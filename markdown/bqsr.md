@@ -14,7 +14,6 @@ Base quality score recalibration
   - [GATK BQSR](#gatk-bqsr)
       - [Generate a vcf file with known
         SNPs](#generate-a-vcf-file-with-known-snps)
-      - [Test one sample](#test-one-sample)
       - [Run all samples](#run-all-samples)
       - [Estimate heterozygosity](#estimate-heterozygosity-1)
       - [Visualize the result](#visualize-the-result-1)
@@ -77,6 +76,7 @@ nohup /workdir/programs/angsd0.931/angsd/angsd \
 -out /workdir/batch-effect/angsd/soapsnp_se \
 -ref  /workdir/batch-effect/misc/gadMor3_snp_masked.fasta \
 -minQ 0 \
+-minMapQ 30 \
 > /workdir/batch-effect/nohups/calibration_matrix_se.nohup &
 
 nohup /workdir/programs/angsd0.931/angsd/angsd \
@@ -86,6 +86,7 @@ nohup /workdir/programs/angsd0.931/angsd/angsd \
 -out /workdir/batch-effect/angsd/soapsnp_pe \
 -ref  /workdir/batch-effect/misc/gadMor3_snp_masked.fasta \
 -minQ 0 \
+-minMapQ 30 \
 > /workdir/batch-effect/nohups/calibration_matrix_pe.nohup &
 
 for K in {0..87}; do
@@ -103,52 +104,6 @@ done
 
 #### Estimate heterozygosity
 
-``` bash
-nohup /workdir/programs/angsd0.931/angsd/angsd \
--i /workdir/batch-effect/bam/ATP2011_111_55173_7_pe_bt2_gadMor3_sorted_dedup_overlapclipped_realigned.bam \
--anc /workdir/cod/reference_seqs/gadMor3.fasta \
--out /workdir/batch-effect/angsd/test \
--doSaf 1 \
--GL 3 \
--tmpdir /workdir/batch-effect/angsd_tmpdir_pe/ \
--P 8 \
--doCounts 1 \
--setMinDepth 2 \
--setMaxDepth 10 \
--minQ 20 \
--minmapq 30 \
-> /workdir/batch-effect/nohups/gl3_test.nohup &
-
-/workdir/programs/angsd0.931/angsd/misc/realSFS \
-/workdir/batch-effect/angsd/test.saf.idx \
--P 8 \
-> /workdir/batch-effect/angsd/test.ml
-
-## The estimated He is 0.00027246644, which is MUCH lower than the ones estimated prior to recalibration (0.00322799145 for minQ20 and 0.00307783489 for minQ33)
-
-nohup /workdir/programs/angsd0.931/angsd/angsd \
--i /workdir/batch-effect/bam/ATP2011_111_55173_7_pe_bt2_gadMor3_sorted_dedup_overlapclipped_realigned.bam \
--anc /workdir/cod/reference_seqs/gadMor3.fasta \
--out /workdir/batch-effect/angsd/test2 \
--doSaf 1 \
--GL 3 \
--tmpdir /workdir/batch-effect/angsd_tmpdir_pe/ \
--P 8 \
--doCounts 1 \
--setMinDepth 2 \
--setMaxDepth 10 \
--minQ 25 \
--minmapq 30 \
-> /workdir/batch-effect/nohups/gl3_test2.nohup &
-
-/workdir/programs/angsd0.931/angsd/misc/realSFS \
-/workdir/batch-effect/angsd/test2.saf.idx \
--P 8 \
-> /workdir/batch-effect/angsd/test2.ml
-
-## The estimated He becomes 0 when minQ is 33 or 30
-```
-
 Save the following script as
 `/workdir/batch-effect/scripts/get_heterozygosity_bqsr.sh`
 
@@ -163,7 +118,7 @@ JOBS=10
 MINDP=2
 MAXDP=10
 MINQ=0
-MINMAPQ=20
+MINMAPQ=30
 KMAX=$(( SAMPLESIZE-1  ))
 for K in $(seq 0 $KMAX); do
   LINE=`head /workdir/batch-effect/sample_lists/bam_list_per_pop/bam_list_realigned_${BATCH}.txt -n $(( K+1 )) | tail -n 1`
@@ -226,11 +181,11 @@ for (i in 1:nrow(sample_table)){
   if (str_detect(data_type,"pe")){
     path <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_overlapclipped_realigned_mindp2_maxdp10_minq20_minmapq30")
     path_stringent <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_overlapclipped_realigned_mindp2_maxdp10_minq33_minmapq30")
-    path_bqsr <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_overlapclipped_realigned_mindp2_maxdp10_minq0_minmapq20_bqsr")
+    path_bqsr <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_overlapclipped_realigned_mindp2_maxdp10_minq0_minmapq30_bqsr")
   } else {
     path <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_realigned_mindp2_maxdp10_minq20_minmapq30")
     path_stringent <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_realigned_mindp2_maxdp10_minq33_minmapq30")
-    path_bqsr <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_realigned_mindp2_maxdp10_minq0_minmapq20_bqsr")
+    path_bqsr <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_realigned_mindp2_maxdp10_minq0_minmapq30_bqsr")
   }
   het_relaxed <- read_delim(str_c(path, ".ml"), col_names = F, delim = " ") %>% 
     transmute(n_sites=(X1+X2+X3), n_snp=X2, het=n_snp/n_sites) %>%
@@ -263,7 +218,7 @@ het_final %>%
   theme(panel.background=element_rect(colour="black", size=0.8))
 ```
 
-![](bqsr_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+![](bqsr_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
 ``` r
 het_final %>%
@@ -277,7 +232,7 @@ het_final %>%
 
     ## Warning: Ignoring unknown parameters: height
 
-![](bqsr_files/figure-gfm/unnamed-chunk-9-2.png)<!-- -->
+![](bqsr_files/figure-gfm/unnamed-chunk-8-2.png)<!-- -->
 
 ## GATK BQSR
 
@@ -300,25 +255,24 @@ write_tsv(vcf_snp_list, "../angsd/global_snp_list_bqsr.vcf", col_names = FALSE, 
 -I /workdir/batch-effect/angsd/global_snp_list_bqsr.vcf
 ```
 
-#### Test one sample
+#### Run all samples
 
 ``` bash
-nohup /programs/gatk-4.2.0.0/gatk BaseRecalibrator \
--I /workdir/batch-effect/bam/ATP2011_111_55173_7_pe_bt2_gadMor3_sorted_dedup_overlapclipped_realigned.bam \
--R /workdir/cod/reference_seqs/gadMor3.fasta \
---known-sites /workdir/batch-effect/angsd/global_snp_list_bam_list_realigned_mincov_filtered_mindp249_maxdp1142_minind111_minq20.vcf \
--O /workdir/batch-effect/bam/recal_data_test.table \
-> /workdir/batch-effect/nohups/gatk_bqsr_test.nohup &
-  
-nohup /programs/gatk-4.2.0.0/gatk ApplyBQSR \
--R /workdir/cod/reference_seqs/gadMor3.fasta \
--I /workdir/batch-effect/bam/ATP2011_111_55173_7_pe_bt2_gadMor3_sorted_dedup_overlapclipped_realigned.bam \
---bqsr-recal-file /workdir/batch-effect/bam/recal_data_test.table \
--O /workdir/batch-effect/bam/gatk_bqsr_test.bam \
-> /workdir/batch-effect/nohups/gatk_ApplyBQSR_test.nohup &
-```
+/programs/gatk-4.2.0.0/gatk IndexFeatureFile \
+-I /workdir/batch-effect/angsd/global_snp_list_bqsr.bed
 
-#### Run all samples
+cp /workdir/batch-effect/sample_lists/bam_list_realigned.txt /workdir/batch-effect/sample_lists/bam_list_realigned.list
+
+nohup /programs/gatk-4.2.0.0/gatk \
+BaseRecalibrator \
+-I /workdir/batch-effect/sample_lists/bam_list_realigned.list \
+-R /workdir/cod/reference_seqs/gadMor3.fasta \
+--known-sites /workdir/batch-effect/angsd/global_snp_list_bqsr.bed \
+--read-filter MappingQualityReadFilter \
+--minimum-mapping-quality 20 \
+-O /workdir/batch-effect/bam/recal_data_all_samples.table \
+> /workdir/batch-effect/nohups/gatk_bqsr_all_samples.nohup &
+```
 
 Save the following script as
 `/workdir/batch-effect/scripts/gatk_bqsr.sh`
@@ -337,31 +291,10 @@ for LINE in `cat $BAMLIST`; do
   NAME_TEMP=`echo "${LINE%.*}"`
   NAME=`echo "${NAME_TEMP##*/}"`
     echo $NAME
-
-  /programs/gatk-4.2.0.0/gatk BaseRecalibrator \
-  -I $LINE \
-  -R $REFERENCE \
-  --known-sites $VCF \
-  -O ${BASEDIR}/bam/${NAME}_recal_data.table &
-  
-  JOB_INDEX=$(( JOB_INDEX + 1 ))
-    if [ $JOB_INDEX == $JOBS ]; then
-        wait
-        JOB_INDEX=0
-    fi
-done
-
-wait
-
-JOB_INDEX=0
-for LINE in `cat $BAMLIST`; do
-  NAME_TEMP=`echo "${LINE%.*}"`
-  NAME=`echo "${NAME_TEMP##*/}"`
-    echo $NAME
   /programs/gatk-4.2.0.0/gatk ApplyBQSR \
   -R $REFERENCE \
   -I $LINE \
-  --bqsr-recal-file ${BASEDIR}/bam/${NAME}_recal_data.table \
+  --bqsr-recal-file ${BASEDIR}/bam/recal_data_all_samples.table \
   -O ${BASEDIR}/bam/${NAME}_bqsr.bam &
   
   JOB_INDEX=$(( JOB_INDEX + 1 ))
@@ -390,7 +323,7 @@ JOBS=10
 MINDP=2
 MAXDP=10
 MINQ=0
-MINMAPQ=20
+MINMAPQ=30
 for LINE in `cat $BAMLIST`; do
   NAME_TEMP=`echo "${LINE%.*}"`
   NAME=`echo "${NAME_TEMP##*/}"`
@@ -448,11 +381,11 @@ for (i in 1:nrow(sample_table)){
   if (str_detect(data_type,"pe")){
     path <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_overlapclipped_realigned_mindp2_maxdp10_minq20_minmapq30")
     path_stringent <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_overlapclipped_realigned_mindp2_maxdp10_minq33_minmapq30")
-    path_bqsr <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_overlapclipped_realigned_mindp2_maxdp10_minq0_minmapq20_bqsr_gatk")
+    path_bqsr <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_overlapclipped_realigned_mindp2_maxdp10_minq0_minmapq30_bqsr_gatk")
   } else {
     path <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_realigned_mindp2_maxdp10_minq20_minmapq30")
     path_stringent <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_realigned_mindp2_maxdp10_minq33_minmapq30")
-    path_bqsr <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_realigned_mindp2_maxdp10_minq0_minmapq20_bqsr_gatk")
+    path_bqsr <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_realigned_mindp2_maxdp10_minq0_minmapq30_bqsr_gatk")
   }
   het_relaxed <- read_delim(str_c(path, ".ml"), col_names = F, delim = " ") %>% 
     transmute(n_sites=(X1+X2+X3), n_snp=X2, het=n_snp/n_sites) %>%
@@ -485,7 +418,7 @@ het_final %>%
   theme(panel.background=element_rect(colour="black", size=0.8))
 ```
 
-![](bqsr_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+![](bqsr_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
 
 ``` r
 het_final %>%
@@ -499,7 +432,7 @@ het_final %>%
 
     ## Warning: Ignoring unknown parameters: height
 
-![](bqsr_files/figure-gfm/unnamed-chunk-18-2.png)<!-- -->
+![](bqsr_files/figure-gfm/unnamed-chunk-17-2.png)<!-- -->
 
 ## Conclusion for now
 

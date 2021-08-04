@@ -8,7 +8,7 @@ JOBS=10
 MINDP=2
 MAXDP=10
 MINQ=0
-MINMAPQ=20
+MINMAPQ=30
 KMAX=$(( SAMPLESIZE-1  ))
 for K in $(seq 0 $KMAX); do
   LINE=`head /workdir/batch-effect/sample_lists/bam_list_per_pop/bam_list_realigned_${BATCH}.txt -n $(( K+1 )) | tail -n 1`

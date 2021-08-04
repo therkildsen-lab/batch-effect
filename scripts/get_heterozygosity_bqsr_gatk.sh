@@ -6,7 +6,7 @@ JOBS=10
 MINDP=2
 MAXDP=10
 MINQ=0
-MINMAPQ=20
+MINMAPQ=30
 for LINE in `cat $BAMLIST`; do
   NAME_TEMP=`echo "${LINE%.*}"`
   NAME=`echo "${NAME_TEMP##*/}"`

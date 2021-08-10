@@ -12,8 +12,6 @@ Base quality score recalibration
       - [Estimate heterozygosity](#estimate-heterozygosity)
       - [Visualize the result](#visualize-the-result)
   - [GATK BQSR](#gatk-bqsr)
-      - [Generate a vcf file with known
-        SNPs](#generate-a-vcf-file-with-known-snps)
       - [Run all samples](#run-all-samples)
       - [Estimate heterozygosity](#estimate-heterozygosity-1)
       - [Visualize the result](#visualize-the-result-1)
@@ -40,16 +38,6 @@ nohup /workdir/programs/angsd0.931/angsd/angsd \
 #### Create a bed formatted SNP list
 
 ``` r
-bed_snp_list <- read_tsv("../angsd/global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20.txt", col_names = FALSE) %>%
-  dplyr::select(1:2) %>%
-  mutate(X2=X2-1, X3=X2+1)
-write_tsv(bed_snp_list, "../angsd/global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20.bed", col_names = FALSE)
-
-bed_snp_list <- read_tsv("../../cod/greenland-cod/angsd/global_snp_list_bam_list_realigned_mincov_filtered_mindp249_maxdp1142_minind111_minq20.txt", col_names = FALSE) %>%
-  dplyr::select(1:2) %>%
-  mutate(X2=X2-1, X3=X2+1)
-write_tsv(bed_snp_list, "../angsd/global_snp_list_bam_list_realigned_mincov_filtered_mindp249_maxdp1142_minind111_minq20.bed", col_names = FALSE)
-
 bed_snp_list <- read_tsv("../angsd/global_snp_list_bqsr.mafs.gz") %>%
   transmute(chromo=chromo, position_start=position-1, position_end=position)
 write_tsv(bed_snp_list, "../angsd/global_snp_list_bqsr.bed", col_names = FALSE)
@@ -164,9 +152,72 @@ for K in $(seq 0 $KMAX); do
 done
 ```
 
+Save the following script as
+`/workdir/batch-effect/scripts/get_heterozygosity_bqsr_notrans.sh`
+
+``` bash
+#!/bin/bash
+BATCH=$1
+SAMPLESIZE=$2
+
+OUTDIR=/workdir/batch-effect/angsd/heterozygosity/
+JOB_INDEX=0
+JOBS=10
+MINDP=2
+MAXDP=10
+MINQ=0
+MINMAPQ=30
+KMAX=$(( SAMPLESIZE-1  ))
+for K in $(seq 0 $KMAX); do
+  LINE=`head /workdir/batch-effect/sample_lists/bam_list_per_pop/bam_list_realigned_${BATCH}.txt -n $(( K+1 )) | tail -n 1`
+  NAME_TEMP=`echo "${LINE%.*}"`
+  NAME=`echo "${NAME_TEMP##*/}"`
+    echo $NAME
+  OUTBASE=$NAME'_mindp'$MINDP'_maxdp'$MAXDP'_minq'$MINQ'_minmapq'$MINMAPQ'_bqsr_notrans'
+  
+    /workdir/programs/angsd0.931/angsd/angsd \
+  -i $LINE \
+  -anc /workdir/cod/reference_seqs/gadMor3.fasta \
+  -out $OUTDIR$OUTBASE \
+  -GL 3 \
+  -tmpdir /workdir/batch-effect/angsd_tmpdir_${BATCH}/subdir${K} \
+  -doSaf 1 \
+  -P 2 \
+  -doCounts 1 \
+  -setMinDepth $MINDP \
+  -setMaxDepth $MAXDP \
+  -minQ $MINQ \
+  -minmapq $MINMAPQ \
+  -noTrans 1 &
+  
+  JOB_INDEX=$(( JOB_INDEX + 1 ))
+    if [ $JOB_INDEX == $JOBS ]; then
+        wait
+        JOB_INDEX=0
+    fi
+done
+
+wait
+
+for K in $(seq 0 $KMAX); do
+  LINE=`head /workdir/batch-effect/sample_lists/bam_list_per_pop/bam_list_realigned_${BATCH}.txt -n $(( K+1 )) | tail -n 1`
+  NAME_TEMP=`echo "${LINE%.*}"`
+  NAME=`echo "${NAME_TEMP##*/}"`
+    echo $NAME
+  OUTBASE=$NAME'_mindp'$MINDP'_maxdp'$MAXDP'_minq'$MINQ'_minmapq'$MINMAPQ'_bqsr_notrans'
+  
+  /workdir/programs/angsd0.931/angsd/misc/realSFS \
+  ${OUTDIR}${OUTBASE}.saf.idx \
+  -P $JOBS \
+  > ${OUTDIR}${OUTBASE}.ml
+done
+```
+
 ``` bash
 nohup bash /workdir/batch-effect/scripts/get_heterozygosity_bqsr.sh se 88 > /workdir/batch-effect/nohups/get_saf_bqsr_se.nohup &
 nohup bash /workdir/batch-effect/scripts/get_heterozygosity_bqsr.sh pe 75 > /workdir/batch-effect/nohups/get_saf_bqsr_pe.nohup &
+nohup bash /workdir/batch-effect/scripts/get_heterozygosity_bqsr_notrans.sh se 88 > /workdir/batch-effect/nohups/get_saf_bqsr_notrans_se.nohup &
+nohup bash /workdir/batch-effect/scripts/get_heterozygosity_bqsr_notrans.sh pe 75 > /workdir/batch-effect/nohups/get_saf_bqsr_notrans_pe.nohup &
 ```
 
 #### Visualize the result
@@ -182,10 +233,16 @@ for (i in 1:nrow(sample_table)){
     path <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_overlapclipped_realigned_mindp2_maxdp10_minq20_minmapq30")
     path_stringent <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_overlapclipped_realigned_mindp2_maxdp10_minq33_minmapq30")
     path_bqsr <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_overlapclipped_realigned_mindp2_maxdp10_minq0_minmapq30_bqsr")
+    path_notrans <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_overlapclipped_realigned_mindp2_maxdp10_minq20_minmapq30_notrans")
+    path_stringent_notrans <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_overlapclipped_realigned_mindp2_maxdp10_minq33_minmapq30_notrans")
+    path_bqsr_notrans <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_overlapclipped_realigned_mindp2_maxdp10_minq0_minmapq30_bqsr_notrans")
   } else {
     path <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_realigned_mindp2_maxdp10_minq20_minmapq30")
     path_stringent <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_realigned_mindp2_maxdp10_minq33_minmapq30")
     path_bqsr <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_realigned_mindp2_maxdp10_minq0_minmapq30_bqsr")
+    path_notrans <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_realigned_mindp2_maxdp10_minq20_minmapq30_notrans")
+    path_stringent_notrans <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_realigned_mindp2_maxdp10_minq33_minmapq30_notrans")
+    path_bqsr_notrans <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_realigned_mindp2_maxdp10_minq0_minmapq30_bqsr_notrans")
   }
   het_relaxed <- read_delim(str_c(path, ".ml"), col_names = F, delim = " ") %>% 
     transmute(n_sites=(X1+X2+X3), n_snp=X2, het=n_snp/n_sites) %>%
@@ -196,7 +253,16 @@ for (i in 1:nrow(sample_table)){
   het_bqsr <- read_delim(str_c(path_bqsr, ".ml"), col_names = F, delim = " ") %>% 
     transmute(n_sites=(X1+X2+X3), n_snp=X2, het=n_snp/n_sites) %>%
     mutate(sample_id=sample_id, population=population, data_type=data_type, tran="Including transitions", filter="bqsr")
-  het_combined <- bind_rows(het_relaxed, het_stringent, het_bqsr)
+  het_relaxed_notrans <- read_delim(str_c(path_notrans, ".ml"), col_names = F, delim = " ") %>% 
+    transmute(n_sites=(X1+X2+X3), n_snp=X2, het=n_snp/n_sites) %>%
+    mutate(sample_id=sample_id, population=population, data_type=data_type, tran="Excluding transitions", filter="relaxed")
+  het_stringent_notrans <- read_delim(str_c(path_stringent_notrans, ".ml"), col_names = F, delim = " ") %>% 
+    transmute(n_sites=(X1+X2+X3), n_snp=X2, het=n_snp/n_sites) %>%
+    mutate(sample_id=sample_id, population=population, data_type=data_type, tran="Excluding transitions", filter="stringent")
+  het_bqsr_notrans <- read_delim(str_c(path_bqsr_notrans, ".ml"), col_names = F, delim = " ") %>% 
+    transmute(n_sites=(X1+X2+X3), n_snp=X2, het=n_snp/n_sites) %>%
+    mutate(sample_id=sample_id, population=population, data_type=data_type, tran="Excluding transitions", filter="bqsr")
+  het_combined <- bind_rows(het_relaxed, het_stringent, het_bqsr, het_relaxed_notrans, het_stringent_notrans, het_bqsr_notrans)
   if(i==1){
     het_final <- het_combined
   } else {
@@ -212,13 +278,13 @@ het_final %>%
   ggplot(aes(x=population, y=het)) +
   geom_boxplot(outlier.alpha = 0) +
   geom_jitter(aes(color=data_type), height = 0, size=0.8) +
-  facet_grid(filter~.) +
+  facet_grid(filter~tran) +
   coord_flip() +
   theme_cowplot() +
   theme(panel.background=element_rect(colour="black", size=0.8))
 ```
 
-![](bqsr_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+![](bqsr_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
 ``` r
 het_final %>%
@@ -232,28 +298,9 @@ het_final %>%
 
     ## Warning: Ignoring unknown parameters: height
 
-![](bqsr_files/figure-gfm/unnamed-chunk-8-2.png)<!-- -->
+![](bqsr_files/figure-gfm/unnamed-chunk-9-2.png)<!-- -->
 
 ## GATK BQSR
-
-#### Generate a vcf file with known SNPs
-
-``` bash
-echo -e "##fileformat=VCFv4.2
-#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO" > /workdir/batch-effect/angsd/global_snp_list_bqsr.vcf
-```
-
-``` r
-vcf_snp_list <- read_tsv("../angsd/global_snp_list_bqsr.mafs.gz", col_names = TRUE) %>%
-  transmute(X1=chromo, X2=position, X3=major, X4=minor, X5=".", X6=".", X7="PASS", X8=".") %>%
-  relocate(X1, X2, X5)
-write_tsv(vcf_snp_list, "../angsd/global_snp_list_bqsr.vcf", col_names = FALSE, append = TRUE)
-```
-
-``` bash
-/programs/gatk-4.2.0.0/gatk IndexFeatureFile \
--I /workdir/batch-effect/angsd/global_snp_list_bqsr.vcf
-```
 
 #### Run all samples
 
@@ -269,7 +316,7 @@ BaseRecalibrator \
 -R /workdir/cod/reference_seqs/gadMor3.fasta \
 --known-sites /workdir/batch-effect/angsd/global_snp_list_bqsr.bed \
 --read-filter MappingQualityReadFilter \
---minimum-mapping-quality 20 \
+--minimum-mapping-quality 30 \
 -O /workdir/batch-effect/bam/recal_data_all_samples.table \
 > /workdir/batch-effect/nohups/gatk_bqsr_all_samples.nohup &
 ```
@@ -282,7 +329,6 @@ Save the following script as
 BAMLIST=/workdir/batch-effect/sample_lists/bam_list_realigned.txt
 BASEDIR=/workdir/batch-effect/
 REFERENCE=/workdir/cod/reference_seqs/gadMor3.fasta
-VCF=/workdir/batch-effect/angsd/global_snp_list_bqsr.vcf
 
 JOB_INDEX=0
 JOBS=20
@@ -418,7 +464,7 @@ het_final %>%
   theme(panel.background=element_rect(colour="black", size=0.8))
 ```
 
-![](bqsr_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+![](bqsr_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
 ``` r
 het_final %>%
@@ -432,7 +478,7 @@ het_final %>%
 
     ## Warning: Ignoring unknown parameters: height
 
-![](bqsr_files/figure-gfm/unnamed-chunk-17-2.png)<!-- -->
+![](bqsr_files/figure-gfm/unnamed-chunk-15-2.png)<!-- -->
 
 ## Conclusion for now
 

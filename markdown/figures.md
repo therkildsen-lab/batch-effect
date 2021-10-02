@@ -3,6 +3,18 @@ Figures
 
 ``` r
 library(tidyverse)
+```
+
+    ## Warning: replacing previous import 'lifecycle::last_warnings' by
+    ## 'rlang::last_warnings' when loading 'pillar'
+
+    ## Warning: replacing previous import 'lifecycle::last_warnings' by
+    ## 'rlang::last_warnings' when loading 'tibble'
+
+    ## Warning: replacing previous import 'lifecycle::last_warnings' by
+    ## 'rlang::last_warnings' when loading 'hms'
+
+``` r
 library(cowplot)
 library(RcppCNPy)
 source("/workdir/genomic-data-analysis/scripts/individual_pca_functions.R")
@@ -24,8 +36,8 @@ of 10, and a stringent mapping quality filter of 30.
 
 ``` r
 sample_table <- read_tsv("../sample_lists/sample_table_merged.tsv")
-rename_pop <- tibble(population = c("ITV2011", "KNG2011", "QQL2011"),
-                     population_new =c("pop 1", "pop 2", "pop 3"))
+rename_pop <- tibble(population = c("ITV2011", "KNG2011", "QQL2011", "BUK2011", "IKE2011", "PAA2011", "ATP2011", "NAR2008", "UUM2010"),
+                     population_new =c("pop 1", "pop 2", "pop 3", "pop 4", "pop 5", "pop 6", "pop 7", "pop 8", "pop 9"))
 for (i in 1:nrow(sample_table)){
   sample_seq_id <- sample_table$sample_seq_id[i]
   sample_id <- sample_table$sample_id_corrected[i]
@@ -57,25 +69,27 @@ het_gg <- het_final %>%
   mutate(batch=ifelse(data_type=="pe", "NextSeq-150PE", "HiSeq-125SE")) 
 set.seed(42)
 het_plot <- het_gg %>%
-  filter(population %in% c("KNG2011", "QQL2011", "ITV2011")) %>%
-  ggplot(aes(x=population, y=het)) +
+  filter(population_new %in% str_c("pop ", 1:6)) %>%
+  ggplot(aes(x="", y=het*10^3)) +
   geom_boxplot(outlier.alpha = 0, color="black", size=0.2, width=0.2) +
   #geom_jitter(data=(het_gg %>% dplyr::select(-population_new) %>% filter(! population %in% c("KNG2011", "QQL2011", "ITV2011"))) , color="grey", height = 0, width = 0.3, size=1) +
   geom_jitter(aes(color=batch), height = 0, width = 0.1, size=2) +
   scale_color_viridis_d(begin=0.25, end=0.75) +
-  ylab("heterozygosity") +
-  facet_grid(population_new~type, scales = "free_y") +
+  ylab(expression(paste("heterozygosity (in ", 10^-3, ")"))) +
+  facet_grid(type~population_new, scales = "free_y") +
   xlab(" ") +
-  #scale_y_continuous(limits = c(0, 0.005), breaks = 0.001*(0:5), labels = c("0", "0.001", "0.002", "0.003", "0.004", "0.005")) +
+  #scale_y_continuous(limits = c(0.002, 0.008), breaks = 0.002*(1:4)) +
   coord_flip() +
   theme_cowplot() +
   theme(panel.background=element_rect(colour="black", size=0.8),
-        legend.position = c(0.78, 0.94),
+        legend.position = c(0.9, 0.09),
         legend.key.size = unit(0.5, 'lines'),
-        strip.text.x = element_text(face = "bold", size=20),
+        strip.text.y = element_text(face = "bold", size=20),
+        strip.text.x = element_text(size=18),
         axis.text.y = element_blank(),
         axis.ticks.y = element_blank(),
-        legend.key = element_rect(fill = "white", colour = "black"))
+        legend.key = element_rect(fill = "white", colour = "black"),
+        legend.title = element_blank())
 het_plot
 ```
 
@@ -128,28 +142,30 @@ pca_combined <- bind_rows(bind_cols(pca_before, type="Before"),
                           bind_cols(pca_after, type="After")) %>%
   mutate(type=fct_relevel(type, c("Before", "After"))) %>%
   mutate(batch=ifelse(data_type=="se", "HiSeq-125SE", "NextSeq-150PE"))
-pca_combined_select_pops <- filter(pca_combined, population %in% c("KNG2011", "QQL2011", "ITV2011"))
-pca_plot <- pca_combined_select_pops %>%
+pca_plot <- pca_combined %>%
   left_join(rename_pop) %>%
+  filter(population_new %in% str_c("pop ", 1:6)) %>%
   ggplot(aes(x=PC1, y=PC2)) +
   geom_point(data=pca_combined, color="grey", size=0.5) +
   geom_point(aes(color=batch), size=2) +
   scale_color_viridis_d(begin=0.25, end=0.75) +
-  facet_grid(population_new~type) +
-  ylim(-0.1, NA) +
+  facet_grid(type~population_new) +
+  ylim(-0.12, NA) +
   xlim(-0.15, NA) +
   theme_cowplot() +
   theme(axis.text = element_blank(),
         axis.ticks = element_blank(),
-        panel.border = element_rect(colour="black",size=0.5),
-        legend.position = c(0.78, 0.94),
+        panel.border = element_rect(colour="black",size=0.8),
+        legend.position = c(0.9, 0.09),
         legend.key.size = unit(0.5, 'lines'),
-        strip.text.x = element_text(face = "bold", size=20),
-        legend.key = element_rect(fill = "white", colour = "black"))
+        strip.text.y = element_text(face = "bold", size=20),
+        strip.text.x = element_text(size=18),
+        legend.key = element_rect(fill = "white", colour = "black"),
+        legend.title = element_blank())
 pca_plot
 ```
 
-    ## Warning: Removed 12 rows containing missing values (geom_point).
+    ## Warning: Removed 24 rows containing missing values (geom_point).
 
 ![](figures_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
@@ -192,11 +208,11 @@ fst_plot <- fst_combined %>%
   scale_x_continuous(breaks = c(0,15)) +
   facet_grid(type~lg, scales = "free_x", space = "free_x") +
   xlab("position (in Mb)") +
-  ylab("Fst") +
+  ylab(expression(F[ST]~between~batches)) +
   theme_cowplot() +
   theme(panel.spacing = unit(0.0, "lines")) +
   theme(legend.position = "none",
-        strip.text.y = element_text(face = "bold", size=15))
+        strip.text.y = element_text(face = "bold", size=20))
 fst_plot
 ```
 
@@ -205,15 +221,9 @@ fst_plot
 #### Combine the plots
 
 ``` r
-top <- plot_grid(het_plot, pca_plot, labels = c('A', 'B'), label_size = 20)
+plot_grid(het_plot, pca_plot, fst_plot, labels = c('A', 'B', 'C'), label_size = 20, nrow = 3, rel_heights = c(4, 3.8, 4))
 ```
 
-    ## Warning: Removed 12 rows containing missing values (geom_point).
-
-``` r
-plot_grid(top, fst_plot, labels = c(NA, 'C'), label_size = 20, nrow = 2, rel_heights = c(1, 0.5))
-```
-
-    ## Warning: Removed 1 rows containing missing values (geom_text).
+    ## Warning: Removed 24 rows containing missing values (geom_point).
 
 ![](figures_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->

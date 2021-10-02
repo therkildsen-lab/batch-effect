@@ -53,6 +53,15 @@ pipeline in our calculation of per-sample coverage (Table 1, Figure S1).
 library(tidyverse)
 ```
 
+    ## Warning: replacing previous import 'lifecycle::last_warnings' by
+    ## 'rlang::last_warnings' when loading 'pillar'
+
+    ## Warning: replacing previous import 'lifecycle::last_warnings' by
+    ## 'rlang::last_warnings' when loading 'tibble'
+
+    ## Warning: replacing previous import 'lifecycle::last_warnings' by
+    ## 'rlang::last_warnings' when loading 'hms'
+
     ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──
 
     ## ✓ ggplot2 3.3.3     ✓ purrr   0.3.4
@@ -400,21 +409,6 @@ base_dir = "/workdir/batch-effect/"
 # Read in the full sample table from the Greenland cod project
 sample_table_full <- read_tsv("../../cod/greenland-cod/sample_lists/sample_table_merged_mincov_contamination_filtered.tsv") %>%
   bind_cols(bam_list = read_lines("../../cod/greenland-cod/sample_lists/bam_list_realigned_mincov_contamination_filtered.txt"))
-```
-
-    ## 
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## cols(
-    ##   sample_seq_id = col_character(),
-    ##   lane_number = col_character(),
-    ##   seq_id = col_character(),
-    ##   sample_id_corrected = col_character(),
-    ##   population = col_character(),
-    ##   data_type = col_character(),
-    ##   population_new = col_character()
-    ## )
-
-``` r
 # Select a subset of populations that were sequenced in both Hiseq and Nextseq platforms
 # Note that there are some QQL samples that appear to be "merged", but they were merged from lane 1 and 2
 sample_table_merged <- filter(sample_table_full, 
@@ -446,20 +440,6 @@ bam_list_realigned <- sample_table_merged %>%
 ## Get unmerged sample table for the select subset of samples
 sample_table_unmerged <- read_tsv("../../cod/greenland-cod/sample_lists/sample_table.tsv") %>%
   semi_join(sample_table_merged, by=c("sample_id"="sample_id_corrected"))
-```
-
-    ## 
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## cols(
-    ##   prefix = col_character(),
-    ##   lane_number = col_character(),
-    ##   seq_id = col_character(),
-    ##   sample_id = col_character(),
-    ##   population = col_character(),
-    ##   data_type = col_character()
-    ## )
-
-``` r
 ## Fastq list of pe and se samples
 fastq_list_pe <- filter(sample_table_unmerged, lane_number == 7)$prefix
 fastq_list_se <- filter(sample_table_unmerged, lane_number != 7)$prefix
@@ -495,10 +475,27 @@ write_lines(fastq_list_se, "../sample_lists/fastq_list_se.txt")
 
 ``` r
 ## Sample distribution
+sample_table_merged <-read_tsv("../sample_lists/sample_table_merged.tsv") %>%
+  rename(sample_id=sample_id_corrected)
+```
+
+    ## 
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## cols(
+    ##   sample_seq_id = col_character(),
+    ##   lane_number = col_character(),
+    ##   seq_id = col_character(),
+    ##   sample_id_corrected = col_character(),
+    ##   population = col_character(),
+    ##   data_type = col_character(),
+    ##   population_new = col_character()
+    ## )
+
+``` r
 sample_size_plot <- sample_table_merged %>%
   mutate(data_type=ifelse(data_type=="pe", "NextSeq-150PE", "HiSeq-125SE")) %>%
-  mutate(sample_id_corrected=fct_reorder(sample_id_corrected, data_type)) %>%
-  ggplot(aes(x=population_new, fill=data_type, group=sample_id_corrected)) +
+  mutate(sample_id=fct_reorder(sample_id, data_type)) %>%
+  ggplot(aes(x=population_new, fill=data_type, group=sample_id)) +
   geom_bar(color="black") +
   scale_fill_viridis_d(begin=0.3, end=0.8) +
   xlab("population")+
@@ -514,7 +511,7 @@ sample_size_plot
 ``` r
 ## Number of bases
 base_count <- read_tsv("../sample_lists/count_merged_old.tsv") %>%
-  dplyr::select(sample_id_corrected, final_mapped_bases)
+  transmute(sample_id=sample_id_corrected, final_mapped_bases=final_mapped_bases)
 ```
 
     ## 
@@ -543,8 +540,8 @@ coverage_plot <- sample_table_merged %>%
   mutate(data_type=ifelse(data_type=="pe", "NextSeq-150PE", "HiSeq-125SE")) %>%
   left_join(base_count) %>%
   arrange(data_type, desc(final_mapped_bases)) %>%
-  mutate(sample_id_corrected=as_factor(sample_id_corrected)) %>%
-  ggplot(aes(x=population_new, y=final_mapped_bases/0.67/10^9, fill=data_type, group=sample_id_corrected)) +
+  mutate(sample_id=as_factor(sample_id)) %>%
+  ggplot(aes(x=population_new, y=final_mapped_bases/0.67/10^9, fill=data_type, group=sample_id)) +
   geom_col(color="black") +
   scale_fill_viridis_d(begin=0.3, end=0.8) +
   labs(x="population", y="coverage", fill="batch")+
@@ -552,7 +549,7 @@ coverage_plot <- sample_table_merged %>%
   coord_flip()
 ```
 
-    ## Joining, by = "sample_id_corrected"
+    ## Joining, by = "sample_id"
 
 ``` r
 coverage_plot
@@ -568,7 +565,7 @@ sample_table_merged %>%
   theme_cowplot()
 ```
 
-    ## Joining, by = "sample_id_corrected"
+    ## Joining, by = "sample_id"
 
     ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
@@ -581,7 +578,7 @@ sample_table_merged %>%
   summarise(sample_size=n(), avearge_final_coverage=mean(final_mapped_bases)/0.67/10^9)
 ```
 
-    ## Joining, by = "sample_id_corrected"
+    ## Joining, by = "sample_id"
 
     ## # A tibble: 2 x 3
     ##   data_type sample_size avearge_final_coverage
@@ -604,6 +601,8 @@ write_tsv(extraction_info, "../sample_lists/extraction_info.tsv")
 ```
 
 ``` r
+rename_pop <- tibble(population = c("ITV2011", "KNG2011", "QQL2011", "BUK2011", "IKE2011", "PAA2011", "ATP2011", "NAR2008", "UUM2010"),
+                     population_new =c("pop 1", "pop 2", "pop 3", "pop 4", "pop 5", "pop 6", "pop 7", "pop 8", "pop 9"))
 extraction_info <- read_tsv("../sample_lists/extraction_info.tsv") %>%
   filter(extraction_method != "Chan Tn5 bead") %>%
   dplyr::select(sample_id, degradation_level) %>%
@@ -627,19 +626,25 @@ extraction_info <- read_tsv("../sample_lists/extraction_info.tsv") %>%
     ## ℹ Use `spec()` for the full column specifications.
 
 ``` r
-sample_table_degradation <- left_join(sample_table_merged, extraction_info, by=c("sample_id_corrected"="sample_id"))
+sample_table_degradation <- left_join(sample_table_merged, extraction_info, by=c("sample_id"))
 degradation_sample_size <- sample_table_degradation %>%
   mutate(data_type=ifelse(data_type=="pe", "NextSeq-150PE", "HiSeq-125SE")) %>%
-  mutate(sample_id_corrected=fct_reorder(sample_id_corrected, degradation_level)) %>%
+  mutate(sample_id=fct_reorder(sample_id, degradation_level)) %>%
   mutate(degradation_level=ifelse(degradation_level=="1", "well-preserved", "degraded")) %>%
-  ggplot(aes(x=population_new, fill=degradation_level, group=sample_id_corrected)) +
+  dplyr::select(-population_new) %>%
+  left_join(rename_pop) %>%
+  ggplot(aes(x=population_new, fill=degradation_level, group=sample_id)) +
   geom_bar(color="black") +
   scale_fill_viridis_d(begin=0.5, end=1, direction = -1) +
-  xlab("population")+
-  ylab("sample size") +
+  labs(x="population", y="sample size", fill="degradation\nlevel")+
   facet_wrap(~data_type) +
   theme_cowplot() +
   coord_flip()
+```
+
+    ## Joining, by = "population"
+
+``` r
 degradation_sample_size
 ```
 
@@ -651,8 +656,10 @@ degradation_coverage <- sample_table_degradation %>%
   left_join(base_count) %>%
   arrange(desc(final_mapped_bases)) %>%
   mutate(degradation_level=ifelse(degradation_level=="1", "well-preserved", "degraded")) %>%
-  mutate(sample_id_corrected=as_factor(sample_id_corrected)) %>%
-  ggplot(aes(x=population_new, y=final_mapped_bases/0.67/10^9, fill=degradation_level, group=sample_id_corrected)) +
+  mutate(sample_id=as_factor(sample_id)) %>%
+  dplyr::select(-population_new) %>%
+  left_join(rename_pop) %>%
+  ggplot(aes(x=population_new, y=final_mapped_bases/0.67/10^9, fill=degradation_level, group=sample_id)) +
   geom_col(color="black") +
   scale_fill_viridis_d(begin=0.5, end=1, direction = -1) +
   labs(x="population", y="coverage", fill="degradation\nlevel")+
@@ -661,7 +668,9 @@ degradation_coverage <- sample_table_degradation %>%
   coord_flip()
 ```
 
-    ## Joining, by = "sample_id_corrected"
+    ## Joining, by = "sample_id"
+
+    ## Joining, by = "population"
 
 ``` r
 degradation_coverage

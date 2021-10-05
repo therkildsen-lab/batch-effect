@@ -36,7 +36,25 @@ DNA degradation
 
 ``` r
 library(tidyverse)
+```
+
+    ## Warning: replacing previous import 'lifecycle::last_warnings' by
+    ## 'rlang::last_warnings' when loading 'pillar'
+
+    ## Warning: replacing previous import 'lifecycle::last_warnings' by
+    ## 'rlang::last_warnings' when loading 'tibble'
+
+    ## Warning: replacing previous import 'lifecycle::last_warnings' by
+    ## 'rlang::last_warnings' when loading 'hms'
+
+``` r
 library(ggstatsplot)
+```
+
+    ## Warning in .recacheSubclasses(def@className, def, env): undefined subclass
+    ## "numericVector" of class "Mnumeric"; definition not updated
+
+``` r
 library(cowplot)
 library(ggsignif)
 source("/workdir/genomic-data-analysis/scripts/individual_pca_functions.R")
@@ -253,11 +271,6 @@ p_a <- delta_het %>%
   ylab("change in heterozygosity estimates \nafter excluding transitions") +
   xlab("sample type") +
   geom_hline(yintercept = 0, linetype=2, color="red")
-```
-
-    ## Warning: Ignoring unknown parameters: segment.linetype
-
-``` r
 print(p_a)
 ```
 
@@ -432,18 +445,12 @@ genome_cov <- read_tsv("../angsd/bam_list_realigned_downsampled_unlinked.covMat"
 PCA(genome_cov, sample_table$sample_id_corrected, sample_table$data_type, 1, 2, show.ellipse = F, show.line = T)
 ```
 
-    ## Warning: Computation failed in `stat_conline()`:
-    ## there is no package called 'miscTools'
-
 ![](degradation_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
 
 ``` r
 pca_table_data_type <- pca_table[,1:6] %>% rename(data_type=population)
 PCA(genome_cov, sample_table$sample_id_corrected, sample_table$population, 1, 2, show.ellipse = F, show.line = T)
 ```
-
-    ## Warning: Computation failed in `stat_conline()`:
-    ## there is no package called 'miscTools'
 
 ![](degradation_files/figure-gfm/unnamed-chunk-11-2.png)<!-- -->
 
@@ -454,17 +461,11 @@ genome_dist <- read_tsv("../angsd/bam_list_realigned_downsampled_unlinked.ibsMat
 PCoA(genome_dist, sample_table$sample_id_corrected, sample_table$data_type, 10, 1, 2, show.ellipse = F, show.line = T)
 ```
 
-    ## Warning: Computation failed in `stat_conline()`:
-    ## there is no package called 'miscTools'
-
 ![](degradation_files/figure-gfm/unnamed-chunk-11-3.png)<!-- -->
 
 ``` r
 PCoA(genome_dist, sample_table$sample_id_corrected, sample_table$population, 10, 1, 2, show.ellipse = F, show.line = T)
 ```
-
-    ## Warning: Computation failed in `stat_conline()`:
-    ## there is no package called 'miscTools'
 
 ![](degradation_files/figure-gfm/unnamed-chunk-11-4.png)<!-- -->
 
@@ -588,9 +589,6 @@ genome_cov <- read_tsv("../angsd/bam_list_realigned_private_snps.covMat", col_na
 PCA(genome_cov, sample_table$sample_id_corrected, sample_table$data_type, 1, 2, show.ellipse = F, show.line = T)
 ```
 
-    ## Warning: Computation failed in `stat_conline()`:
-    ## there is no package called 'miscTools'
-
 ![](degradation_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
 
 ``` r
@@ -648,33 +646,35 @@ somewhat reduced.
 #### All three populations affected by degradation
 
 ``` r
-rename_pop <- tibble(population = c("ATP2011", "NAR2008", "UUM2010"),
-                     population_new =c("pop 4", "pop 5", "pop 6"))
+rename_pop <- tibble(population = c("ITV2011", "KNG2011", "QQL2011", "BUK2011", "IKE2011", "PAA2011", "ATP2011", "NAR2008", "UUM2010"),
+                     population_new =c("pop 1", "pop 2", "pop 3", "pop 4", "pop 5", "pop 6", "pop 7", "pop 8", "pop 9"))
 set.seed(42)
 p_c <- het_final %>%
   left_join(rename_pop) %>%
-  filter(!is.na(population_new), filter=="stringent") %>%
-  mutate(batch=ifelse(data_type=="pe", "well-preserved", "degraded")) %>%
+  filter(population_new %in% str_c("pop ", 7:9), filter=="stringent") %>%
+  mutate(batch=ifelse(data_type=="pe", "Nextseq-150PE\n(well-preserved)", "HiSeq-125SE\n(degraded)")) %>%
   mutate(type=ifelse(tran=="Including transitions", "Before", "After")) %>%
   mutate(type=fct_relevel(type, c("Before", "After"))) %>%
-  ggplot(aes(x=population, y=het)) +
+  ggplot(aes(x="", y=het*10^3)) +
   geom_boxplot(outlier.alpha = 0, color="black", size=0.2, width=0.2) +
   geom_jitter(aes(color=batch), height = 0, width = 0.1, size=2) +
   scale_color_viridis_d(begin=0.25, end=0.75) +
   ylim(c(0,NA)) +
-  ylab("heterozygosity") +
-  facet_grid(population_new~type, scales = "free_y") +
+  facet_grid(type~population_new, scales = "free_y") +
   xlab(" ") +
+  ylab(expression(paste("heterozygosity (in ", 10^-3, ")"))) +
   coord_flip() +
   theme_cowplot() +
   theme(panel.background=element_rect(colour="black", size=0.8),
-        legend.position = c(0.75, 0.93),
+        legend.position = c(0.815, 0.12),
         legend.text = element_text(size=9),
         legend.key.size = unit(0.5, 'lines'),
-        strip.text.x = element_text(face = "bold", size=20),
+        strip.text.y = element_text(face = "bold", size=20),
+        strip.text.x = element_text(size=18),
         axis.text.y = element_blank(),
         axis.ticks.y = element_blank(),
-        legend.key = element_rect(fill = "white", colour = "black"))
+        legend.key = element_rect(fill = "white", colour = "black"),
+        legend.title = element_blank())
 print(p_c)
 ```
 
@@ -705,7 +705,7 @@ pca_after <- pca_table[,1:4] %>%
 pca_combined <- bind_rows(bind_cols(pca_before, type="Before"), 
                           bind_cols(pca_after, type="After")) %>%
   mutate(type=fct_relevel(type, c("Before", "After"))) %>%
-  mutate(batch=ifelse(data_type=="se", "degraded", "well-preserved"))
+  mutate(batch=ifelse(data_type=="pe", "Nextseq-150PE\n(well-preserved)", "HiSeq-125SE\n(degraded)"))
 pca_combined_select_pops <- filter(pca_combined, population %in% c("ATP2011", "NAR2008", "UUM2010"))
 ```
 
@@ -716,18 +716,20 @@ p_d <- pca_combined_select_pops %>%
   geom_point(data=pca_combined, color="grey", size=0.5) +
   geom_point(aes(color=batch), size=2) +
   scale_color_viridis_d(begin=0.25, end=0.75) +
-  facet_grid(population_new~type) +
+  facet_grid(type~population_new) +
   ylim(-0.1, NA) +
   xlim(-0.15, NA) +
   theme_cowplot() +
   theme(axis.text = element_blank(),
         axis.ticks = element_blank(),
         panel.border = element_rect(colour="black",size=0.5),
-        legend.position = c(0.75, 0.93),
+        legend.position = c(0.815, 0.12),
         legend.text = element_text(size=9),
         legend.key.size = unit(0.5, 'lines'),
-        strip.text.x = element_text(face = "bold", size=20),
-        legend.key = element_rect(fill = "white", colour = "black"))
+        strip.text.x = element_text(size=18),
+        strip.text.y = element_text(face = "bold", size=20),
+        legend.key = element_rect(fill = "white", colour = "black"),
+        legend.title = element_blank())
 p_d
 ```
 
@@ -740,8 +742,9 @@ p_d
 ## Assemble Figure 5
 
 ``` r
-bottom <- cowplot::plot_grid(p_b, p_a,nrow = 1, labels = c("C", "D"), scale = 0.9)
-top <- cowplot::plot_grid(p_c, p_d, nrow = 1, labels = c("A", "B"), scale = 0.9)
+#bottom <- cowplot::plot_grid(p_b, p_a,nrow = 1, labels = c("C", "D"), scale = 0.9)
+#top <- cowplot::plot_grid(p_c, p_d, nrow = 1, labels = c("A", "B"), scale = 0.9)
+figure <- cowplot::plot_grid(p_c, p_d, p_b, p_a, nrow = 4, labels = c("A", "B", "C", "D"), rel_heights = c(3.9, 3.6, 3.6, 6.5))
 ```
 
     ## Warning: Removed 12 rows containing missing values (geom_point).
@@ -749,7 +752,6 @@ top <- cowplot::plot_grid(p_c, p_d, nrow = 1, labels = c("A", "B"), scale = 0.9)
     ## Warning: Removed 4 rows containing missing values (geom_point).
 
 ``` r
-figure <- cowplot::plot_grid(top, bottom, nrow = 2, rel_heights = c(5.3, 7))
 print(figure)
 ```
 

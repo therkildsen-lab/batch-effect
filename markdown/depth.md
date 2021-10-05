@@ -3,6 +3,18 @@ Sequencing depth
 
 ``` r
 library(tidyverse)
+```
+
+    ## Warning: replacing previous import 'lifecycle::last_warnings' by
+    ## 'rlang::last_warnings' when loading 'pillar'
+
+    ## Warning: replacing previous import 'lifecycle::last_warnings' by
+    ## 'rlang::last_warnings' when loading 'tibble'
+
+    ## Warning: replacing previous import 'lifecycle::last_warnings' by
+    ## 'rlang::last_warnings' when loading 'hms'
+
+``` r
 library(RcppCNPy)
 library(cowplot)
 library(scales)
@@ -72,7 +84,7 @@ p1 <- pca_table_final %>%
   ggplot(aes(x=PC1, y=PC2, color=as.character(coverage))) +
   geom_point() +
   facet_grid(method~sample_size, scales="free") +
-  scale_color_viridis_d(name = "coverage", option = "D", begin = 0.75, end = 0.1) +
+  scale_color_viridis_d(name = "coverage", option = "D", begin = 0.75, end = 0.25) +
   theme_cowplot() +
   theme(panel.border = element_rect(size = 1, color = "black"),
         text = element_text(size=11), 
@@ -131,7 +143,7 @@ p2 <- pca_table_final %>%
   mutate(method="ANGSD (-doCov 1)") %>%
   ggplot(aes(x=PC1, y=PC2, color=as.character(coverage))) +
   geom_point() +
-  scale_color_viridis_d(name = "coverage", option = "D", begin = 0.75, end = 0.1) +
+  scale_color_viridis_d(name = "coverage", option = "D", begin = 0.75, end = 0.25) +
   facet_grid(method~sample_size, scales="free") +
   theme_cowplot() +
   theme(panel.border = element_rect(size = 1, color = "black"),
@@ -190,7 +202,7 @@ p3 <- mds_table_final %>%
   ggplot(aes(x=PCo1, y=PCo2, color=as.character(coverage))) +
   geom_point() +
   facet_grid(method~sample_size, scales="free") +
-  scale_color_viridis_d(name = "coverage", option = "D", begin = 0.75, end = 0.1) +
+  scale_color_viridis_d(name = "coverage", option = "D", begin = 0.75, end = 0.25) +
   theme_cowplot() +
   theme(panel.border = element_rect(size = 1, color = "black"),
         text = element_text(size=11), 

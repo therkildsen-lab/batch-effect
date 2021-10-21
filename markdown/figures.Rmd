@@ -280,13 +280,13 @@ for (i in 1:nrow(sample_table)){
     path_original <- str_c("../../cod/greenland-cod/angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_minq20_sorted_dedup_realigned_mindp2_maxdp10_minq20_minmapq30")
     path_new <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_realigned_mindp2_maxdp10")
   }
-  het_original <- read_delim(str_c(path_original, ".ml"), col_names = F, delim = " ") %>% 
+  het_relaxed <- read_delim(str_c(path_new, "_minq20_minmapq30.ml"), col_names = F, delim = " ") %>% 
     transmute(n_sites=(X1+X2+X3), n_snp=X2, het=n_snp/n_sites) %>%
-    mutate(sample_id=sample_id, population=population, data_type=data_type, type="Before mitigation")
+    mutate(sample_id=sample_id, population=population, data_type=data_type, type="Relaxed base quality filter")
   
   het_stringent <- read_delim(str_c(path_new, "_minq33_minmapq30.ml"), col_names = F, delim = " ") %>% 
     transmute(n_sites=(X1+X2+X3), n_snp=X2, het=n_snp/n_sites) %>%
-    mutate(sample_id=sample_id, population=population, data_type=data_type, type="After mitigation")
+    mutate(sample_id=sample_id, population=population, data_type=data_type, type="Stringent base quality filter")
 
   het_bqsr_angsd <- read_delim(str_c(path_new, "_minq0_minmapq30_bqsr.ml"), col_names = F, delim = " ") %>% 
     transmute(n_sites=(X1+X2+X3), n_snp=X2, het=n_snp/n_sites) %>%
@@ -296,7 +296,7 @@ for (i in 1:nrow(sample_table)){
     transmute(n_sites=(X1+X2+X3), n_snp=X2, het=n_snp/n_sites) %>%
     mutate(sample_id=sample_id, population=population, data_type=data_type, type="BQSR with GATK")
 
-  het_combined <- bind_rows(het_original, het_stringent, het_bqsr_angsd, het_bqsr_gatk)
+  het_combined <- bind_rows(het_relaxed, het_stringent, het_bqsr_angsd, het_bqsr_gatk)
   if(i==1){
     het_final <- het_combined
   } else {
@@ -305,7 +305,7 @@ for (i in 1:nrow(sample_table)){
 }
 bqsr_gg <- het_final %>%
   left_join(rename_pop) %>%
-  mutate(type=fct_relevel(type, c("Before mitigation", "After mitigation", "BQSR with ANGSD", "BQSR with GATK"))) %>%
+  mutate(type=fct_relevel(type, c("Relaxed base quality filter", "Stringent base quality filter", "BQSR with ANGSD", "BQSR with GATK"))) %>%
   mutate(batch=ifelse(data_type=="pe", "NextSeq-150PE", "HiSeq-125SE")) 
 set.seed(42)
 bqsr_plot <- bqsr_gg %>%

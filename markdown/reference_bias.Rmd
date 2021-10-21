@@ -16,12 +16,13 @@ library(RcppCNPy)
 library(cowplot)
 library(ggstatsplot)
 library(statsExpressions)
+source("/workdir/genomic-data-analysis/scripts/individual_pca_functions.R")
 ```
 
 Here, we examine the effect of reference bias by estimating Fst between two batches of data, and study the source of Fst outliers.
 
 
-## Plot Fst with sliding window trimmed PE samples
+## Fst outliers caused by reference bias
 
 #### Without filtering
 
@@ -187,4 +188,248 @@ samtools view -b $FILE "LG23:6169006-6171006" > ${FILE%bam}'pe_LG23.bam'
 done
 samtools merge /workdir/batch-effect/bam/fst_outliers/fst_outliers_pe.bam /workdir/batch-effect/bam/*pe_LG??.bam
 samtools index /workdir/batch-effect/bam/fst_outliers/fst_outliers_pe.bam
+```
+
+## PCA results before and after correcting for reference bias
+
+## Exclude certain SNPs to mitigate the batch effects in PCA results
+
+Here, we try to exclude private alleles and regions affected by reference bias in PCA to address batch effect caused by DNA degradation and reference bias
+
+#### Come up with a new SNP list
+
+```{r eval=FALSE}
+maf_pe <- read_tsv("../angsd/popminind20/pe_global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled_unlinked_popminind20.mafs.gz") %>%
+  transmute(lg = chromo, position = position, major=major, minor = minor, pe_maf = knownEM, pe_nind=nInd)
+
+maf_se <- read_tsv("../angsd/popminind20/se_global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled_unlinked_popminind20.mafs.gz") %>%
+  transmute(lg = chromo, position = position, major=major, minor = minor, se_maf = knownEM, se_nind=nInd)
+
+maf_joined <- inner_join(maf_pe, maf_se) %>% 
+  mutate(delta=abs(se_maf-pe_maf))
+
+maf_joined_excluding_private <- filter(maf_joined, !((pe_maf<0.01 | pe_maf>0.99)&(se_maf>0.1 & se_maf<0.9))) %>%
+  filter(!((se_maf<0.01 | se_maf>0.99)&(pe_maf>0.1 & pe_maf<0.9)))
+
+maf_excluding_pe <- maf_se %>%
+  filter(!(se_maf<0.1 | se_maf>0.9))
+
+maf_excluding_se <-  maf_pe %>%
+  filter(!(pe_maf<0.1 | pe_maf>0.9))
+
+original_snp_list <- read_tsv("/workdir/batch-effect/angsd/global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled_unlinked.txt", col_names = c("lg", "position", "major", "minor")) 
+  
+new_snp_list <- semi_join(original_snp_list, maf_joined_excluding_private)
+write_tsv(new_snp_list, "../angsd/global_snp_list_private_snps.txt", col_names = F)
+
+se_snp_list <- semi_join(original_snp_list, maf_excluding_pe)
+write_tsv(se_snp_list, "../angsd/global_snp_list_se_snps.txt", col_names = F)
+
+pe_snp_list <- semi_join(original_snp_list, maf_excluding_se)
+write_tsv(pe_snp_list, "../angsd/global_snp_list_pe_snps.txt", col_names = F)
+
+anymapq_depth <- read_tsv("../angsd/popminind2/bam_list_realigned_se_anymapq.pos.gz") %>%
+  rename(lg=chr, position=pos, total_depth_anymapq=totDepth)
+mapq20_depth <- read_tsv("../angsd/popminind20/se_global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_popminind20.pos.gz") %>%
+  rename(lg=chr, position=pos, total_depth_mapq20=totDepth)
+depth <- inner_join(anymapq_depth, mapq20_depth) %>%
+ mutate(depth_ratio=total_depth_mapq20/total_depth_anymapq)
+
+depth_ratio_filtered_snp_list <- semi_join(original_snp_list, filter(depth, depth_ratio > 0.9))
+write_tsv(depth_ratio_filtered_snp_list, "../angsd/global_snp_list_depth_ratio_filtered_snps.txt", col_names = F)
+```
+
+#### Run ANGSD
+
+```{bash eval=FALSE}
+## Private SNPs
+cd /workdir/batch-effect/
+/workdir/programs/angsd0.931/angsd/angsd sites index /workdir/batch-effect/angsd/global_snp_list_private_snps.txt
+nohup /workdir/programs/angsd0.931/angsd/angsd \
+-b sample_lists/bam_list_realigned.txt \
+-anc /workdir/cod/reference_seqs/gadMor3.fasta \
+-out angsd/bam_list_realigned_private_snps \
+-GL 1 -doGlf 2 -doMaf 1 -doMajorMinor 3 -doCounts 1 -doDepth 1 -dumpCounts 1 \
+-P 16 -setMinDepth 2 -setMaxDepth 661 -minInd 2 -minQ 20 -minMapQ 20 -minMaf 0.05 \
+-doIBS 2 -makematrix 1 -doCov 1 \
+-sites /workdir/batch-effect/angsd/global_snp_list_private_snps.txt \
+-rf /workdir/batch-effect/angsd/global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled_unlinked.chrs \
+>& nohups/get_gl_bam_list_realigned_private_snps.log &
+## SE SNPs
+cd /workdir/batch-effect/
+/workdir/programs/angsd0.931/angsd/angsd sites index /workdir/batch-effect/angsd/global_snp_list_se_snps.txt
+nohup /workdir/programs/angsd0.931/angsd/angsd \
+-b sample_lists/bam_list_realigned.txt \
+-anc /workdir/cod/reference_seqs/gadMor3.fasta \
+-out angsd/bam_list_realigned_se_snps \
+-GL 1 -doGlf 2 -doMaf 1 -doMajorMinor 3 -doCounts 1 -doDepth 1 -dumpCounts 1 \
+-P 16 -setMinDepth 2 -setMaxDepth 661 -minInd 2 -minQ 20 -minMapQ 20 -minMaf 0.05 \
+-doIBS 2 -makematrix 1 -doCov 1 \
+-sites /workdir/batch-effect/angsd/global_snp_list_se_snps.txt \
+-rf /workdir/cod/greenland-cod/angsd/global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked.chrs \
+>& nohups/get_gl_bam_list_realigned_se_snps.log &
+## PE SNPs
+cd /workdir/batch-effect/
+/workdir/programs/angsd0.931/angsd/angsd sites index /workdir/batch-effect/angsd/global_snp_list_pe_snps.txt
+nohup /workdir/programs/angsd0.931/angsd/angsd \
+-b sample_lists/bam_list_realigned.txt \
+-anc /workdir/cod/reference_seqs/gadMor3.fasta \
+-out angsd/bam_list_realigned_pe_snps \
+-GL 1 -doGlf 2 -doMaf 1 -doMajorMinor 3 -doCounts 1 -doDepth 1 -dumpCounts 1 \
+-P 16 -setMinDepth 2 -setMaxDepth 661 -minInd 2 -minQ 20 -minMapQ 20 -minMaf 0.05 \
+-doIBS 2 -makematrix 1 -doCov 1 \
+-sites /workdir/batch-effect/angsd/global_snp_list_pe_snps.txt \
+-rf /workdir/cod/greenland-cod/angsd/global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked.chrs \
+>& nohups/get_gl_bam_list_realigned_pe_snps.log &
+## Depth ratio filtered SNPs
+cd /workdir/batch-effect/
+/workdir/programs/angsd0.931/angsd/angsd sites index /workdir/batch-effect/angsd/global_snp_list_depth_ratio_filtered_snps.txt
+nohup /workdir/programs/angsd0.931/angsd/angsd \
+-b sample_lists/bam_list_realigned.txt \
+-anc /workdir/cod/reference_seqs/gadMor3.fasta \
+-out angsd/bam_list_realigned_depth_ratio_filtered_snps \
+-GL 1 -doGlf 2 -doMaf 1 -doMajorMinor 3 -doCounts 1 -doDepth 1 -dumpCounts 1 \
+-P 16 -setMinDepth 2 -setMaxDepth 661 -minInd 2 -minQ 20 -minMapQ 20 -minMaf 0.05 \
+-doIBS 2 -makematrix 1 -doCov 1 \
+-sites /workdir/batch-effect/angsd/global_snp_list_depth_ratio_filtered_snps.txt \
+-rf /workdir/cod/greenland-cod/angsd/global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked.chrs \
+>& nohups/get_gl_bam_list_realigned_depth_ratio_filtered_snps.log &
+```
+
+#### PCA result with original SNP list
+
+```{r eval=T}
+sample_table <- read_tsv("../sample_lists/sample_table_merged.tsv")
+genome_cov <- read_tsv("../angsd/bam_list_realigned_downsampled_unlinked.covMat", col_names = F)[1:163,]
+PCA(genome_cov, sample_table$sample_id_corrected, sample_table$data_type, 1, 2, show.ellipse = F, show.line = T)
+pca_table_data_type <- pca_table[,1:6] %>% rename(data_type=population)
+PCA(genome_cov, sample_table$sample_id_corrected, sample_table$population, 1, 2, show.ellipse = F, show.line = T)
+pca_table_population <- pca_table[,1:6]
+
+genome_dist <- read_tsv("../angsd/bam_list_realigned_downsampled_unlinked.ibsMat", col_names = F)[1:163,]
+PCoA(genome_dist, sample_table$sample_id_corrected, sample_table$data_type, 10, 1, 2, show.ellipse = F, show.line = T)
+PCoA(genome_dist, sample_table$sample_id_corrected, sample_table$population, 10, 1, 2, show.ellipse = F, show.line = T)
+
+pca_table_data_type_summary <- group_by(pca_table_data_type, data_type) %>%
+  summarise(PC1_mean=mean(PC1), PC2_mean=mean(PC2), PC3_mean=mean(PC3), PC4_mean=mean(PC4))
+pca_table_population_summary <- group_by(pca_table, population) %>%
+  summarise(PC1_mean=mean(PC1), PC2_mean=mean(PC2), PC3_mean=mean(PC3), PC4_mean=mean(PC4))
+pca_table_combined <- left_join(pca_table_data_type, pca_table_population)
+
+pca_table_combined %>%
+  left_join(pca_table_data_type_summary) %>%
+  ggplot() +
+  geom_point(aes(x=PC1, y=PC2, color=population)) +
+  geom_segment(aes(x=PC1, y=PC2, xend=PC1_mean, yend=PC2_mean, color=population), size = 0.1) +
+  geom_label(aes(x=PC1_mean, y=PC2_mean, label=data_type)) +
+  ylim(-0.15, NA) +
+  theme_cowplot()
+
+pca_table_combined %>%
+  left_join(pca_table_population_summary) %>%
+  ggplot() +
+  geom_point(aes(x=PC1, y=PC2, color=data_type)) +
+  geom_segment(aes(x=PC1, y=PC2, xend=PC1_mean, yend=PC2_mean, color=data_type), size = 0.1) +
+  geom_label(aes(x=PC1_mean, y=PC2_mean, label=population)) +
+  ylim(-0.15, NA) +
+  theme_cowplot()
+
+pca_table_combined %>%
+  left_join(pca_table_data_type_summary) %>%
+  ggplot() +
+  geom_point(aes(x=PC1, y=PC2, color=population)) +
+  geom_segment(aes(x=PC1, y=PC2, xend=PC1_mean, yend=PC2_mean, color=population), size = 0.1) +
+  #geom_label(aes(x=PC1_mean, y=PC2_mean, label=data_type)) +
+  ylim(-0.15, NA) +
+  facet_wrap(~data_type) +
+  theme_cowplot()
+
+pca_table_combined %>%
+  left_join(pca_table_population_summary) %>%
+  ggplot() +
+  geom_point(aes(x=PC1, y=PC2, color=data_type)) +
+  geom_segment(aes(x=PC1, y=PC2, xend=PC1_mean, yend=PC2_mean, color=data_type), size = 0.1) +
+  #geom_label(aes(x=PC1_mean, y=PC2_mean, label=population)) +
+  ylim(-0.15, NA) +
+  facet_wrap(~population) +
+  theme_cowplot()
+```
+
+
+#### Ascertainment bias when using SNP lists that exclude either PE or SE private alleles
+
+```{r eval=TRUE, include=FALSE}
+genome_cov <- read_tsv("../angsd/bam_list_realigned_pe_snps.covMat", col_names = F) %>%
+  as.matrix()
+PCA(genome_cov, sample_table$sample_id_corrected, sample_table$data_type, 1, 2, show.ellipse = F, show.line = F)
+pca_pe <- pca_table[,1:4] %>%
+  rename(data_type=population) %>%
+  left_join(transmute(sample_table, individual=sample_id_corrected, population=population))
+
+genome_cov <- read_tsv("../angsd/bam_list_realigned_se_snps.covMat", col_names = F) %>%
+  as.matrix()
+PCA(genome_cov, sample_table$sample_id_corrected, sample_table$data_type, 1, 2, show.ellipse = F, show.line = F)
+pca_se <- pca_table[,1:4] %>%
+  rename(data_type=population) %>%
+  left_join(transmute(sample_table, individual=sample_id_corrected, population=population))
+```
+
+```{r eval=TRUE, fig.width=10, fig.height=8}
+rename_pop <- tibble(population = c("ITV2011", "KNG2011", "QQL2011", "all pops"),
+                     population_new =c("pop 1", "pop 2", "pop 3", "all pops"))
+pca_combined <- bind_rows(bind_cols(pca_pe, type="NextSeq-150PE SNPs"), 
+                          bind_cols(pca_se, type="HiSeq-125SE SNPs")) %>%
+  mutate(batch=ifelse(data_type=="se", "HiSeq-125SE", "NextSeq-150PE")) %>%
+  filter(! individual %in% c("UUM2010_036", "UUM2010_038"))
+pca_combined_select_pops <- filter(pca_combined, population %in% c("KNG2011", "QQL2011", "ITV2011"))
+pca_plot <- pca_combined_select_pops %>%
+  bind_rows(mutate(pca_combined, population = "all pops")) %>%
+  left_join(rename_pop) %>%
+  mutate(population_new=fct_relevel(population_new, c("pop 1", "pop 2", "pop 3", "all pops"))) %>%
+  ggplot(aes(x=PC1, y=PC2)) +
+  geom_point(data=pca_combined, color="grey", size=0.5) +
+  geom_point(aes(color=batch), size=2) +
+  scale_color_viridis_d(begin=0.25, end=0.75) +
+  facet_grid(population_new~type) +
+  ylim(c(NA, 0.25)) +
+  xlim(c(-0.15, NA)) +
+  theme_cowplot() +
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        panel.border = element_rect(colour="black",size=0.5),
+        legend.position = c(0.78, 0.94),
+        legend.key.size = unit(0.5, 'lines'),
+        strip.text.x = element_text(face = "bold", size=20),
+        legend.key = element_rect(fill = "white", colour = "black"))
+pca_plot
+```
+
+#### PCA result with a SNP list that exclude both PE and SE SNPs
+
+```{r eval=T}
+genome_cov <- read_tsv("../angsd/bam_list_realigned_private_snps.covMat", col_names = F)[1:163,]
+PCA(genome_cov, sample_table$sample_id_corrected, sample_table$data_type, 1, 2, show.ellipse = F, show.line = T)
+pca_table %>%
+  dplyr::select(1:4) %>%
+  mutate(data_type=population, population=str_sub(individual, 1, 7)) %>%
+  ggplot() +
+  geom_point(aes(x=PC1, y=PC2, color=data_type)) +
+  ylim(NA, 0.15) +
+  facet_wrap(~population) +
+  theme_cowplot()
+```
+
+#### PCA result with a depth ratio filtered SNP list
+
+```{r eval=T}
+genome_cov <- read_tsv("../angsd/bam_list_realigned_depth_ratio_filtered_snps.covMat", col_names = F)[1:163,]
+PCA(genome_cov, sample_table$sample_id_corrected, sample_table$data_type, 1, 2, show.ellipse = F, show.line = T)
+pca_table %>%
+  dplyr::select(1:4) %>%
+  mutate(data_type=population, population=str_sub(individual, 1, 7)) %>%
+  ggplot() +
+  geom_point(aes(x=PC1, y=PC2, color=data_type)) +
+  ylim(NA, 0.15) +
+  facet_wrap(~population) +
+  theme_cowplot()
 ```

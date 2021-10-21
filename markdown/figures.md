@@ -44,19 +44,19 @@ for (i in 1:nrow(sample_table)){
   population <- sample_table$population[i]
   data_type <- sample_table$data_type[i]
   if (str_detect(data_type,"pe")){
-    path <- str_c("../../cod/greenland-cod/angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_minq20_sorted_dedup_overlapclipped_realigned_mindp2_maxdp10_minq20_minmapq30")
-    path_stringent <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_overlapclipped_realigned_mindp2_maxdp10_minq33_minmapq30")
+    path_original <- str_c("../../cod/greenland-cod/angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_minq20_sorted_dedup_overlapclipped_realigned_mindp2_maxdp10_minq20_minmapq30")
+    path_new <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_overlapclipped_realigned_mindp2_maxdp10_minq33_minmapq30")
   } else {
-    path <- str_c("../../cod/greenland-cod/angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_minq20_sorted_dedup_realigned_mindp2_maxdp10_minq20_minmapq30")
-    path_stringent <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_realigned_mindp2_maxdp10_minq33_minmapq30")
+    path_original <- str_c("../../cod/greenland-cod/angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_minq20_sorted_dedup_realigned_mindp2_maxdp10_minq20_minmapq30")
+    path_new <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_realigned_mindp2_maxdp10_minq33_minmapq30")
   }
-  het_relaxed <- read_delim(str_c(path, ".ml"), col_names = F, delim = " ") %>% 
+  het_original <- read_delim(str_c(path_original, ".ml"), col_names = F, delim = " ") %>% 
     transmute(n_sites=(X1+X2+X3), n_snp=X2, het=n_snp/n_sites) %>%
     mutate(sample_id=sample_id, population=population, data_type=data_type, type="Before")
-  het_stringent_notrans <- read_delim(str_c(path_stringent, ".ml"), col_names = F, delim = " ") %>% 
+  het_stringent <- read_delim(str_c(path_new, ".ml"), col_names = F, delim = " ") %>% 
     transmute(n_sites=(X1+X2+X3), n_snp=X2, het=n_snp/n_sites) %>%
     mutate(sample_id=sample_id, population=population, data_type=data_type, type="After")
-  het_combined <- bind_rows(het_relaxed, het_stringent_notrans)
+  het_combined <- bind_rows(het_original, het_stringent)
   if(i==1){
     het_final <- het_combined
   } else {
@@ -101,9 +101,7 @@ Here, I am comparing PCA result from
 
 1.  the original LD pruned SNP list
 
-2.  a subsetted SNP list with private SNPs in each batch (those that are
-    fixed in one batch and are at intermediate frequency in the other
-    batch) and SNPs with depth ratio \< 0.9 filtered out
+2.  a subsetted SNP list with SNPs with depth ratio \< 0.9 filtered out
 
 Both have gone through sliding window trimming, have base quality and
 mapping quality filters of 20, minimum individual filter of 20, and etc.
@@ -113,35 +111,11 @@ Also, note that two outlier individuals from UUM2010 are removed from
 these plots for clearer results.
 
 ``` r
-genome_cov <- read_tsv("../angsd/bam_list_realigned_downsampled_unlinked.covMat", col_names = F) %>%
-  as.matrix()
-PCA(genome_cov, sample_table$sample_id_corrected, sample_table$data_type, 1, 2, show.ellipse = F, show.line = F)
-```
-
-![](figures_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
-
-``` r
-pca_before <- pca_table[,1:4] %>%
-  rename(data_type=population) %>%
-  left_join(transmute(sample_table, individual=sample_id_corrected, population=population))
-genome_cov <- read_tsv("../angsd/bam_list_realigned_private_snps.covMat", col_names = F) %>%
-  as.matrix()
-PCA(genome_cov, sample_table$sample_id_corrected, sample_table$data_type, 1, 2, show.ellipse = F, show.line = F)
-```
-
-![](figures_files/figure-gfm/unnamed-chunk-3-2.png)<!-- -->
-
-``` r
-pca_after <- pca_table[,1:4] %>%
-  rename(data_type=population) %>%
-  left_join(transmute(sample_table, individual=sample_id_corrected, population=population))
-```
-
-``` r
 pca_combined <- bind_rows(bind_cols(pca_before, type="Before"), 
                           bind_cols(pca_after, type="After")) %>%
   mutate(type=fct_relevel(type, c("Before", "After"))) %>%
-  mutate(batch=ifelse(data_type=="se", "HiSeq-125SE", "NextSeq-150PE"))
+  mutate(batch=ifelse(data_type=="se", "HiSeq-125SE", "NextSeq-150PE")) %>%
+  filter(! individual %in% c("UUM2010_036", "UUM2010_038"))
 pca_plot <- pca_combined %>%
   left_join(rename_pop) %>%
   filter(population_new %in% str_c("pop ", 1:6)) %>%
@@ -150,8 +124,6 @@ pca_plot <- pca_combined %>%
   geom_point(aes(color=batch), size=2) +
   scale_color_viridis_d(begin=0.25, end=0.75) +
   facet_grid(type~population_new) +
-  ylim(-0.12, NA) +
-  xlim(-0.15, NA) +
   theme_cowplot() +
   theme(axis.text = element_blank(),
         axis.ticks = element_blank(),
@@ -164,8 +136,6 @@ pca_plot <- pca_combined %>%
         legend.title = element_blank())
 pca_plot
 ```
-
-    ## Warning: Removed 24 rows containing missing values (geom_point).
 
 ![](figures_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
@@ -224,6 +194,189 @@ fst_plot
 plot_grid(het_plot, pca_plot, fst_plot, labels = c('A', 'B', 'C'), label_size = 20, nrow = 3, rel_heights = c(4, 3.8, 4))
 ```
 
-    ## Warning: Removed 24 rows containing missing values (geom_point).
-
 ![](figures_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+
+## Figure S3
+
+This is a sequential visualization of estimated heterozygosity after
+each issue is taken care of
+
+``` r
+sample_table <- read_tsv("../sample_lists/sample_table_merged.tsv")
+rename_pop <- tibble(population = c("ITV2011", "KNG2011", "QQL2011", "BUK2011", "IKE2011", "PAA2011", "ATP2011", "NAR2008", "UUM2010"),
+                     population_new =c("pop 1", "pop 2", "pop 3", "pop 4", "pop 5", "pop 6", "pop 7", "pop 8", "pop 9"))
+for (i in 1:nrow(sample_table)){
+  sample_seq_id <- sample_table$sample_seq_id[i]
+  sample_id <- sample_table$sample_id_corrected[i]
+  population <- sample_table$population[i]
+  data_type <- sample_table$data_type[i]
+  if (str_detect(data_type,"pe")){
+    path_original <- str_c("../../cod/greenland-cod/angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_minq20_sorted_dedup_overlapclipped_realigned_mindp2_maxdp10_minq20_minmapq30")
+    path_new <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_overlapclipped_realigned_mindp2_maxdp10")
+  } else {
+    path_original <- str_c("../../cod/greenland-cod/angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_minq20_sorted_dedup_realigned_mindp2_maxdp10_minq20_minmapq30")
+    path_new <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_realigned_mindp2_maxdp10")
+  }
+  het_original <- read_delim(str_c(path_original, ".ml"), col_names = F, delim = " ") %>% 
+    transmute(n_sites=(X1+X2+X3), n_snp=X2, het=n_snp/n_sites) %>%
+    mutate(sample_id=sample_id, population=population, data_type=data_type, type="Before mitigation")
+  
+  het_relaxed <- read_delim(str_c(path_new, "_minq20_minmapq30.ml"), col_names = F, delim = " ") %>% 
+    transmute(n_sites=(X1+X2+X3), n_snp=X2, het=n_snp/n_sites) %>%
+    mutate(sample_id=sample_id, population=population, data_type=data_type, type="After sliding-window trimming")
+  
+  het_stringent <- read_delim(str_c(path_new, "_minq33_minmapq30.ml"), col_names = F, delim = " ") %>% 
+    transmute(n_sites=(X1+X2+X3), n_snp=X2, het=n_snp/n_sites) %>%
+    mutate(sample_id=sample_id, population=population, data_type=data_type, type="After stringent quality filtering")
+
+  het_stringent_notrans <- read_delim(str_c(path_new, "_minq33_minmapq30_notrans.ml"), col_names = F, delim = " ") %>% 
+    transmute(n_sites=(X1+X2+X3), n_snp=X2, het=n_snp/n_sites) %>%
+    mutate(sample_id=sample_id, population=population, data_type=data_type, type="After filtering transitions")
+  
+  het_combined <- bind_rows(het_original, het_relaxed, het_stringent, het_stringent_notrans)
+  if(i==1){
+    het_final <- het_combined
+  } else {
+    het_final <- bind_rows(het_final, het_combined)
+  }
+}
+het_gg <- het_final %>%
+  left_join(rename_pop) %>%
+  mutate(type=fct_relevel(type, c("Before mitigation", "After sliding-window trimming", "After stringent quality filtering", "After filtering transitions"))) %>%
+  mutate(batch=ifelse(data_type=="pe", "NextSeq-150PE", "HiSeq-125SE")) 
+set.seed(42)
+het_plot <- het_gg %>%
+  ggplot(aes(x="", y=het*10^3)) +
+  geom_boxplot(outlier.alpha = 0, color="black", size=0.2, width=0.2) +
+  #geom_jitter(data=(het_gg %>% dplyr::select(-population_new) %>% filter(! population %in% c("KNG2011", "QQL2011", "ITV2011"))) , color="grey", height = 0, width = 0.3, size=1) +
+  geom_jitter(aes(color=batch), height = 0, width = 0.1, size=1.5) +
+  scale_color_viridis_d(begin=0.25, end=0.75) +
+  ylab(expression(paste("heterozygosity (in ", 10^-3, ")"))) +
+  facet_grid(population_new~type, scales = "free_y") +
+  xlab(" ") +
+  #scale_y_continuous(limits = c(0.002, 0.008), breaks = 0.002*(1:4)) +
+  coord_flip() +
+  theme_cowplot() +
+  theme(panel.background=element_rect(colour="black", size=0.8),
+        legend.position = c(0.84, 0.98),
+        legend.key.size = unit(0.5, 'lines'),
+        strip.text.x = element_text(size=12),
+        strip.text.y = element_text(size=12),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        legend.key = element_rect(fill = "white", colour = "black"),
+        legend.title = element_blank())
+het_plot
+```
+
+![](figures_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
+## Figure S4
+
+This compares filtering based methods with base quality score
+recalibration.
+
+``` r
+sample_table <- read_tsv("../sample_lists/sample_table_merged.tsv")
+rename_pop <- tibble(population = c("ITV2011", "KNG2011", "QQL2011", "BUK2011", "IKE2011", "PAA2011", "ATP2011", "NAR2008", "UUM2010"),
+                     population_new =c("pop 1", "pop 2", "pop 3", "pop 4", "pop 5", "pop 6", "pop 7", "pop 8", "pop 9"))
+for (i in 1:nrow(sample_table)){
+  sample_seq_id <- sample_table$sample_seq_id[i]
+  sample_id <- sample_table$sample_id_corrected[i]
+  population <- sample_table$population[i]
+  data_type <- sample_table$data_type[i]
+  if (str_detect(data_type,"pe")){
+    path_original <- str_c("../../cod/greenland-cod/angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_minq20_sorted_dedup_overlapclipped_realigned_mindp2_maxdp10_minq20_minmapq30")
+    path_new <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_overlapclipped_realigned_mindp2_maxdp10")
+  } else {
+    path_original <- str_c("../../cod/greenland-cod/angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_minq20_sorted_dedup_realigned_mindp2_maxdp10_minq20_minmapq30")
+    path_new <- str_c("../angsd/heterozygosity/", sample_seq_id,  "_bt2_gadMor3_sorted_dedup_realigned_mindp2_maxdp10")
+  }
+  het_original <- read_delim(str_c(path_original, ".ml"), col_names = F, delim = " ") %>% 
+    transmute(n_sites=(X1+X2+X3), n_snp=X2, het=n_snp/n_sites) %>%
+    mutate(sample_id=sample_id, population=population, data_type=data_type, type="Before mitigation")
+  
+  het_stringent <- read_delim(str_c(path_new, "_minq33_minmapq30.ml"), col_names = F, delim = " ") %>% 
+    transmute(n_sites=(X1+X2+X3), n_snp=X2, het=n_snp/n_sites) %>%
+    mutate(sample_id=sample_id, population=population, data_type=data_type, type="After mitigation")
+
+  het_bqsr_angsd <- read_delim(str_c(path_new, "_minq0_minmapq30_bqsr.ml"), col_names = F, delim = " ") %>% 
+    transmute(n_sites=(X1+X2+X3), n_snp=X2, het=n_snp/n_sites) %>%
+    mutate(sample_id=sample_id, population=population, data_type=data_type, type="BQSR with ANGSD")
+
+  het_bqsr_gatk <- read_delim(str_c(path_new, "_minq0_minmapq30_bqsr_gatk.ml"), col_names = F, delim = " ") %>% 
+    transmute(n_sites=(X1+X2+X3), n_snp=X2, het=n_snp/n_sites) %>%
+    mutate(sample_id=sample_id, population=population, data_type=data_type, type="BQSR with GATK")
+
+  het_combined <- bind_rows(het_original, het_stringent, het_bqsr_angsd, het_bqsr_gatk)
+  if(i==1){
+    het_final <- het_combined
+  } else {
+    het_final <- bind_rows(het_final, het_combined)
+  }
+}
+bqsr_gg <- het_final %>%
+  left_join(rename_pop) %>%
+  mutate(type=fct_relevel(type, c("Before mitigation", "After mitigation", "BQSR with ANGSD", "BQSR with GATK"))) %>%
+  mutate(batch=ifelse(data_type=="pe", "NextSeq-150PE", "HiSeq-125SE")) 
+set.seed(42)
+bqsr_plot <- bqsr_gg %>%
+  filter(!population_new %in% c("pop 7", "pop 8", "pop 9")) %>%
+  ggplot(aes(x=population_new, y=het*10^3)) +
+  geom_boxplot(outlier.alpha = 0, color="black") +
+  geom_jitter(aes(color=batch), height = 0, size=1.5) +
+  scale_color_viridis_d(begin=0.25, end=0.75) +
+  scale_x_discrete(limits = rev) +
+  ylab(expression(paste("heterozygosity (in ", 10^-3, ")"))) +
+  facet_grid(type~., scales = "free_y") +
+  xlab(" ") +
+  coord_flip() +
+  theme_cowplot() +
+  theme(panel.background=element_rect(colour="black", size=0.8),
+        legend.position = c(0.03, 0.98),
+        legend.key.size = unit(0.5, 'lines'),
+        strip.text.x = element_text(size=12),
+        strip.text.y = element_text(size=12),
+        legend.key = element_rect(fill = "white", colour = "black"),
+        legend.title = element_blank())
+bqsr_plot
+```
+
+![](figures_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+
+## Figure S5
+
+``` r
+pca_combined <- bind_rows(bind_cols(pca_before, type="Full LD-pruned\nSNP list"), 
+                          bind_cols(pca_pe, type="NextSeq-150PE\nSNPs only"), 
+                          bind_cols(pca_se, type="HiSeq-125SE\nSNPs only"), 
+                          bind_cols(pca_private_filtered, type="All private\nSNPs removed"), 
+                          bind_cols(pca_depth_ratio_filtered, type="Depth ratio filtered\nSNP list"), 
+                          bind_cols(pca_depth_ratio_filtered_notrans, type="Depth ratio & transition\nfiltered SNP list")) %>%
+  mutate(type=fct_relevel(type, c("Full LD-pruned\nSNP list", "NextSeq-150PE\nSNPs only", "HiSeq-125SE\nSNPs only", "All private\nSNPs removed", "Depth ratio filtered\nSNP list", "Depth ratio & transition\nfiltered SNP list"))) %>%
+  mutate(batch=ifelse(data_type=="se", "HiSeq-125SE", "NextSeq-150PE")) %>%
+  filter(! individual %in% c("UUM2010_036", "UUM2010_038"))
+pca_plot <- bind_rows(pca_combined, mutate(pca_combined, population="all pops")) %>%
+  left_join(rename_pop) %>%
+  mutate(population_new=ifelse(is.na(population_new), "all pops", population_new)) %>% 
+  mutate(population_new=fct_relevel(population_new, c(str_c("pop ", 1:9), "all pops"))) %>%
+  ggplot(aes(x=PC1, y=PC2)) +
+  geom_point(data=pca_combined, color="grey", size=0.3) +
+  geom_point(aes(color=batch), size=1.5) +
+  scale_color_viridis_d(begin=0.25, end=0.75) +
+  facet_grid(population_new~type) +
+  theme_cowplot() +
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        panel.border = element_rect(colour="black",size=0.8),
+        legend.position = c(0.89, 0.99),
+        legend.key.size = unit(0.5, 'lines'),
+        legend.text = element_text(size=8),
+        strip.text.y = element_text(size=10),
+        strip.text.x = element_text(size=10),
+        legend.key = element_rect(fill = "white", colour = "black"),
+        legend.title = element_blank())
+pca_plot
+```
+
+![](figures_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->

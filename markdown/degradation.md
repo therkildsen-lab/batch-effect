@@ -13,17 +13,11 @@ DNA degradation
     alleles](#a-closer-look-at-private-alleles)
       - [Extract private alleles and examine proportion of base
         substitutions](#extract-private-alleles-and-examine-proportion-of-base-substitutions)
-  - [Exclude certain SNPs to mitigate the batch effects in PCA
-    results](#exclude-certain-snps-to-mitigate-the-batch-effects-in-pca-results)
+  - [Exclude transitions from PCA](#exclude-transitions-from-pca)
       - [Come up with a new SNP list](#come-up-with-a-new-snp-list)
       - [Run ANGSD](#run-angsd-1)
-      - [PCA result with original SNP
-        list](#pca-result-with-original-snp-list)
-      - [Supplementary Figure: ascertainment bias when using SNP lists
-        that exclude either PE or SE private
-        alleles](#supplementary-figure-ascertainment-bias-when-using-snp-lists-that-exclude-either-pe-or-se-private-alleles)
-      - [PCA result with a SNP list that exclude both PE and SE
-        SNPs](#pca-result-with-a-snp-list-that-exclude-both-pe-and-se-snps)
+      - [PCA results before and after excluding
+        transitions](#pca-results-before-and-after-excluding-transitions)
   - [Effectiveness of different mitigation
     strategies](#effectiveness-of-different-mitigation-strategies)
       - [Effectiveness of base quality filtering and transition
@@ -343,228 +337,67 @@ print(p_b_2)
 C-to-T and G-to-A transitions are enriched in samples that are more
 degraded
 
-## Exclude certain SNPs to mitigate the batch effects in PCA results
+## Exclude transitions from PCA
 
-Here, we try to exclude private alleles and regions affected by
-reference bias in PCA to address batch effect caused by DNA degradation
-and reference bias
+Here, we try to exclude transitions after reference bias is accounted
+for, to evalutate whether PCA results are affected by DNA degradataion
 
 #### Come up with a new SNP list
 
 ``` r
-maf_pe <- read_tsv("../angsd/popminind20/pe_global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled_unlinked_popminind20.mafs.gz") %>%
-  transmute(lg = chromo, position = position, major=major, minor = minor, pe_maf = knownEM, pe_nind=nInd)
-
-maf_se <- read_tsv("../angsd/popminind20/se_global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled_unlinked_popminind20.mafs.gz") %>%
-  transmute(lg = chromo, position = position, major=major, minor = minor, se_maf = knownEM, se_nind=nInd)
-
-maf_joined <- inner_join(maf_pe, maf_se) %>% 
-  mutate(delta=abs(se_maf-pe_maf))
-
-maf_joined_excluding_private <- filter(maf_joined, !((pe_maf<0.01 | pe_maf>0.99)&(se_maf>0.1 & se_maf<0.9))) %>%
-  filter(!((se_maf<0.01 | se_maf>0.99)&(pe_maf>0.1 & pe_maf<0.9)))
-
-maf_excluding_pe <- maf_se %>%
-  filter(!(se_maf<0.1 | se_maf>0.9))
-
-maf_excluding_se <-  maf_pe %>%
-  filter(!(pe_maf<0.1 | pe_maf>0.9))
-
-#anymapq_depth <- read_tsv("../angsd/popminind2/bam_list_realigned_se_anymapq.pos.gz") %>%
-#  rename(lg=chr, position=pos, total_depth_anymapq=totDepth)
-#mapq20_depth <- read_tsv("../angsd/popminind20/se_global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled_unlinked_popminind20.pos.gz") %>%
-#  rename(lg=chr, position=pos, total_depth_mapq20=totDepth)
-#depth <- inner_join(anymapq_depth, mapq20_depth) %>%
-#  mutate(depth_ratio=total_depth_mapq20/total_depth_anymapq)
-#
-#maf_joined_excluding_private_filtering_depth <- maf_joined_excluding_private %>%
-#  left_join(depth) %>%
-#  filter(depth_ratio > 0.9)
-  
 original_snp_list <- read_tsv("/workdir/batch-effect/angsd/global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled_unlinked.txt", col_names = c("lg", "position", "major", "minor")) 
   
-new_snp_list <- semi_join(original_snp_list, maf_joined_excluding_private)
-write_tsv(new_snp_list, "../angsd/global_snp_list_private_snps.txt", col_names = F)
+anymapq_depth <- read_tsv("../angsd/popminind2/bam_list_realigned_se_anymapq.pos.gz") %>%
+  rename(lg=chr, position=pos, total_depth_anymapq=totDepth)
+mapq20_depth <- read_tsv("../angsd/popminind20/se_global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_popminind20.pos.gz") %>%
+  rename(lg=chr, position=pos, total_depth_mapq20=totDepth)
+depth <- inner_join(anymapq_depth, mapq20_depth) %>%
+ mutate(depth_ratio=total_depth_mapq20/total_depth_anymapq)
 
-se_snp_list <- semi_join(original_snp_list, maf_excluding_pe)
-write_tsv(se_snp_list, "../angsd/global_snp_list_se_snps.txt", col_names = F)
-
-pe_snp_list <- semi_join(original_snp_list, maf_excluding_se)
-write_tsv(pe_snp_list, "../angsd/global_snp_list_pe_snps.txt", col_names = F)
+depth_ratio_filtered_snp_list <- semi_join(original_snp_list, filter(depth, depth_ratio > 0.9))
+depth_ratio_filtered_notrans_snp_list <- depth_ratio_filtered_snp_list %>%
+  filter(!(major=="C"& minor=="T"), !(major=="G" & minor=="A"), !(major=="T"& minor=="C"), !(major=="A" & minor=="G"))
+write_tsv(depth_ratio_filtered_notrans_snp_list, "../angsd/global_snp_list_depth_ratio_filtered_notrans_snps.txt", col_names = F)
 ```
 
 #### Run ANGSD
 
 ``` bash
-## Private SNPs, depth ratio filtered
+## Depth ratio and transition filtered SNPs
 cd /workdir/batch-effect/
-/workdir/programs/angsd0.931/angsd/angsd sites index /workdir/batch-effect/angsd/global_snp_list_private_snps.txt
+/workdir/programs/angsd0.931/angsd/angsd sites index /workdir/batch-effect/angsd/global_snp_list_depth_ratio_filtered_notrans_snps.txt
 nohup /workdir/programs/angsd0.931/angsd/angsd \
 -b sample_lists/bam_list_realigned.txt \
 -anc /workdir/cod/reference_seqs/gadMor3.fasta \
--out angsd/bam_list_realigned_private_snps \
+-out angsd/bam_list_realigned_depth_ratio_filtered_notrans_snps \
 -GL 1 -doGlf 2 -doMaf 1 -doMajorMinor 3 -doCounts 1 -doDepth 1 -dumpCounts 1 \
 -P 16 -setMinDepth 2 -setMaxDepth 661 -minInd 2 -minQ 20 -minMapQ 20 -minMaf 0.05 \
 -doIBS 2 -makematrix 1 -doCov 1 \
--sites /workdir/batch-effect/angsd/global_snp_list_private_snps.txt \
--rf /workdir/batch-effect/angsd/global_snp_list_bam_list_realigned_mindp46_maxdp184_minind20_minq20_downsampled_unlinked.chrs \
->& nohups/get_gl_bam_list_realigned_private_snps.log &
-## SE SNPs
-cd /workdir/batch-effect/
-/workdir/programs/angsd0.931/angsd/angsd sites index /workdir/batch-effect/angsd/global_snp_list_se_snps.txt
-nohup /workdir/programs/angsd0.931/angsd/angsd \
--b sample_lists/bam_list_realigned.txt \
--anc /workdir/cod/reference_seqs/gadMor3.fasta \
--out angsd/bam_list_realigned_se_snps \
--GL 1 -doGlf 2 -doMaf 1 -doMajorMinor 3 -doCounts 1 -doDepth 1 -dumpCounts 1 \
--P 16 -setMinDepth 2 -setMaxDepth 661 -minInd 2 -minQ 20 -minMapQ 20 -minMaf 0.05 \
--doIBS 2 -makematrix 1 -doCov 1 \
--sites /workdir/batch-effect/angsd/global_snp_list_se_snps.txt \
+-sites /workdir/batch-effect/angsd/global_snp_list_depth_ratio_filtered_notrans_snps.txt \
 -rf /workdir/cod/greenland-cod/angsd/global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked.chrs \
->& nohups/get_gl_bam_list_realigned_se_snps.log &
-## PE SNPs
-cd /workdir/batch-effect/
-/workdir/programs/angsd0.931/angsd/angsd sites index /workdir/batch-effect/angsd/global_snp_list_pe_snps.txt
-nohup /workdir/programs/angsd0.931/angsd/angsd \
--b sample_lists/bam_list_realigned.txt \
--anc /workdir/cod/reference_seqs/gadMor3.fasta \
--out angsd/bam_list_realigned_pe_snps \
--GL 1 -doGlf 2 -doMaf 1 -doMajorMinor 3 -doCounts 1 -doDepth 1 -dumpCounts 1 \
--P 16 -setMinDepth 2 -setMaxDepth 661 -minInd 2 -minQ 20 -minMapQ 20 -minMaf 0.05 \
--doIBS 2 -makematrix 1 -doCov 1 \
--sites /workdir/batch-effect/angsd/global_snp_list_pe_snps.txt \
--rf /workdir/cod/greenland-cod/angsd/global_snp_list_bam_list_realigned_mincov_contamination_filtered_mindp151_maxdp661_minind102_minq20_downsampled_unlinked.chrs \
->& nohups/get_gl_bam_list_realigned_pe_snps.log &
+>& nohups/get_gl_bam_list_realigned_depth_ratio_filtered_notrans_snps.log &
 ```
 
-#### PCA result with original SNP list
+#### PCA results before and after excluding transitions
 
 ``` r
-sample_table <- read_tsv("../sample_lists/sample_table_merged.tsv")
-genome_cov <- read_tsv("../angsd/bam_list_realigned_downsampled_unlinked.covMat", col_names = F)[1:163,]
-PCA(genome_cov, sample_table$sample_id_corrected, sample_table$data_type, 1, 2, show.ellipse = F, show.line = T)
-```
-
-![](degradation_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
-
-``` r
-pca_table_data_type <- pca_table[,1:6] %>% rename(data_type=population)
-PCA(genome_cov, sample_table$sample_id_corrected, sample_table$population, 1, 2, show.ellipse = F, show.line = T)
-```
-
-![](degradation_files/figure-gfm/unnamed-chunk-11-2.png)<!-- -->
-
-``` r
-pca_table_population <- pca_table[,1:6]
-
-genome_dist <- read_tsv("../angsd/bam_list_realigned_downsampled_unlinked.ibsMat", col_names = F)[1:163,]
-PCoA(genome_dist, sample_table$sample_id_corrected, sample_table$data_type, 10, 1, 2, show.ellipse = F, show.line = T)
-```
-
-![](degradation_files/figure-gfm/unnamed-chunk-11-3.png)<!-- -->
-
-``` r
-PCoA(genome_dist, sample_table$sample_id_corrected, sample_table$population, 10, 1, 2, show.ellipse = F, show.line = T)
-```
-
-![](degradation_files/figure-gfm/unnamed-chunk-11-4.png)<!-- -->
-
-``` r
-pca_table_data_type_summary <- group_by(pca_table_data_type, data_type) %>%
-  summarise(PC1_mean=mean(PC1), PC2_mean=mean(PC2), PC3_mean=mean(PC3), PC4_mean=mean(PC4))
-pca_table_population_summary <- group_by(pca_table, population) %>%
-  summarise(PC1_mean=mean(PC1), PC2_mean=mean(PC2), PC3_mean=mean(PC3), PC4_mean=mean(PC4))
-pca_table_combined <- left_join(pca_table_data_type, pca_table_population)
-
-pca_table_combined %>%
-  left_join(pca_table_data_type_summary) %>%
-  ggplot() +
-  geom_point(aes(x=PC1, y=PC2, color=population)) +
-  geom_segment(aes(x=PC1, y=PC2, xend=PC1_mean, yend=PC2_mean, color=population), size = 0.1) +
-  geom_label(aes(x=PC1_mean, y=PC2_mean, label=data_type)) +
-  ylim(-0.15, NA) +
-  theme_cowplot()
-```
-
-    ## Warning: Removed 2 rows containing missing values (geom_point).
-
-    ## Warning: Removed 2 rows containing missing values (geom_segment).
-
-![](degradation_files/figure-gfm/unnamed-chunk-11-5.png)<!-- -->
-
-``` r
-pca_table_combined %>%
-  left_join(pca_table_population_summary) %>%
-  ggplot() +
-  geom_point(aes(x=PC1, y=PC2, color=data_type)) +
-  geom_segment(aes(x=PC1, y=PC2, xend=PC1_mean, yend=PC2_mean, color=data_type), size = 0.1) +
-  geom_label(aes(x=PC1_mean, y=PC2_mean, label=population)) +
-  ylim(-0.15, NA) +
-  theme_cowplot()
-```
-
-    ## Warning: Removed 2 rows containing missing values (geom_point).
-    
-    ## Warning: Removed 2 rows containing missing values (geom_segment).
-
-![](degradation_files/figure-gfm/unnamed-chunk-11-6.png)<!-- -->
-
-``` r
-pca_table_combined %>%
-  left_join(pca_table_data_type_summary) %>%
-  ggplot() +
-  geom_point(aes(x=PC1, y=PC2, color=population)) +
-  geom_segment(aes(x=PC1, y=PC2, xend=PC1_mean, yend=PC2_mean, color=population), size = 0.1) +
-  #geom_label(aes(x=PC1_mean, y=PC2_mean, label=data_type)) +
-  ylim(-0.15, NA) +
-  facet_wrap(~data_type) +
-  theme_cowplot()
-```
-
-    ## Warning: Removed 2 rows containing missing values (geom_point).
-    
-    ## Warning: Removed 2 rows containing missing values (geom_segment).
-
-![](degradation_files/figure-gfm/unnamed-chunk-11-7.png)<!-- -->
-
-``` r
-pca_table_combined %>%
-  left_join(pca_table_population_summary) %>%
-  ggplot() +
-  geom_point(aes(x=PC1, y=PC2, color=data_type)) +
-  geom_segment(aes(x=PC1, y=PC2, xend=PC1_mean, yend=PC2_mean, color=data_type), size = 0.1) +
-  #geom_label(aes(x=PC1_mean, y=PC2_mean, label=population)) +
-  ylim(-0.15, NA) +
-  facet_wrap(~population) +
-  theme_cowplot()
-```
-
-    ## Warning: Removed 2 rows containing missing values (geom_point).
-    
-    ## Warning: Removed 2 rows containing missing values (geom_segment).
-
-![](degradation_files/figure-gfm/unnamed-chunk-11-8.png)<!-- -->
-
-#### Supplementary Figure: ascertainment bias when using SNP lists that exclude either PE or SE private alleles
-
-``` r
-rename_pop <- tibble(population = c("ITV2011", "KNG2011", "QQL2011", "all pops"),
-                     population_new =c("pop 1", "pop 2", "pop 3", "all pops"))
-pca_combined <- bind_rows(bind_cols(pca_pe, type="NextSeq-150PE SNPs"), 
-                          bind_cols(pca_se, type="HiSeq-125SE SNPs")) %>%
-  mutate(batch=ifelse(data_type=="se", "HiSeq-125SE", "NextSeq-150PE"))
-pca_combined_select_pops <- filter(pca_combined, population %in% c("KNG2011", "QQL2011", "ITV2011"))
-pca_plot <- pca_combined_select_pops %>%
-  bind_rows(mutate(pca_combined, population = "all pops")) %>%
+rename_pop <- tibble(population = c("ITV2011", "KNG2011", "QQL2011", "BUK2011", "IKE2011", "PAA2011", "ATP2011", "NAR2008", "UUM2010"),
+                     population_new =c("pop 1", "pop 2", "pop 3", "pop 4", "pop 5", "pop 6", "pop 7", "pop 8", "pop 9"))
+pca_combined <- bind_rows(bind_cols(pca_before, type="Including\ntransitions"), 
+                          bind_cols(pca_after, type="Excluding\ntransitions")) %>%
+  mutate(type=fct_relevel(type, c("Including\ntransitions", "Excluding\ntransitions"))) %>%
+  mutate(batch=ifelse(data_type=="se", "HiSeq-125SE", "NextSeq-150PE")) %>%
+  filter(! individual %in% c("UUM2010_036", "UUM2010_038"))
+pca_plot <- pca_combined %>%
   left_join(rename_pop) %>%
-  mutate(population_new=fct_relevel(population_new, c("pop 1", "pop 2", "pop 3", "all pops"))) %>%
+  filter(population_new %in% c("pop 7", "pop 8", "pop 9")) %>%
+  bind_rows(mutate(pca_combined, population = "all pops", population_new="all pops")) %>%
+  mutate(population_new=fct_relevel(population_new, c("pop 7", "pop 8", "pop 9", "all pops"))) %>%
   ggplot(aes(x=PC1, y=PC2)) +
   geom_point(data=pca_combined, color="grey", size=0.5) +
   geom_point(aes(color=batch), size=2) +
   scale_color_viridis_d(begin=0.25, end=0.75) +
   facet_grid(population_new~type) +
-  ylim(c(NA, 0.25)) +
-  xlim(c(-0.15, NA)) +
   theme_cowplot() +
   theme(axis.text = element_blank(),
         axis.ticks = element_blank(),
@@ -576,33 +409,12 @@ pca_plot <- pca_combined_select_pops %>%
 pca_plot
 ```
 
-    ## Warning: Removed 16 rows containing missing values (geom_point).
+![](degradation_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
 
-    ## Warning: Removed 4 rows containing missing values (geom_point).
-
-![](degradation_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
-
-#### PCA result with a SNP list that exclude both PE and SE SNPs
-
-``` r
-genome_cov <- read_tsv("../angsd/bam_list_realigned_private_snps.covMat", col_names = F)[1:163,]
-PCA(genome_cov, sample_table$sample_id_corrected, sample_table$data_type, 1, 2, show.ellipse = F, show.line = T)
-```
-
-![](degradation_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
-
-``` r
-pca_table %>%
-  dplyr::select(1:4) %>%
-  mutate(data_type=population, population=str_sub(individual, 1, 7)) %>%
-  ggplot() +
-  geom_point(aes(x=PC1, y=PC2, color=data_type)) +
-  ylim(NA, 0.15) +
-  facet_wrap(~population) +
-  theme_cowplot()
-```
-
-![](degradation_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->
+Including transitions in PCA does not lead to observable batch effects,
+and excluding transition does not change the results significantly,
+suggesting the DNA degradation is not an major factor causing batch
+effects in PCA.
 
 ## Effectiveness of different mitigation strategies
 
@@ -621,7 +433,7 @@ het_final %>%
   theme(panel.background=element_rect(colour="black", size=0.8))
 ```
 
-![](degradation_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+![](degradation_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
 ``` r
 ## PE vs SE before filtering and excluding transitions
@@ -653,8 +465,8 @@ p_c <- het_final %>%
   left_join(rename_pop) %>%
   filter(population_new %in% str_c("pop ", 7:9), filter=="stringent") %>%
   mutate(batch=ifelse(data_type=="pe", "Nextseq-150PE\n(well-preserved)", "HiSeq-125SE\n(degraded)")) %>%
-  mutate(type=ifelse(tran=="Including transitions", "Before", "After")) %>%
-  mutate(type=fct_relevel(type, c("Before", "After"))) %>%
+  mutate(type=ifelse(tran=="Including transitions", "Including\ntransitions", "Excluding\ntransitions")) %>%
+  mutate(type=fct_relevel(type, c("Including\ntransitions", "Excluding\ntransitions"))) %>%
   ggplot(aes(x="", y=het*10^3)) +
   geom_boxplot(outlier.alpha = 0, color="black", size=0.2, width=0.2) +
   geom_jitter(aes(color=batch), height = 0, width = 0.1, size=2) +
@@ -666,10 +478,10 @@ p_c <- het_final %>%
   coord_flip() +
   theme_cowplot() +
   theme(panel.background=element_rect(colour="black", size=0.8),
-        legend.position = c(0.815, 0.12),
+        legend.position = c(0.81, 0.12),
         legend.text = element_text(size=9),
         legend.key.size = unit(0.5, 'lines'),
-        strip.text.y = element_text(face = "bold", size=20),
+        strip.text.y = element_text(size=18),
         strip.text.x = element_text(size=18),
         axis.text.y = element_blank(),
         axis.ticks.y = element_blank(),
@@ -678,66 +490,34 @@ p_c <- het_final %>%
 print(p_c)
 ```
 
-![](degradation_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+![](degradation_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
 
 #### Effectiveness on PCA result
-
-``` r
-genome_cov <- read_tsv("../angsd/bam_list_realigned_downsampled_unlinked.covMat", col_names = F) %>%
-  as.matrix()
-PCA(genome_cov, sample_table$sample_id_corrected, sample_table$data_type, 1, 2, show.ellipse = F, show.line = F)
-```
-
-``` r
-pca_before <- pca_table[,1:4] %>%
-  rename(data_type=population) %>%
-  left_join(transmute(sample_table, individual=sample_id_corrected, population=population))
-
-genome_cov <- read_tsv("../angsd/bam_list_realigned_private_snps.covMat", col_names = F) %>%
-  as.matrix()
-PCA(genome_cov, sample_table$sample_id_corrected, sample_table$data_type, 1, 2, show.ellipse = F, show.line = F)
-```
-
-``` r
-pca_after <- pca_table[,1:4] %>%
-  rename(data_type=population) %>%
-  left_join(transmute(sample_table, individual=sample_id_corrected, population=population))
-pca_combined <- bind_rows(bind_cols(pca_before, type="Before"), 
-                          bind_cols(pca_after, type="After")) %>%
-  mutate(type=fct_relevel(type, c("Before", "After"))) %>%
-  mutate(batch=ifelse(data_type=="pe", "Nextseq-150PE\n(well-preserved)", "HiSeq-125SE\n(degraded)"))
-pca_combined_select_pops <- filter(pca_combined, population %in% c("ATP2011", "NAR2008", "UUM2010"))
-```
 
 ``` r
 p_d <- pca_combined_select_pops %>%
   left_join(rename_pop) %>%
   ggplot(aes(x=PC1, y=PC2)) +
-  geom_point(data=pca_combined, color="grey", size=0.5) +
+  geom_point(data=pca_combined, color="grey", size=0.8) +
   geom_point(aes(color=batch), size=2) +
   scale_color_viridis_d(begin=0.25, end=0.75) +
   facet_grid(type~population_new) +
-  ylim(-0.1, NA) +
-  xlim(-0.15, NA) +
+  ylim(c(-0.15, NA)) +
   theme_cowplot() +
   theme(axis.text = element_blank(),
         axis.ticks = element_blank(),
         panel.border = element_rect(colour="black",size=0.5),
-        legend.position = c(0.815, 0.12),
+        legend.position = c(0.81, 0.12),
         legend.text = element_text(size=9),
         legend.key.size = unit(0.5, 'lines'),
         strip.text.x = element_text(size=18),
-        strip.text.y = element_text(face = "bold", size=20),
+        strip.text.y = element_text(size=18),
         legend.key = element_rect(fill = "white", colour = "black"),
         legend.title = element_blank())
 p_d
 ```
 
-    ## Warning: Removed 12 rows containing missing values (geom_point).
-
-    ## Warning: Removed 4 rows containing missing values (geom_point).
-
-![](degradation_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+![](degradation_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
 
 ## Assemble Figure 5
 
@@ -745,14 +525,7 @@ p_d
 #bottom <- cowplot::plot_grid(p_b, p_a,nrow = 1, labels = c("C", "D"), scale = 0.9)
 #top <- cowplot::plot_grid(p_c, p_d, nrow = 1, labels = c("A", "B"), scale = 0.9)
 figure <- cowplot::plot_grid(p_c, p_d, p_b, p_a, nrow = 4, labels = c("A", "B", "C", "D"), rel_heights = c(3.9, 3.6, 3.6, 6.5))
-```
-
-    ## Warning: Removed 12 rows containing missing values (geom_point).
-
-    ## Warning: Removed 4 rows containing missing values (geom_point).
-
-``` r
 print(figure)
 ```
 
-![](degradation_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
+![](degradation_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->

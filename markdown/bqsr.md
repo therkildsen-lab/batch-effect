@@ -19,6 +19,18 @@ Base quality score recalibration
 
 ``` r
 library(tidyverse)
+```
+
+    ## Warning: replacing previous import 'lifecycle::last_warnings' by
+    ## 'rlang::last_warnings' when loading 'pillar'
+
+    ## Warning: replacing previous import 'lifecycle::last_warnings' by
+    ## 'rlang::last_warnings' when loading 'tibble'
+
+    ## Warning: replacing previous import 'lifecycle::last_warnings' by
+    ## 'rlang::last_warnings' when loading 'hms'
+
+``` r
 library(cowplot)
 ```
 
@@ -27,9 +39,9 @@ library(cowplot)
 ``` bash
 nohup /workdir/programs/angsd0.931/angsd/angsd \
 -b /workdir/cod/greenland-cod/sample_lists/bam_list_realigned_mincov_filtered.txt \
--anc /workdir/cod/reference_seqs/gadMor3.fasta \
+-ref /workdir/cod/reference_seqs/gadMor3.fasta \
 -out /workdir/batch-effect/angsd/global_snp_list_bqsr \
--GL 1 -doMaf 1 -doMajorMinor 1 -P 8 -SNP_pval 1e-6 -minQ 20 -minMapQ 20 \
+-GL 1 -doMaf 1 -doMajorMinor 4 -P 8 -SNP_pval 1e-6 -minQ 20 -minMapQ 20 \
 > /workdir/batch-effect/nohups/global_snp_list_bqsr.nohup &
 ```
 
@@ -365,7 +377,7 @@ Save the following script as
 BAMLIST=/workdir/batch-effect/sample_lists/bam_list_realigned.txt
 OUTDIR=/workdir/batch-effect/angsd/heterozygosity/
 JOB_INDEX=0
-JOBS=10
+JOBS=30
 MINDP=2
 MAXDP=10
 MINQ=0

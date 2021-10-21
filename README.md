@@ -34,7 +34,7 @@
 
 <br>
 
-[**Difference in levels of DNA degradation**](https://github.com/therkildsen-lab/batch-effect/blob/main/markdown/degradation.md)
+[**Difference in levels of DNA degradation**](https://github.com/therkildsen-lab/batch-effect/raw/main/markdown/degradation_files/figure-gfm/unnamed-chunk-6-1.png)
 
 <br>
 

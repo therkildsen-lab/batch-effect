@@ -80,7 +80,7 @@ nohup nice -n 19 bash /workdir/genomic-data-analysis/scripts/get_heterozygosity.
 > /workdir/batch-effect/nohups/rerun_heterozygosity_2.nohup &
 ```
 
-## Supplementary Figure: heterozygosity with polyG trimming only
+## Heterozygosity with polyG trimming only
 
 This is to demonstrate that polyG trimming resolves most but not all of the batch effects in heterozygosity, since base quality miscalibration also plays a role.
 

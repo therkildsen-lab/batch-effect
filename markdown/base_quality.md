@@ -4,8 +4,8 @@ Base quality score miscalibration
   - [Estimate heterozygosity including
     transitions](#estimate-heterozygosity-including-transitions)
   - [Rerun a few outlier individuals](#rerun-a-few-outlier-individuals)
-  - [Supplementary Figure: heterozygosity with polyG trimming
-    only](#supplementary-figure-heterozygosity-with-polyg-trimming-only)
+  - [Heterozygosity with polyG trimming
+    only](#heterozygosity-with-polyg-trimming-only)
   - [Genome-wide, relaxed vs. stringent mapping quality filter and
     including vs. excluding
     transitions](#genome-wide-relaxed-vs-stringent-mapping-quality-filter-and-including-vs-excluding-transitions)
@@ -15,7 +15,25 @@ Base quality score miscalibration
 
 ``` r
 library(tidyverse)
+```
+
+    ## Warning: replacing previous import 'lifecycle::last_warnings' by
+    ## 'rlang::last_warnings' when loading 'pillar'
+
+    ## Warning: replacing previous import 'lifecycle::last_warnings' by
+    ## 'rlang::last_warnings' when loading 'tibble'
+
+    ## Warning: replacing previous import 'lifecycle::last_warnings' by
+    ## 'rlang::last_warnings' when loading 'hms'
+
+``` r
 library(ggstatsplot)
+```
+
+    ## Warning in .recacheSubclasses(def@className, def, env): undefined subclass
+    ## "numericVector" of class "Mnumeric"; definition not updated
+
+``` r
 library(cowplot)
 ```
 
@@ -85,7 +103,7 @@ nohup nice -n 19 bash /workdir/genomic-data-analysis/scripts/get_heterozygosity.
 > /workdir/batch-effect/nohups/rerun_heterozygosity_2.nohup &
 ```
 
-## Supplementary Figure: heterozygosity with polyG trimming only
+## Heterozygosity with polyG trimming only
 
 This is to demonstrate that polyG trimming resolves most but not all of
 the batch effects in heterozygosity, since base quality miscalibration
@@ -265,13 +283,6 @@ figure <- het_final %>%
   ggplot.component = list(theme(panel.grid = element_blank(),
                                 axis.line = element_line()))
   )
-```
-
-    ## Warning: Ignoring unknown parameters: segment.linetype
-    
-    ## Warning: Ignoring unknown parameters: segment.linetype
-
-``` r
 print(figure)
 ```
 

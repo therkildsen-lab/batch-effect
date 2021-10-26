@@ -226,37 +226,43 @@ cowplot::plot_grid(p1, p2, p3, ncol = 1, rel_heights = c(1.2, 1, 1), labels=c("A
 
 ``` bash
 nohup python2 /workdir/programs/pcangsd/pcangsd.py \
--beagle /workdir/batch-effect/angsd/bam_list_realigned_private_snps.beagle.gz \
+-beagle /workdir/batch-effect/angsd/bam_list_realigned_depth_ratio_filtered_snps.beagle.gz \
 -minMaf 0.05 \
 -threads 8 \
--o /workdir/batch-effect/angsd/bam_list_realigned_private_snps_pcangsd \
-> /workdir/batch-effect/nohups/run_pcangsd_private_snps.nohup &
+-o /workdir/batch-effect/angsd/bam_list_realigned_depth_ratio_filtered_snps_pcangsd \
+> /workdir/batch-effect/nohups/run_pcangsd_depth_ratio_filtered_snps.nohup &
 ```
 
 #### Supplementary Figure: PCA with PCAngsd
 
 ``` r
-pca_angsd_select_pops <- filter(pca_pcangsd, population %in% c("KNG2011", "QQL2011", "ITV2011"))
-pca_plot <- pca_angsd_select_pops %>%
+pca_combined <- bind_rows(bind_cols(pca_angsd, type="PCA with ANGSD"), 
+                          bind_cols(pca_pcangsd, type="PCA with PCAngsd")) %>%
+  mutate(type=fct_relevel(type, c("PCA with ANGSD", "PCA with PCAngsd"))) %>%
+  mutate(batch=ifelse(data_type=="se", "HiSeq-125SE", "NextSeq-150PE")) %>%
+  filter(! (individual %in% c("UUM2010_036", "UUM2010_038") & type == "PCA with ANGSD")) %>%
+  filter(! (individual %in% c("UUM2010_026", "UUM2010_030") & type == "PCA with PCAngsd"))
+pca_plot <- bind_rows(pca_combined, mutate(pca_combined, population="all pops")) %>%
   left_join(rename_pop) %>%
+  mutate(population_new=ifelse(is.na(population_new), "all pops", population_new)) %>% 
+  mutate(population_new=fct_relevel(population_new, c(str_c("pop ", 1:9), "all pops"))) %>%
   ggplot(aes(x=PC1, y=PC2)) +
-  geom_point(data=pca_pcangsd, color="grey", size=0.5) +
-  geom_point(aes(color=batch), size=2) +
+  geom_point(data=pca_combined, color="grey", size=0.3) +
+  geom_point(aes(color=batch), size=1.5) +
   scale_color_viridis_d(begin=0.25, end=0.75) +
-  facet_grid(population_new~.) +
-  ylim(NA, 0.15) +
-  xlim(-0.15, NA) +
+  facet_grid(population_new~type) +
   theme_cowplot() +
   theme(axis.text = element_blank(),
         axis.ticks = element_blank(),
-        panel.border = element_rect(colour="black",size=0.5),
-        legend.position = c(0.55, 0.94),
+        panel.border = element_rect(colour="black",size=0.8),
+        legend.position = c(0.72, 0.99),
         legend.key.size = unit(0.5, 'lines'),
-        strip.text.x = element_text(face = "bold", size=20),
-        legend.key = element_rect(fill = "white", colour = "black"))
+        legend.text = element_text(size=8),
+        strip.text.y = element_text(size=10),
+        strip.text.x = element_text(size=10),
+        legend.key = element_rect(fill = "white", colour = "black"),
+        legend.title = element_blank())
 pca_plot
 ```
-
-    ## Warning: Removed 6 rows containing missing values (geom_point).
 
 ![](depth_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->

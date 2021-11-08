@@ -275,12 +275,14 @@ figure <- het_final %>%
   y = het,
   #type = "np", # non-parametric statistics
   point.path.args=list(alpha=0.2),
+  point.args=list(alpha=0.4, size=2.5),
   xlab = element_blank(),
   ylab = "estimated heterozygosity",
   grouping.var = data_type,
   ggtheme = theme_ggstatsplot(),
   bf.message = FALSE,
-  ggplot.component = list(theme(panel.grid = element_blank(),
+  ggplot.component = list(scale_color_viridis_d(begin = 0.4, end = 0.7, option = "A"), 
+                          theme(panel.grid = element_blank(),
                                 axis.line = element_line()))
   )
 print(figure)

@@ -258,6 +258,7 @@ p_a <- delta_het %>%
                               pairwise.comparisons = TRUE,
                               ggsignif.args = list(textsize = 3),
                               ggplot.component = list(coord_cartesian(ylim=c(-0.004, 0.0001)),
+                                                      scale_color_manual(values = c("#5DC863FF", "#3B528BFF", "#414487FF")),
                                                       theme(panel.grid = element_blank(),
                                                             axis.line = element_line()))) +
   #geom_signif(comparisons = list(c("pe\nless degraded", "se\nmore degraded"), c("se\nless degraded", "se\nmore degraded")), y_position = c(-0.001, -0.0012)) +
@@ -306,7 +307,7 @@ p_b <- private_alleles %>%
   #geom_line() + 
   #geom_point() +
   geom_col(position = "dodge", color="black")+
-  scale_fill_viridis_d(begin = 0.25, end="0.75") +
+  scale_fill_viridis_d(begin = 0.25, end=0.75) +
   ylim(c(NA, 0.3)) +
   labs(x="type of base substitution", y="frequency") +
   theme_ggstatsplot() +

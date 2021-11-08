@@ -60,8 +60,8 @@ system.
 ``` bash
 ## Location of the tutorial folder in the batch-effect Github repo
 BASEDIR=/workdir/batch-effect/tutorial
-## Path to the reference to the gadMor3 reference genome
-REFERENCE=/workdir/cod/reference_seqs/gadMor3.fasta
+## Path to samtools (https://github.com/samtools/)
+SAMTOOLS=samtools
 ## Path to fastp (https://github.com/OpenGene/fastp)
 FASTP=/workdir/programs/fastp_0.19.7/fastp
 ## Path to fastqc (https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
@@ -70,6 +70,14 @@ FASTQC=fastqc
 ANGSD=/programs/angsd0.930/angsd/angsd 
 ## Path to the realSFS module in AGNSD
 REALSFS=/workdir/programs/angsd0.931/angsd/misc/realSFS
+## Path to a subsetted gadMor3 reference genome
+REFERENCE=$BASEDIR/data/gadMor3_subsetted.fasta
+```
+
+Index the subsetted reference genome.
+
+``` bash
+$SAMTOOLS faidx $REFERENCE
 ```
 
 You will need to create a `results` folder within `tutorial` to store
@@ -193,7 +201,7 @@ seq_content_p <- per_base_seq_content_polyg_trimmed_final %>%
 seq_content_p
 ```
 
-![](tutorial_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](tutorial_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
 The raw fastq file has a strong enrichment of G bases toward the end of
 sequencing reads.
@@ -299,14 +307,12 @@ het_final %>%
   )
 ```
 
-![](tutorial_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+![](tutorial_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
-Note that since we took a very small subsample of the data, the
-statiscal signficance is not exactly the same as what our paper shows.
-Here, the NextSeq-150PE samples get signficantly lower heterozygosity
-estimates after the filter is applied, but the HiSeq-125PE samples are
-not significantly affected by the filter although there is a trend of
-increased heterozygosity estimates after the filter is applied.
+As shown in our paper, the NextSeq-150PE samples get signficantly lower
+heterozygosity estimates after the filter is applied, and the
+HiSeq-125PE samples get significantly higher heterozygosity estimates
+with the filter.
 
 This suggests that base qualities are likely to be overestimated in the
 NextSeq-150PE batch, and underestimated in the HiSeq-125PE batch. This
@@ -438,7 +444,7 @@ fst %>%
   theme_cowplot()
 ```
 
-![](tutorial_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+![](tutorial_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
 
 At some SNPs, Fst is very high between samples from the same populations
 but two different batches, which is not expected. Let’s investigate what
@@ -472,7 +478,7 @@ fst_depth_ratio %>%
   theme_cowplot()
 ```
 
-![](tutorial_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+![](tutorial_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
 
 ``` r
 ## Get test stats
@@ -497,16 +503,16 @@ fst_depth_ratio %>%
   scale_fill_viridis_d() +
   labs(x="proportion of reads with mapping quality lower than 20",
        y="density",
-       subtitle=expression(paste(italic("t")["Welch"], "(", "49.09", ") = ", "-7.51", ", ", 
-    italic("p"), " = ", "1.07e-09", ", ", widehat(italic("g"))["Hedges"], 
-    " = ", "-1.30", ", CI"["95%"], " [", "-1.72", ", ", "-0.87", 
-    "], ", italic("n")["obs"], " = ", "15,681"))) +
+       subtitle=expression(paste(italic("t")["Welch"], "(", "18.08", ") = ", "-11.17", ", ", 
+    italic("p"), " = ", "1.51e-09", ", ", widehat(italic("g"))["Hedges"], 
+    " = ", "-2.75", ", CI"["95%"], " [", "-3.76", ", ", "-1.73", 
+    "], ", italic("n")["obs"], " = ", "5,202"))) +
   theme_ggstatsplot() +
   theme(panel.grid = element_blank(),
         axis.line = element_line())
 ```
 
-![](tutorial_files/figure-gfm/unnamed-chunk-16-2.png)<!-- -->
+![](tutorial_files/figure-gfm/unnamed-chunk-17-2.png)<!-- -->
 
 It is clear that Fst outliers are enriched in regions where a high
 proportion of single-end 125bp reads get low mapping quality scores, a
@@ -529,7 +535,7 @@ fst_depth_ratio %>%
   theme_cowplot()
 ```
 
-![](tutorial_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+![](tutorial_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
 
 On this segment of the genome, our mitigation strategy is particularly
 successful: almost all of the outlier SNPs are removed.
@@ -538,23 +544,33 @@ successful: almost all of the outlier SNPs are removed.
 
 ``` r
 basedir="/workdir/batch-effect/tutorial/"
-sample_table <- read_tsv(str_c(basedir, "data/sample_table_rb.tsv"))
+rename_pop <- tibble(population = c("ITV2011", "KNG2011", "QQL2011", "BUK2011", "IKE2011", "PAA2011", "ATP2011", "NAR2008", "UUM2010"),
+                     population_new =c("pop 1", "pop 2", "pop 3", "pop 4", "pop 5", "pop 6", "pop 7", "pop 8", "pop 9"))
+sample_table <- read_tsv(str_c(basedir, "data/sample_table_rb.tsv")) %>%
+  dplyr::select(-population_new) %>%
+  left_join(rename_pop) %>%
+  mutate(batch=ifelse(data_type=="se", "HiSeq-125SE", "NextSeq-150PE"))
 bam_list <- read_tsv(str_c(basedir, "data/bam_list_rb.txt"), col_names = FALSE) %>%
   transmute(sample_id=str_sub(X1, 37, 47))
 genome_cov <- read_tsv(str_c(basedir, "results/bam_list_rb.covMat"), col_names = F)[1:nrow(sample_table),1:nrow(sample_table)] %>% as.matrix
 pca_table <- eigen(genome_cov)$vectors %>% 
   as_tibble() %>%
-  #transmute(PC1=V1, PC2=V2) %>%
+  transmute(PC1=V1, PC2=V2) %>%
   bind_cols(bam_list, .) %>%
   left_join(sample_table, ., by=c("sample_id_corrected"="sample_id"))
 pca_table %>%
-  ggplot(aes(x=V1, y=V2, color=data_type)) +
-  facet_wrap(~population) +
+  left_join(rename_pop) %>%
+  ggplot(aes(x=PC1, y=PC2, color=batch)) +
+  facet_wrap(~population_new) +
   geom_point() +
-  theme_cowplot()
+  scale_color_viridis_d(begin=0.25, end=0.75) +
+  theme_cowplot() +
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        panel.border = element_rect(colour="black",size=0.5))
 ```
 
-![](tutorial_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+![](tutorial_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
 
 Because this subset of our dataset is very small, individual level PCA
 has limited power, and therefore there is not a signal of batch effects
@@ -588,23 +604,33 @@ $ANGSD -b $BASEDIR/data/bam_list_rb.txt \
 
 ``` r
 basedir="/workdir/batch-effect/tutorial/"
-sample_table <- read_tsv(str_c(basedir, "data/sample_table_rb.tsv"))
+rename_pop <- tibble(population = c("ITV2011", "KNG2011", "QQL2011", "BUK2011", "IKE2011", "PAA2011", "ATP2011", "NAR2008", "UUM2010"),
+                     population_new =c("pop 1", "pop 2", "pop 3", "pop 4", "pop 5", "pop 6", "pop 7", "pop 8", "pop 9"))
+sample_table <- read_tsv(str_c(basedir, "data/sample_table_rb.tsv")) %>%
+  dplyr::select(-population_new) %>%
+  left_join(rename_pop) %>%
+  mutate(batch=ifelse(data_type=="se", "HiSeq-125SE", "NextSeq-150PE"))
 bam_list <- read_tsv(str_c(basedir, "data/bam_list_rb.txt"), col_names = FALSE) %>%
   transmute(sample_id=str_sub(X1, 37, 47))
 genome_cov_depth_ratio_filtered <- read_tsv(str_c(basedir, "results/bam_list_rb_depth_ratio_filtered.covMat"), col_names = F)[1:nrow(sample_table),1:nrow(sample_table)] %>% as.matrix
 pca_table_depth_ratio_filtered <- eigen(genome_cov_depth_ratio_filtered)$vectors %>% 
   as_tibble() %>%
-  #transmute(PC1=V1, PC2=V2) %>%
+  transmute(PC1=V1, PC2=V2) %>%
   bind_cols(bam_list, .) %>%
   left_join(sample_table, ., by=c("sample_id_corrected"="sample_id"))
 pca_table_depth_ratio_filtered %>%
-  ggplot(aes(x=V1, y=V2, color=data_type)) +
-  facet_wrap(~population) +
+  left_join(rename_pop) %>%
+  ggplot(aes(x=PC1, y=PC2, color=batch)) +
+  facet_wrap(~population_new) +
   geom_point() +
-  theme_cowplot()
+  scale_color_viridis_d(begin=0.25, end=0.75) +
+  theme_cowplot() +
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        panel.border = element_rect(colour="black",size=0.5))
 ```
 
-![](tutorial_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
+![](tutorial_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
 
 ## DNA degradation
 
@@ -678,9 +704,9 @@ sample_table <- read_tsv(str_c(basedir, "data/sample_table_degradation.tsv"))
 for (i in seq_len(nrow(sample_table))){
   data_type <- sample_table$data_type[i]
   if (data_type=="se"){
-    prefix <- str_c(sample_table$sample_seq_id[i], "_bt2_gadMor3_sorted_dedup_realigned_subsetted_mindp2_maxdp10_minq33_minmapq30_notrans")
+    prefix <- str_c(sample_table$sample_seq_id[i], "_bt2_gadMor3_sorted_dedup_realigned_subsetted_degradation_mindp2_maxdp10_minq33_minmapq30_notrans")
   } else {
-    prefix <- str_c(sample_table$sample_seq_id[i], "_bt2_gadMor3_sorted_dedup_overlapclipped_realigned_subsetted_mindp2_maxdp10_minq33_minmapq30_notrans")
+    prefix <- str_c(sample_table$sample_seq_id[i], "_bt2_gadMor3_sorted_dedup_overlapclipped_realigned_subsetted_degradation_mindp2_maxdp10_minq33_minmapq30_notrans")
   }
   for (notrans in c(0, 1)) {
     ml <- read_delim(str_c(basedir, "results/", prefix, notrans, ".ml"), col_names = FALSE, delim = " ")
@@ -702,10 +728,10 @@ het_final %>%
   ggstatsplot::ggbetweenstats(x = data_type, 
                               y = delta,  
                               type = "p", 
-                              p.adjust.method = "holm",
                               pairwise.comparisons = TRUE,
                               ggsignif.args = list(textsize = 3),
-                              ggplot.component = list(coord_cartesian(ylim=c(-0.005, 0.0001)),
+                              ggplot.component = list(coord_cartesian(ylim=c(-0.005, 0.0001)), 
+                                                      scale_color_manual(values = c("#5DC863FF", "#3B528BFF")), 
                                                       theme(panel.grid = element_blank(),
                                                             axis.line = element_line()))) +
   #geom_signif(comparisons = list(c("pe\nless degraded", "se\nmore degraded"), c("se\nless degraded", "se\nmore degraded")), y_position = c(-0.001, -0.0012)) +
@@ -714,7 +740,7 @@ het_final %>%
   geom_hline(yintercept = 0, linetype=2, color="red")
 ```
 
-![](tutorial_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->
+![](tutorial_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
 
 Exclusion of transitions will always cause a decrease in estimated
 heterozygosity. However, in this case, we see that the more degraded

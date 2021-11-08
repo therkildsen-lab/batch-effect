@@ -1,6 +1,13 @@
 Data Preparation
 ================
 
+## Select two chromosomes from the gadMor3 reference genome
+
+``` bash
+samtools faidx /workdir/cod/reference_seqs/gadMor3.fasta LG06 > /workdir/batch-effect/tutorial/data/gadMor3_subsetted.fasta
+samtools faidx /workdir/batch-effect/tutorial/data/gadMor3_subsetted.fasta
+```
+
 ## Poly-G tail trimming
 
 ``` bash
@@ -38,7 +45,7 @@ egrep 'IKE' /workdir/batch-effect/sample_lists/sample_table_merged.tsv >>  /work
 for LINE in `egrep 'IKE' /workdir/batch-effect/sample_lists/bam_list_realigned.txt`; do
   TEMP=${LINE%.*}
   PREFIX=${TEMP/*\/}
-  samtools view -b $LINE "LG03" > /workdir/batch-effect/tutorial/data/${PREFIX}_subsetted_bq.bam
+  samtools view -b $LINE "LG06" > /workdir/batch-effect/tutorial/data/${PREFIX}_subsetted_bq.bam
 done
 ```
 
@@ -81,13 +88,13 @@ done
 for LINE in `egrep 'UUM' /workdir/batch-effect/sample_lists/bam_list_per_pop/bam_list_realigned_se.txt`; do
   TEMP=${LINE%.*}
   PREFIX=${TEMP/*\/}
-  echo /workdir/batch-effect/tutorial/data/${PREFIX}_subsetted.bam >> /workdir/batch-effect/tutorial/data/bam_list_degradation_se.txt
+  echo /workdir/batch-effect/tutorial/data/${PREFIX}_subsetted_degradation.bam >> /workdir/batch-effect/tutorial/data/bam_list_degradation_se.txt
 done
 
 for LINE in `egrep 'UUM' /workdir/batch-effect/sample_lists/bam_list_per_pop/bam_list_realigned_pe.txt`; do
   TEMP=${LINE%.*}
   PREFIX=${TEMP/*\/}
-  echo /workdir/batch-effect/tutorial/data/${PREFIX}_subsetted.bam >> /workdir/batch-effect/tutorial/data/bam_list_degradation_pe.txt
+  echo /workdir/batch-effect/tutorial/data/${PREFIX}_subsetted_degradation.bam >> /workdir/batch-effect/tutorial/data/bam_list_degradation_pe.txt
 done
 
 cp /workdir/batch-effect/tutorial/data/bam_list_degradation_se.txt /workdir/batch-effect/tutorial/data/bam_list_degradation.txt
@@ -101,6 +108,6 @@ egrep 'UUM' /workdir/batch-effect/sample_lists/sample_table_merged.tsv >>  /work
 for LINE in `egrep 'UUM' /workdir/batch-effect/sample_lists/bam_list_realigned.txt`; do
   TEMP=${LINE%.*}
   PREFIX=${TEMP/*\/}
-  samtools view -b $LINE "LG03:5000000-15000000" > /workdir/batch-effect/tutorial/data/${PREFIX}_subsetted.bam
+  samtools view -b $LINE "LG06:5000000-15000000" > /workdir/batch-effect/tutorial/data/${PREFIX}_subsetted_degradation.bam
 done
 ```

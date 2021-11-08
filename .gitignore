@@ -37,6 +37,8 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+
+# Intermediate files
 bam/
 qual_filtered/
 angsd/
@@ -47,3 +49,4 @@ angsd_old/
 .DS_Store
 misc/gadMor3_snp_masked*
 angsd_tmpdir*/
+tutorial/results/

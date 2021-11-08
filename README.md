@@ -50,8 +50,18 @@
 
 <br>
 
+[**Base quality score recalibration**](https://github.com/therkildsen-lab/batch-effect/blob/main/markdown/bqsr.md)
+
+<br>
+
+![](https://raw.githubusercontent.com/therkildsen-lab/batch-effect/main/markdown/figures_files/figure-gfm/unnamed-chunk-8-1.png)
+
+<br>
+
 [**Miscellaneous**](https://github.com/therkildsen-lab/batch-effect/blob/main/markdown/figures.md)
 
 <br>
 
 ![](https://github.com/therkildsen-lab/batch-effect/raw/main/markdown/figures_files/figure-gfm/unnamed-chunk-6-1.png)
+
+[**A tutorial with real data and hands-on exercises**](https://github.com/therkildsen-lab/batch-effect/blob/main/tutorial/tutorial.md)

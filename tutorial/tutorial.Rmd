@@ -1,8 +1,9 @@
 ---
-title: "Tutorial"
+title: "A tutorial for the detection and mitigation of batch effects with low-coverage whole genome sequencing data"
 output: 
   github_document:
     toc: true
+    toc_depth: 4
 ---
 
 ```{r setup, include=FALSE}
@@ -11,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE, message=FALSE, warning=FALSE)
 
 ## Introduction
 
-This is a tutorial accompanying the paper [Batch effects in population genomic studies with low-coverage whole genome sequencing data: causes, detection, and mitigation](https://doi.org/10.22541/au.162791857.78788821/v2) by R. Nicolas Lou and Nina Overgaard Therkildsen. In this tutorial, we provide a small subset of the data used in our paper and offer hands-on exercises on the detection and mitigation of batch effects in low-coverage whole genome sequencing (lcWGS) data. 
+This is a tutorial accompanying the paper [Batch effects in population genomic studies with low-coverage whole genome sequencing data: causes, detection, and mitigation](https://doi.org/10.22541/au.162791857.78788821/v2) by R. Nicolas Lou and Nina Overgaard Therkildsen. In this tutorial, we provide a small subset of the data used in our paper and offer hands-on exercises for the detection and mitigation of batch effects in low-coverage whole genome sequencing (lcWGS) data. 
 
 We will focus on four main causes of batch effects in this tutorial:
 
@@ -29,11 +30,11 @@ This tutorial is under active development and will be finalized before the publi
 
 ## Some preparation
 
-To start, first clone this GitHub repo to your Linux server (e.g. `git clone https://github.com/therkildsen-lab/batch-effect.git`). Even though the size of our individual files are not very large, this may still take some time.
+To start, clone this GitHub repo to your Linux server (e.g. `git clone https://github.com/therkildsen-lab/batch-effect.git`). Even though the sizes of our individual files are not very large, this may still take some time.
 
-Change your working directory to the tutorial folder within this GitHub repo (e.g. `cd /workdir/batch-effect/tutorial`) and inspect the content of this folder (e.g. `ls`). As you can see, there is a single folder called `data` that stores all the data needed for this tutorial. 
+Change your working directory to the tutorial folder within this GitHub repo (e.g. `cd /workdir/batch-effect/tutorial`) and inspect the content of this folder (e.g. `ls`). As you can see, there is a folder called `data` that stores all the data needed for this tutorial, and some markdown files. 
 
-Then, define the following variables on your Linux server. Make sure that you **modify these paths** to reflect the locations on your file system. 
+Then, define the following variables on your Linux server. Make sure that you **modify these paths** to reflect the locations in your file system. If some of the programs listed below are not installed on your server, install them first. 
 
 ```{bash eval=FALSE}
 ## Location of the tutorial folder in the batch-effect Github repo
@@ -42,7 +43,7 @@ BASEDIR=/workdir/batch-effect/tutorial
 SAMTOOLS=samtools
 ## Path to fastp (https://github.com/OpenGene/fastp)
 FASTP=/workdir/programs/fastp_0.19.7/fastp
-## Path to fastqc (https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
+## Path to FastQC (https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
 FASTQC=fastqc
 ## Path to AGNSD (https://github.com/ANGSD/angsd)
 ANGSD=/programs/angsd0.930/angsd/angsd 
@@ -58,13 +59,13 @@ Index the subsetted reference genome.
 $SAMTOOLS faidx $REFERENCE
 ```
 
-You will need to create a `results` folder within `tutorial` to store your output files. To do so, run 
+You will need to create a `results` folder within the `tutorial` folder to store your output files. To do so, run 
 
 ```{bash eval=FALSE}
 makdir $BASEDIR/results
 ```
 
-Also, you will need to use R in this tutorial for data wrangling and visualization. We recommend you to use RStudio server, but you can also launch a another session on your Linux server and use R there. Install the following packages with `install.packages()` if you don't have them installed already, and load them using `library()` as shown below. 
+Also, you will need to use R in this tutorial for data wrangling and visualization. We recommend you use RStudio server, but you can also launch another session on your Linux server and use R there. Install the following packages with `install.packages()` if you don't have them installed already, and load them using `library()` as shown below. 
 
 ```{r eval=TRUE}
 library(tidyverse)
@@ -75,9 +76,11 @@ library(statsExpressions)
 
 ## Poly-G tail 
 
-Across Illumina platforms, an important change is the shift from a four-channel system (used e.g., on HiSeq instruments) where each DNA base is detected with a different fluorescent dye, to a two-channel chemistry, that uses the combinations of two different dyes. With the two-channel system (implemented on newer platforms like NextSeq and NovaSeq), G is called when there is little to no fluorescence signal. Accordingly, the absence of a signal can result from a true G base in the DNA template, but any low-intensity fluorescence signal (regardless of the true base) may also lead to a G call, which becomes problematic.
+Across Illumina platforms, an important change in recent years is the shift from a four-channel system (used e.g., on HiSeq instruments) where each DNA base is detected with a different fluorescent dye, to a two-channel chemistry, that uses the combinations of two different dyes. With the two-channel system (implemented on newer platforms like NextSeq and NovaSeq), G is called when there is little to no fluorescence signal. Accordingly, the absence of a signal can result from a true G base in the DNA template, but any low-intensity fluorescence signal (regardless of the true base) may also lead to a G call, which becomes problematic.
 
-Here, we will inspect a pair of fastq files (`before_trimming_f.fastq.gz` and `before_trimming_r.fastq.gz`) generated by a NextSeq sequencer. Specifically, we will perform two different trimming operations, and will compare the base composition per position in the raw and trimmed fastq files. 
+Here, we will first inspect a pair of fastq files (`before_trimming_f.fastq.gz` and `before_trimming_r.fastq.gz`) generated by a NextSeq sequencer. Specifically, we will perform two different trimming operations, and will compare the base composition per position in the raw and trimmed fastq files. 
+
+Then, we will estimate heterozygosity from bam files to assess the impact that incomplete poly-G tail removal has on downstream analyses. 
 
 #### Poly-G tail trimming with fastp
 
@@ -109,7 +112,7 @@ $FASTP --trim_poly_g -L -A --cut_right \
 
 #### Run FastQC
 
-We use fastQC to compute the average base composition of each position along the sequencing reads. 
+We use fastQC to compute the average base composition of each position along the sequencing reads. We will only use the forward reads here. 
 
 ```{bash eval=FALSE}
 $FASTQC $BASEDIR/data/before_trimming_f.fastq.gz -o $BASEDIR/results/
@@ -122,7 +125,9 @@ $FASTQC $BASEDIR/results/sliding_window_trimming_f.fastq.gz -o $BASEDIR/results/
 Run the following with R to compile and plot the base composition generation by FastQC. 
 
 ```{r eval=TRUE, fig.height=6, fig.width=4}
+## Define the paths to the results/ folder as your basedir
 basedir="/workdir/batch-effect/tutorial/results/"
+## Loop through the FastQC results from the raw fastq file, poly-G trimmed fastq file, and sliding-window trimmed fastq file
 file_list=c("before_trimming_f_fastqc", "poly_g_trimming_f_fastqc", "sliding_window_trimming_f_fastqc")
 type_list <- c("no trimming", "poly-G trimming", "sliding-window trimming")
 for (i in 1:3){
@@ -143,7 +148,7 @@ for (i in 1:3){
     per_base_seq_content_polyg_trimmed_final <- bind_rows(per_base_seq_content_polyg_trimmed_final, per_base_seq_content_polyg_trimmed)
   }
 }
-
+## Plot
 seq_content_p <- per_base_seq_content_polyg_trimmed_final %>%
   mutate(position = as_factor(position)) %>%
   ggplot(aes(x=position, y=percentage, color=base, group=base)) +
@@ -159,11 +164,106 @@ seq_content_p
 
 The raw fastq file has a strong enrichment of G bases toward the end of sequencing reads. 
 
+#### Heterozygosity estimation 
+
+The differentially trimmed fastq files need to be aligned to a reference genome and go through several quality control steps. For the sake of time, we will skip these steps in this tutorial. If you are interested in them, please see our full [pipeline](https://github.com/therkildsen-lab/batch-effect) for our batch-effect paper as well as a [tutorial](https://github.com/nt246/lcwgs-guide-tutorial) for the processing and analysis of lcWGS data. 
+
+
+Here, the quality-controlled alignment files (in bam format) are provided to you directly. They are from "pop 5" in our paper, and only contain a 10Mb section of a chromosome. Samples that were sequenced on a NextSeq platform were either trimmed using the poly-G trimming option in fastp, or through sliding window trimming. Samples from the HiSeq platform were not trimmed. The names of these bam files are stored in the `bam_list_poly_g.txt` file under `data/`. 
+
+First, we loop through `bam_list_poly_g.txt` to estimate heterozygosity from these bam files using ANGSD. 
+
+```{bash eval=FALSE}
+MINDP=2
+MAXDP=10
+MINQ=20
+MINMAPQ=30
+
+for LINE in `cat $BASEDIR/data/bam_list_poly_g.txt`; do
+    NAME_TEMP=`echo "${LINE%.*}"`
+    NAME=`echo "${NAME_TEMP##*/}"`
+	  echo $NAME
+    OUTBASE=$NAME'_mindp'$MINDP'_maxdp'$MAXDP'_minq'$MINQ'_minmapq'$MINMAPQ
+    
+    ## Get saf file
+    $ANGSD \
+    -i $LINE \
+    -anc $REFERENCE \
+    -out $BASEDIR/results/$OUTBASE \
+    -doSaf 1 \
+    -GL 1 \
+    -P 8 \
+    -doCounts 1 \
+    -setMinDepth $MINDP \
+    -setMaxDepth $MAXDP \
+    -minQ $MINQ \
+    -minmapq $MINMAPQ 
+
+    ## Estimate sfs
+    /workdir/programs/angsd0.931/angsd/misc/realSFS \
+    $BASEDIR/results/$OUTBASE'.saf.idx' \
+    -tole 0.0000001 \
+    -P 8 \
+    -seed 42 \
+    > $BASEDIR/results/$OUTBASE'.ml'
+done
+```
+
+#### Visualization 
+
+In R, we read in the estimated heterozygosity and compare the estimated heterozygosity in the same samples that have gone through different types of quality trimming. 
+
+Note that each NextSeq sample in the sample table has a bam file that has gone through poly-G trimming, and a bam file that has gone through sliding-window trimming. HiSeq samples were not trimmed, so the two bam files for each HiSeq sample are essentially the same. 
+
+```{r eval=TRUE, fig.width=6, fig.height=6}
+## Define the tutorial/ folder as your basedir
+basedir="/workdir/batch-effect/tutorial/"
+## Read in a table of sample information
+sample_table <- read_tsv(str_c(basedir, "data/sample_table_poly_g.tsv"))
+## Read in the estimated heterozygosity for each sample in the sample table
+for (i in seq_len(nrow(sample_table))){
+  data_type <- sample_table$data_type[i]
+  if (data_type=="se"){
+    prefix <- str_c(sample_table$sample_seq_id[i], "_bt2_gadMor3_sorted_dedup_realigned_subsetted_")
+  } else {
+    prefix <- str_c(sample_table$sample_seq_id[i], "_bt2_gadMor3_sorted_dedup_overlapclipped_realigned_subsetted_")
+  }
+  for (trimming in c("poly_g_trimming", "sliding_window_trimming")) {
+    ml <- read_delim(str_c(basedir, "results/", prefix, trimming, "_mindp2_maxdp10_minq20_minmapq30.ml"), col_names = FALSE, delim = " ")
+    het <- ml$X2/(ml$X1 + ml$X2 + ml$X3)
+    line <- tibble(het=het, sample_id=sample_table$sample_id_corrected[i], data_type=sample_table$data_type[i], trimming=trimming)
+    if (i==1 & trimming=="poly_g_trimming") {
+      het_final <- line
+    } else{
+      het_final <- bind_rows(het_final, line)
+    }
+  }
+}
+## Plot
+het_final %>%
+  mutate(batch=ifelse(data_type=="pe", "NextSeq-150PE", "HiSeq-125SE")) %>%
+  mutate(trimming=ifelse(trimming=="poly_g_trimming", "Poly-G trimming", "Sliding window trimming")) %>%
+  ggplot(aes(x="", y=het)) +
+  geom_boxplot(outlier.alpha = 0, color="black", size=0.2, width=0.2) +
+  geom_jitter(aes(color=batch), height = 0, width = 0.1, size=2) +
+  scale_color_viridis_d(begin=0.25, end=0.75) +
+  ylab(expression(paste("heterozygosity (in ", 10^-3, ")"))) +
+  xlab(" ") +
+  coord_flip() +
+  facet_grid(trimming~"pop 5") +
+  theme_cowplot() +
+  theme(panel.background=element_rect(colour="black", size=0.8),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())
+```
+
+As shown above, remnant poly-G tails severely inflate heterozygosity estimates in NextSeq samples if only poly-G trimming is performed. In contrast, sliding window trimming can substantially correct for such batch effects. This suggests that poly-G tails are a major cause of batch effects in heterozygosity estimates in our data. 
+
 ## Base quality score miscalibration
 
 In an ideal scenario, a base quality score should accurately reflect the probability of the base call being correct. In practice, however, these scores are often incorrectly calibrated (Callahan et al., 2016; Ni & Stoneking, 2016), which can lead to batch effects if the levels of such biases differ across sequencing runs. 
 
-Here, we will compare the heterozygosity estimation using a relaxed vs. stringent base quality filter to detect base quality score miscalibration in samples from the same Atlanlatic cod population that are split into two sequencing batches. 
+Here, we will compare the heterozygosity estimation using a relaxed vs. stringent base quality filter to detect base quality score miscalibration in samples from the same Atlantic cod population that are split into two sequencing batches. We will start from sliding-window trimmed bam files in "pop 5"; these bam files contain an entire chromosome (LG06). 
 
 #### Heterozygosity estimation
 
@@ -206,12 +306,14 @@ for MINQ in {20,33}; do
 done
 ```
 
-## Visulization 
+#### Visualization 
 
 We perform visualization and statistical analysis using R. 
 
 ```{r eval=TRUE, fig.width=12, fig.height=5}
+## Define the path to the tutorial/ folder as basedir
 basedir="/workdir/batch-effect/tutorial/"
+## Sample table for this set of samples
 sample_table <- read_tsv(str_c(basedir, "data/sample_table_bq.tsv"))
 for (i in seq_len(nrow(sample_table))){
   data_type <- sample_table$data_type[i]
@@ -231,7 +333,7 @@ for (i in seq_len(nrow(sample_table))){
     }
   }
 }
-
+## Plot
 het_final %>%
   mutate(data_type=ifelse(data_type=="pe", "NextSeq-150PE (more miscalibration in base quality scores)", "HiSeq-125SE (less miscalibration in base quality scores)")) %>%
   mutate(filter=ifelse(minq==20, "relaxed base quality filter (minQ = 20)", "stringent base quality filter (minQ = 33)")) %>%
@@ -246,20 +348,21 @@ het_final %>%
   grouping.var = data_type,
   ggtheme = theme_ggstatsplot(),
   bf.message = FALSE,
-  ggplot.component = list(theme(panel.grid = element_blank(),
+  ggplot.component = list(scale_color_viridis_d(begin = 0.4, end = 0.7, option = "A"),
+                          theme(panel.grid = element_blank(),
                                 axis.line = element_line()))
   )
 ```
 
-As shown in our paper, the NextSeq-150PE samples get signficantly lower heterozygosity estimates after the filter is applied, and the HiSeq-125PE samples get significantly higher heterozygosity estimates with the filter.
+As shown above, NextSeq-150PE samples get significantly lower heterozygosity estimates after the filter is applied, and the HiSeq-125PE samples get significantly higher heterozygosity estimates with the filter.
 
-This suggests that base qualities are likely to be overestimated in the NextSeq-150PE batch, and underestimated in the HiSeq-125PE batch. This could cause an inflation of hetorozygosity in the NextSeq-150PE batch (i.e. sequencing errors are interpreted as true mutations). Therefore, using a more stringent base quality threshold for both batches can be an effective mitigation strategy. 
+This suggests that base qualities are likely to be overestimated in the NextSeq-150PE batch, and underestimated in the HiSeq-125PE batch. This could cause inflation of heterozygosity in the NextSeq-150PE batch (i.e. sequencing errors are interpreted as true mutations). Therefore, using a more stringent base quality threshold for both batches can be an effective mitigation strategy. 
 
 ## Reference bias
 
-Compared to longer paired-end reads, shorter single-end reads carrying bases that are different from the reference are less likely to be aligned to the reference genome (either correctly or incorrectly) with high confidence (e.g., due to the presence of an analogous sequence on the genome), and therefore tend to receive low mapping quality scores. As a result, when a strigent mapping quality threshold is imposed, shorter single-end reads are more likely to be affected. 
+Compared to longer paired-end reads, shorter single-end reads carrying bases that are different from the reference are less likely to be aligned to the reference genome (either correctly or incorrectly) with high confidence (e.g., due to the presence of an analogous sequence on the genome), and therefore tend to receive low mapping quality scores. As a result, when a stringent mapping quality threshold is imposed, shorter single-end reads are more likely to be affected. 
 
-Here, we perform PCA and Fst estimation using samples from four Atlantic cod populations. Some of the samples were sequenced with paired-end 150bp reads, and others were sequenced with single-end 125bp reads. 
+Here, we perform PCA and Fst estimation on a 0.5Mb section of a chromosome using samples from four Atlantic cod populations (pop 2, 3, 4, 6). Some of the samples were sequenced with paired-end 150bp reads, and others were sequenced with single-end 125bp reads. 
 
 #### SNP calling and PCA
 
@@ -288,7 +391,7 @@ test %>%
 
 #### Get saf file per population
 
-We get the sample allele frequency likelihoods (saf files) using ANGSD in each of the two batches. 
+We get the sample allele frequency likelihoods (saf files) using ANGSD in each of the two batches (i.e., NextSeq-150PE, HiSeq-125SE). 
 
 ```{bash eval=FALSE}
 ## NextSeq-150PE
@@ -428,9 +531,11 @@ fst_depth_ratio %>%
 ```
 
 
-It is clear that Fst outliers are enriched in regions where a high proportion of single-end 125bp reads get low mapping quality scores, a signal of heightened level reference bias in one batch of our data. Therefore, we can exclude such SNPs (e.g., those with > 10% reads having mapping quality scores lower than 20 in the single-end 125bp batch) from the analysis. 
+Fst outliers are enriched in regions where a high proportion of single-end 125bp reads get low mapping quality scores, a signal of heightened level reference bias in one batch of our data. Therefore, we can exclude such SNPs (e.g., those with > 10% reads having mapping quality scores lower than 20 in the single-end 125bp batch) from the analysis. 
 
 #### Fst before and after correction
+
+Compare Fst before and after correction in R.
 
 ```{r eval=TRUE, fig.width=8, fig.height=4}
 fst_depth_ratio %>%
@@ -448,22 +553,31 @@ On this segment of the genome, our mitigation strategy is particularly successfu
 
 #### Examine PCA results
 
+Perform eigendecomposition and data visualization in R. 
+
 ```{r eval=TRUE}
+## Define the tutorial/ folder as your basedir
 basedir="/workdir/batch-effect/tutorial/"
+## This is how the different populations are named in our paper
 rename_pop <- tibble(population = c("ITV2011", "KNG2011", "QQL2011", "BUK2011", "IKE2011", "PAA2011", "ATP2011", "NAR2008", "UUM2010"),
                      population_new =c("pop 1", "pop 2", "pop 3", "pop 4", "pop 5", "pop 6", "pop 7", "pop 8", "pop 9"))
+## Join new population names with the sample table
 sample_table <- read_tsv(str_c(basedir, "data/sample_table_rb.tsv")) %>%
   dplyr::select(-population_new) %>%
   left_join(rename_pop) %>%
   mutate(batch=ifelse(data_type=="se", "HiSeq-125SE", "NextSeq-150PE"))
+## Order of samples in the covariance matrix is the same as in the bam list, so we extract the order of samples from the bam list
 bam_list <- read_tsv(str_c(basedir, "data/bam_list_rb.txt"), col_names = FALSE) %>%
   transmute(sample_id=str_sub(X1, 37, 47))
+## Read in the covariance matrix
 genome_cov <- read_tsv(str_c(basedir, "results/bam_list_rb.covMat"), col_names = F)[1:nrow(sample_table),1:nrow(sample_table)] %>% as.matrix
+## Perform eigendecomposition on the covariance matrix, and join it with the sample table
 pca_table <- eigen(genome_cov)$vectors %>% 
   as_tibble() %>%
   transmute(PC1=V1, PC2=V2) %>%
   bind_cols(bam_list, .) %>%
   left_join(sample_table, ., by=c("sample_id_corrected"="sample_id"))
+## Plot PCA result
 pca_table %>%
   left_join(rename_pop) %>%
   ggplot(aes(x=PC1, y=PC2, color=batch)) +
@@ -492,8 +606,10 @@ read_tsv(str_c(basedir, "results/bam_list_rb.snp_list.txt"), col_names = FALSE) 
 Now, let's run PCA at this new SNP list.
 
 ```{bash eval=FALSE}
+## Index the new SNP list with ANGSD
 $ANGSD sites index $BASEDIR/results/bam_list_rb.depth_ratio_filtered_snp_list.txt
 
+## Run PCA with ANGSD, restricting the analysis on our new SNP list
 $ANGSD -b $BASEDIR/data/bam_list_rb.txt \
 -anc $REFERENCE \
 -out $BASEDIR/results/bam_list_rb_depth_ratio_filtered \
@@ -501,6 +617,8 @@ $ANGSD -b $BASEDIR/data/bam_list_rb.txt \
 -minQ 20 -minMapQ 20 \
 -sites $BASEDIR/results/bam_list_rb.depth_ratio_filtered_snp_list.txt
 ```
+
+Use R to perform eigendecomposition and visualization.
 
 ```{r eval=TRUE}
 basedir="/workdir/batch-effect/tutorial/"
@@ -530,15 +648,17 @@ pca_table_depth_ratio_filtered %>%
         panel.border = element_rect(colour="black",size=0.5))
 ```
 
+Again, because of the size of our subsetted data, the PCA result is not substantially altered. For PCA comparison before and after batch effect correction with our full dataset, see Figure 1B and Figure S5 of our paper. 
+
 ## DNA degradation
 
 A major consequence of DNA degradation is deamination of cytosines (i.e., transition of C bases into U bases), causing enrichment of C-to-T and G-to-A substitutions in more degraded batches of data. Similar to base quality score miscalibration, these errors will also inflate diversity estimates, as degradation patterns will be regarded as true variants, and can cause batch effects if two batches of data are differentially degraded.
 
-Here, we have samples from the same population, some of which are heavily degraded (determined by gDNA gel results), and some are relatively well preserved. We sequenced these samples in two different batches. To detect whether DNA degradation may cause an inflation of heterozygosity in the more degraded batch of samples, we estimation heterozygosity with and without transitions. 
+Here, we have samples from the same population (pop 9), some of which are heavily degraded (determined by gDNA gel results), and some are relatively well preserved. We sequenced these samples in two different batches. To detect whether DNA degradation may inflate heterozygosity in the more degraded batch of samples, we estimate heterozygosity with and without transitions. These bam files contain a 10Mb segment of one chromosome. 
 
 #### Heterozygosity estimation
 
-We use ANGSD to estimation heterozygosity including and excluding transtions. 
+We use ANGSD to estimate heterozygosity including and excluding transitions. 
 
 ```{bash eval=FALSE}
 MINDP=2
@@ -546,6 +666,7 @@ MAXDP=10
 MINMAPQ=30
 MINQ=33
 
+## NOTRANS=0: transitions are included in the analysis. NOTRANS=1: transitions are excluded from the analysis.
 for NOTRANS in {0,1}; do
   for LINE in `cat $BASEDIR/data/bam_list_degradation.txt`; do
       NAME_TEMP=`echo "${LINE%.*}"`
@@ -584,8 +705,11 @@ done
 Using R, we compare the change in heterozygosity after transitions are excluded. 
 
 ```{r eval=TRUE, fig.width=6, fig.height=5}
+## Define path to the tutorial/ folder as basedir
 basedir="/workdir/batch-effect/tutorial/"
+## Read in the sample table for this analysis
 sample_table <- read_tsv(str_c(basedir, "data/sample_table_degradation.tsv"))
+## Loop through all samples and read in heterozygosity estimated with and without transitions
 for (i in seq_len(nrow(sample_table))){
   data_type <- sample_table$data_type[i]
   if (data_type=="se"){
@@ -604,7 +728,7 @@ for (i in seq_len(nrow(sample_table))){
     }
   }
 }
-
+## Plot
 het_final %>%
   pivot_wider(names_from = notrans, values_from = het) %>%
   mutate(delta=`1`-`0`) %>%
@@ -619,12 +743,13 @@ het_final %>%
                                                       scale_color_manual(values = c("#5DC863FF", "#3B528BFF")), 
                                                       theme(panel.grid = element_blank(),
                                                             axis.line = element_line()))) +
-  #geom_signif(comparisons = list(c("pe\nless degraded", "se\nmore degraded"), c("se\nless degraded", "se\nmore degraded")), y_position = c(-0.001, -0.0012)) +
   ylab("change in heterozygosity estimates \nafter excluding transitions") +
   xlab("sample type") +
   geom_hline(yintercept = 0, linetype=2, color="red")
 ```
 
-Exclusion of transitions will always cause a decrease in estimated heterozygosity. However, in this case, we see that the more degraded samples are more negatively affected by this exclusion, suggesting that the deamination of cytocines has caused a inflation of heterozygosity estimation if the transitions are included in the more degraded samples. Therefore, to compare batches of data with different DNA degradation levels, it is better to exclude the transitions (while bearing in mind that the absolute values of heterozygosity would be downward biased).
+Exclusion of transitions will always cause a decrease in estimated heterozygosity. However, in this case, we see that the more degraded samples are more negatively affected by this exclusion, suggesting that the deamination of cytocines can inflate heterozygosity estimates if the transitions are included in the more degraded samples. Therefore, to compare batches of data with different DNA degradation levels, it is better to exclude the transitions (while bearing in mind that the absolute values of heterozygosity would be downward biased).
 
+## Conclusion
 
+In this tutorial, we used some simple bioinformatic approaches (e.g., visualizing the base composition of sequencing reads, comparing heterozygosity estimates using different base quality filters and with/without transitions, locating SNPs that have a high proportion of low-mapping-quality reads mapped to them) to detect and mitigate four different types of batch effects. We observed that batch effects can be common when different lcWGS datasets are combined, but they can be substantially reduced with simple bioinformatic methods. We conclude that combining pre-existing lcWGS datasets is still a powerful approach as long as batch effects are carefully accounted for.  

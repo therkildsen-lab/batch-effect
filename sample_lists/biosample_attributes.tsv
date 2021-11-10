@@ -1,0 +1,164 @@
+*sample_name	*organism	strain	age	*sex	tissue	collection_date	geo_loc_name	lat_lon	store_cond	length	weight	dressed_weight	liver_weight	gonad_weight	maturity	ship	trip	station
+ATP2011_104	Gadus morhua	not applicable	6	male	fin clips	2011-04-02	Greenland: Atlantic Peace	64.43 N 35.23 W	96% Ethanol	59	1.915	1.58	0.065	0.185	5	not collected	not collected	not collected
+ATP2011_111	Gadus morhua	not applicable	7	female	fin clips	2011-04-02	Greenland: Atlantic Peace	64.43 N 35.23 W	96% Ethanol	74	3.55	2.94	0.145	0.34	4	not collected	not collected	not collected
+ATP2011_117	Gadus morhua	not applicable	6	female	fin clips	2011-04-02	Greenland: Atlantic Peace	64.43 N 35.23 W	96% Ethanol	68	3.335	2.42	0.17	0.25	4	not collected	not collected	not collected
+ATP2011_118	Gadus morhua	not applicable	7	female	fin clips	2011-04-02	Greenland: Atlantic Peace	64.43 N 35.23 W	96% Ethanol	81	4.98	4.13	0.345	0.215	4	not collected	not collected	not collected
+ATP2011_123	Gadus morhua	not applicable	8	male	fin clips	2011-04-03	Greenland: Atlantic Peace	64.38 N 35.27 W	96% Ethanol	76	4.205	3.47	0.15	0.405	5	not collected	not collected	not collected
+ATP2011_124	Gadus morhua	not applicable	7	female	fin clips	2011-04-03	Greenland: Atlantic Peace	64.38 N 35.27 W	96% Ethanol	63	3.785	3.15	0.165	0.365	4	not collected	not collected	not collected
+ATP2011_125	Gadus morhua	not applicable	6	male	fin clips	2011-04-03	Greenland: Atlantic Peace	64.38 N 35.27 W	96% Ethanol	62	2.555	2.07	0.055	0.225	5	not collected	not collected	not collected
+ATP2011_126	Gadus morhua	not applicable	7	female	fin clips	2011-04-03	Greenland: Atlantic Peace	64.38 N 35.27 W	96% Ethanol	78	5.055	4.035	0.415	0.325	4	not collected	not collected	not collected
+ATP2011_127	Gadus morhua	not applicable	6	female	fin clips	2011-04-03	Greenland: Atlantic Peace	64.38 N 35.27 W	96% Ethanol	69	3.58	2.785	0.345	0.235	4	not collected	not collected	not collected
+ATP2011_129	Gadus morhua	not applicable	8	male	fin clips	2011-04-03	Greenland: Atlantic Peace	64.38 N 35.27 W	96% Ethanol	85	6.105	4.885	0.375	0.6	5	not collected	not collected	not collected
+ATP2011_139	Gadus morhua	not applicable	6	male	fin clips	2011-04-11	Greenland: Atlantic Peace	64.48 N 35.1 W	96% Ethanol	72	3.155	2.6	0.075	0.31	5	not collected	not collected	not collected
+BUK2011_001	Gadus morhua	not applicable	7	male	fin clips	2011-05-10	Greenland: Buksefjord	63.76 N 51.3 W	96% Ethanol	68	3.274	2.33	0.134	0.638	6	not collected	not collected	not collected
+BUK2011_002	Gadus morhua	not applicable	6	female	fin clips	2011-05-10	Greenland: Buksefjord	63.76 N 51.3 W	96% Ethanol	54	1.574	1.258	0.068	0.168	4	not collected	not collected	not collected
+BUK2011_005	Gadus morhua	not applicable	6	female	fin clips	2011-05-10	Greenland: Buksefjord	63.76 N 51.3 W	96% Ethanol	62	1.914	1.524	0.068	0.184	7	not collected	not collected	not collected
+BUK2011_006	Gadus morhua	not applicable	6	female	fin clips	2011-05-10	Greenland: Buksefjord	63.76 N 51.3 W	96% Ethanol	62	2.72	2.08	0.1	0.376	5	not collected	not collected	not collected
+BUK2011_007	Gadus morhua	not applicable	6	male	fin clips	2011-05-10	Greenland: Buksefjord	63.76 N 51.3 W	96% Ethanol	66	2.57	2.206	0.048	0.172	6	not collected	not collected	not collected
+BUK2011_008	Gadus morhua	not applicable	7	female	fin clips	2011-05-10	Greenland: Buksefjord	63.76 N 51.3 W	96% Ethanol	73	3.8	2.904	0.078	0.36	7	not collected	not collected	not collected
+BUK2011_009	Gadus morhua	not applicable	6	male	fin clips	2011-05-10	Greenland: Buksefjord	63.76 N 51.3 W	96% Ethanol	62	2.222	2.026	0.038	0.052	7	not collected	not collected	not collected
+BUK2011_010	Gadus morhua	not applicable	5	female	fin clips	2011-05-10	Greenland: Buksefjord	63.76 N 51.3 W	96% Ethanol	50	1.244	0.954	0.052	0.162	5	not collected	not collected	not collected
+BUK2011_012	Gadus morhua	not applicable	5	female	fin clips	2011-05-10	Greenland: Buksefjord	63.76 N 51.3 W	96% Ethanol	51	1.37	0.998	0.032	0.232	6	not collected	not collected	not collected
+BUK2011_015	Gadus morhua	not applicable	5	female	fin clips	2011-05-10	Greenland: Buksefjord	63.76 N 51.3 W	96% Ethanol	53	1.542	1.284	0.076	0.096	7	not collected	not collected	not collected
+BUK2011_016	Gadus morhua	not applicable	6	female	fin clips	2011-05-10	Greenland: Buksefjord	63.76 N 51.3 W	96% Ethanol	58	1.596	1.322	0.062	0.118	7	not collected	not collected	not collected
+BUK2011_018	Gadus morhua	not applicable	5	female	fin clips	2011-05-10	Greenland: Buksefjord	63.76 N 51.3 W	96% Ethanol	50	1.31	1.036	0.058	0.16	4	not collected	not collected	not collected
+BUK2011_021	Gadus morhua	not applicable	6	female	fin clips	2011-05-10	Greenland: Buksefjord	63.76 N 51.3 W	96% Ethanol	55	1.768	1.418	0.062	0.192	7	not collected	not collected	not collected
+BUK2011_027	Gadus morhua	not applicable	6	female	fin clips	2011-05-10	Greenland: Buksefjord	63.76 N 51.3 W	96% Ethanol	57	1.79	1.474	0.042	0.132	7	not collected	not collected	not collected
+BUK2011_029	Gadus morhua	not applicable	6	male	fin clips	2011-05-10	Greenland: Buksefjord	63.76 N 51.3 W	96% Ethanol	51	1.368	1.176	0.03	0.1	6	not collected	not collected	not collected
+BUK2011_041	Gadus morhua	not applicable	4	male	fin clips	2011-05-10	Greenland: Buksefjord	63.76 N 51.3 W	96% Ethanol	48	1.152	1.01	0.024	0.038	7	not collected	not collected	not collected
+BUK2011_045	Gadus morhua	not applicable	5	female	fin clips	2011-05-10	Greenland: Buksefjord	63.76 N 51.3 W	96% Ethanol	49	1.188	0.998	0.044	0.06	7	not collected	not collected	not collected
+BUK2011_048	Gadus morhua	not applicable	5	male	fin clips	2011-05-10	Greenland: Buksefjord	63.76 N 51.3 W	96% Ethanol	57	1.425	1.225	0.02	0.13	6	not collected	not collected	not collected
+BUK2011_051	Gadus morhua	not applicable	5	female	fin clips	2011-05-10	Greenland: Buksefjord	63.76 N 51.3 W	96% Ethanol	51	1.515	1.135	0.05	0.24	6	not collected	not collected	not collected
+BUK2011_053	Gadus morhua	not applicable	5	female	fin clips	2011-05-10	Greenland: Buksefjord	63.76 N 51.3 W	96% Ethanol	56	1.73	1.445	0.055	0.115	7	not collected	not collected	not collected
+BUK2011_056	Gadus morhua	not applicable	5	female	fin clips	2011-05-10	Greenland: Buksefjord	63.76 N 51.3 W	96% Ethanol	48	1.245	0.915	0.045	0.185	6	not collected	not collected	not collected
+BUK2011_057	Gadus morhua	not applicable	5	female	fin clips	2011-05-10	Greenland: Buksefjord	63.76 N 51.3 W	96% Ethanol	53	1.565	1.19	0.04	0.245	7	not collected	not collected	not collected
+BUK2011_059	Gadus morhua	not applicable	not collected	female	fin clips	2011-05-10	Greenland: Buksefjord	63.76 N 51.3 W	96% Ethanol	53	1.55	1.2	0.065	0.17	5	not collected	not collected	not collected
+BUK2011_060	Gadus morhua	not applicable	not collected	female	fin clips	2011-05-10	Greenland: Buksefjord	63.76 N 51.3 W	96% Ethanol	49	1.47	0.945	0.055	0.37	6	not collected	not collected	not collected
+IKE2011_000	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-18	Greenland: 1B, Ikertoq	66.91 N 52.31 W	not collected	58	2.038	1.522	0.106	0.022	7	AJ	4	13
+IKE2011_002	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-18	Greenland: 1B, Ikertoq	66.91 N 52.31 W	not collected	61	2.28	1.818	0.096	0.104	6	AJ	4	13
+IKE2011_006	Gadus morhua	not applicable	not collected	female	fin clips	2011-05-18	Greenland: 1B, Ikertoq	66.91 N 52.31 W	not collected	62	2.768	2.01	0.266	0.29	6	AJ	4	13
+IKE2011_032	Gadus morhua	not applicable	not collected	female	fin clips	2011-05-18	Greenland: 1B, Ikertoq	66.91 N 52.31 W	not collected	51	1.526	1.224	0.122	0.086	7	AJ	4	13
+IKE2011_966	Gadus morhua	not applicable	not collected	female	fin clips	2011-05-18	Greenland: 1B, Ikertoq	66.91 N 52.31 W	not collected	65	3.646	2.42	0.26	0.808	6	AJ	4	13
+IKE2011_970	Gadus morhua	not applicable	not collected	female	fin clips	2011-05-18	Greenland: 1B, Ikertoq	66.91 N 52.31 W	not collected	59	2.39	1.58	0.124	0.426	6	AJ	4	13
+IKE2011_972	Gadus morhua	not applicable	not collected	female	fin clips	2011-05-18	Greenland: 1B, Ikertoq	66.91 N 52.31 W	not collected	55	2.268	1.522	0.206	0.318	6	AJ	4	13
+IKE2011_976	Gadus morhua	not applicable	not collected	female	fin clips	2011-05-18	Greenland: 1B, Ikertoq	66.91 N 52.31 W	not collected	56	2.274	1.534	0.264	0.268	5	AJ	4	13
+IKE2011_978	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-18	Greenland: 1B, Ikertoq	66.91 N 52.31 W	not collected	51	1.792	1.396	0.142	0.08	6	AJ	4	13
+IKE2011_984	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-18	Greenland: 1B, Ikertoq	66.91 N 52.31 W	not collected	53	1.752	1.352	0.134	0.098	6	AJ	4	13
+IKE2011_986	Gadus morhua	not applicable	not collected	female	fin clips	2011-05-18	Greenland: 1B, Ikertoq	66.91 N 52.31 W	not collected	73	3.542	2.69	0.146	0.29	7	AJ	4	13
+IKE2011_998	Gadus morhua	not applicable	not collected	female	fin clips	2011-05-18	Greenland: 1B, Ikertoq	66.91 N 52.31 W	not collected	54	2.072	1.492	0.19	0.098	7	AJ	4	13
+ITV2011_628	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-16	Greenland: 1B, Itivdleq	66.5 N 53.23 W	not collected	51	1.294	1.05	0.046	0.112	6	AJ	4	10
+ITV2011_630	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-16	Greenland: 1B, Itivdleq	66.5 N 53.23 W	not collected	68	2.752	2.248	0.116	0.254	6	AJ	4	10
+ITV2011_636	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-16	Greenland: 1B, Itivdleq	66.5 N 53.23 W	not collected	56	1.704	1.442	0.058	0.122	6	AJ	4	10
+ITV2011_642	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-16	Greenland: 1B, Itivdleq	66.5 N 53.23 W	not collected	77	4.565	3.805	0.09	0.415	6	AJ	4	10
+ITV2011_646	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-16	Greenland: 1B, Itivdleq	66.5 N 53.23 W	not collected	65	2.955	2.415	0.09	0.295	6	AJ	4	10
+ITV2011_648	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-16	Greenland: 1B, Itivdleq	66.5 N 53.23 W	not collected	71	3.64	2.975	0.1	0.31	6	AJ	4	10
+ITV2011_652	Gadus morhua	not applicable	not collected	female	fin clips	2011-05-16	Greenland: 1B, Itivdleq	66.5 N 53.23 W	not collected	66	2.61	2.055	0.065	0.365	5	AJ	4	10
+ITV2011_658	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-16	Greenland: 1B, Itivdleq	66.5 N 53.23 W	not collected	67	2.945	2.5	0.12	0.145	6	AJ	4	10
+ITV2011_660	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-16	Greenland: 1B, Itivdleq	66.5 N 53.23 W	not collected	45	0.91	0.765	0.06	0.025	6	AJ	4	10
+ITV2011_672	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-16	Greenland: 1B, Itivdleq	66.5 N 53.23 W	not collected	63	2.3	1.89	0.05	0.235	6	AJ	4	10
+ITV2011_674	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-16	Greenland: 1B, Itivdleq	66.5 N 53.23 W	not collected	51	1.42	1.185	0.065	0.085	6	AJ	4	10
+ITV2011_676	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-16	Greenland: 1B, Itivdleq	66.5 N 53.23 W	not collected	51	1.315	1.13	0.045	0.08	6	AJ	4	10
+ITV2011_678	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-16	Greenland: 1B, Itivdleq	66.5 N 53.23 W	not collected	54	1.67	1.375	0.055	0.145	6	AJ	4	10
+ITV2011_682	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-16	Greenland: 1B, Itivdleq	66.5 N 53.23 W	not collected	56	1.68	1.41	0.065	0.095	6	AJ	4	10
+ITV2011_686	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-16	Greenland: 1B, Itivdleq	66.5 N 53.23 W	not collected	52	1.405	1.185	0.06	0.06	6	AJ	4	10
+ITV2011_690	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-16	Greenland: 1B, Itivdleq	66.5 N 53.23 W	not collected	57	1.775	1.53	0.055	0.11	6	AJ	4	10
+ITV2011_708	Gadus morhua	not applicable	not collected	female	fin clips	2011-05-16	Greenland: 1B, Itivdleq	66.5 N 53.23 W	not collected	78	5.628	3.646	0.228	1.408	6	AJ	4	10
+ITV2011_714	Gadus morhua	not applicable	not collected	female	fin clips	2011-05-16	Greenland: 1B, Itivdleq	66.5 N 53.23 W	not collected	80	6.09	3.712	0.212	1.594	6	AJ	4	10
+ITV2011_722	Gadus morhua	not applicable	not collected	female	fin clips	2011-05-16	Greenland: 1B, Itivdleq	66.5 N 53.23 W	not collected	58	2.068	1.632	0.102	0.214	5	AJ	4	10
+ITV2011_782	Gadus morhua	not applicable	not collected	female	fin clips	2011-05-16	Greenland: 1B, Itivdleq	66.5 N 53.23 W	not collected	55	1.976	1.562	0.134	0.172	6	AJ	4	10
+KNG2011_373	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-15	Greenland: 1C, Kangia	65.29 N 52.02 W	not collected	54	1.552	1.244	0.046	0.154	6	AJ	4	8
+KNG2011_375	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-15	Greenland: 1C, Kangia	65.29 N 52.02 W	not collected	64	2.526	2.09	0.058	0.232	6	AJ	4	8
+KNG2011_377	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-15	Greenland: 1C, Kangia	65.29 N 52.02 W	not collected	54	1.624	1.358	0.062	0.098	6	AJ	4	8
+KNG2011_379	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-15	Greenland: 1C, Kangia	65.29 N 52.02 W	not collected	57	1.994	1.632	0.066	0.106	6	AJ	4	8
+KNG2011_383	Gadus morhua	not applicable	not collected	female	fin clips	2011-05-15	Greenland: 1C, Kangia	65.29 N 52.02 W	not collected	63	2.51	1.996	0.082	0.298	7	AJ	4	8
+KNG2011_385	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-15	Greenland: 1C, Kangia	65.29 N 52.02 W	not collected	65	2.838	2.1	0.092	0.47	6	AJ	4	8
+KNG2011_387	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-15	Greenland: 1C, Kangia	65.29 N 52.02 W	not collected	62	2.058	1.744	0.058	0.134	6	AJ	4	8
+KNG2011_391	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-15	Greenland: 1C, Kangia	65.29 N 52.02 W	not collected	65	2.63	2.18	0.074	0.16	6	AJ	4	8
+KNG2011_393	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-15	Greenland: 1C, Kangia	65.29 N 52.02 W	not collected	64	2.36	1.85	0.044	0.318	6	AJ	4	8
+KNG2011_397	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-15	Greenland: 1C, Kangia	65.29 N 52.02 W	not collected	50	1.198	1.008	0.034	0.078	6	AJ	4	8
+KNG2011_399	Gadus morhua	not applicable	not collected	female	fin clips	2011-05-15	Greenland: 1C, Kangia	65.29 N 52.02 W	not collected	51	1.236	0.914	not collected	0.212	6	AJ	4	8
+KNG2011_401	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-15	Greenland: 1C, Kangia	65.29 N 52.02 W	not collected	53	1.39	1.17	0.032	0.11	6	AJ	4	8
+KNG2011_405	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-15	Greenland: 1C, Kangia	65.29 N 52.02 W	not collected	53	1.378	1.194	0.038	0.066	6	AJ	4	8
+KNG2011_407	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-15	Greenland: 1C, Kangia	65.29 N 52.02 W	not collected	55	1.67	1.462	0.042	0.058	6	AJ	4	8
+KNG2011_411	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-15	Greenland: 1C, Kangia	65.29 N 52.02 W	not collected	73	3.422	2.92	0.114	0.216	6	AJ	4	8
+KNG2011_413	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-15	Greenland: 1C, Kangia	65.29 N 52.02 W	not collected	63	2.208	1.844	0.064	0.194	6	AJ	4	8
+KNG2011_415	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-15	Greenland: 1C, Kangia	65.29 N 52.02 W	not collected	57	1.7	1.4	0.04	0.162	6	AJ	4	8
+KNG2011_417	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-15	Greenland: 1C, Kangia	65.29 N 52.02 W	not collected	66	2.332	1.982	0.03	0.108	6	AJ	4	8
+KNG2011_421	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-15	Greenland: 1C, Kangia	65.29 N 52.02 W	not collected	53	1.36	1.082	0.032	0.16	6	AJ	4	8
+KNG2011_423	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-15	Greenland: 1C, Kangia	65.29 N 52.02 W	not collected	43	0.748	0.624	0.02	0.036	6	AJ	4	8
+KNG2011_427	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-15	Greenland: 1C, Kangia	65.29 N 52.02 W	not collected	68	2.926	2.334	0.052	0.352	6	AJ	4	8
+KNG2011_429	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-15	Greenland: 1C, Kangia	65.29 N 52.02 W	not collected	65	2.538	2.096	0.038	0.254	6	AJ	4	8
+KNG2011_431	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-15	Greenland: 1C, Kangia	65.29 N 52.02 W	not collected	53	1.4	1.154	0.032	0.128	6	AJ	4	8
+KNG2011_433	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-15	Greenland: 1C, Kangia	65.29 N 52.02 W	not collected	52	1.278	1.1	0.028	0.07	6	AJ	4	8
+KNG2011_435	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-15	Greenland: 1C, Kangia	65.29 N 52.02 W	not collected	51	1.26	1.064	0.04	0.078	6	AJ	4	8
+KNG2011_437	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-15	Greenland: 1C, Kangia	65.29 N 52.02 W	not collected	54	1.568	1.288	0.054	0.138	6	AJ	4	8
+KNG2011_439	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-15	Greenland: 1C, Kangia	65.29 N 52.02 W	not collected	65	2.508	1.99	0.086	0.294	6	AJ	4	8
+KNG2011_441	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-15	Greenland: 1C, Kangia	65.29 N 52.02 W	not collected	71	3.05	2.56	0.094	0.206	6	AJ	4	8
+KNG2011_489	Gadus morhua	not applicable	not collected	female	fin clips	2011-05-15	Greenland: 1C, Kangia	65.29 N 52.02 W	not collected	59	2.474	1.734	0.082	0.528	6	AJ	4	8
+KNG2011_497	Gadus morhua	not applicable	not collected	female	fin clips	2011-05-15	Greenland: 1C, Kangia	65.29 N 52.02 W	not collected	79	4.95	3.495	0.2	0.855	6	AJ	4	8
+NAR2008_001	Gadus morhua	not applicable	5	male	fin clips	2008-02-03	Greenland: Narsaq	60.89 N 46.56 W	96% Ethanol	52	1.44	1.18	0.0507	0.1059	4	not collected	not collected	not collected
+NAR2008_002	Gadus morhua	not applicable	5	male	fin clips	2008-02-03	Greenland: Narsaq	60.89 N 46.56 W	96% Ethanol	50	1.18	1.02	0.0313	0.0884	4	not collected	not collected	not collected
+NAR2008_006	Gadus morhua	not applicable	5	male	fin clips	2008-02-03	Greenland: Narsaq	60.89 N 46.56 W	96% Ethanol	54	1.38	1.1	0.0302	0.0727	5	not collected	not collected	not collected
+NAR2008_028	Gadus morhua	not applicable	6	male	fin clips	2008-02-08	Greenland: Bredefjord, Narsaq	not collected	96% Ethanol	68	2.58	2.26	not collected	0.1007	3	not collected	not collected	not collected
+NAR2008_029	Gadus morhua	not applicable	5	female	fin clips	2008-02-08	Greenland: Bredefjord, Narsaq	not collected	96% Ethanol	56	1.4	1.26	not collected	0.0197	3	not collected	not collected	not collected
+NAR2008_032	Gadus morhua	not applicable	6	male	fin clips	2008-02-03	Greenland: Narsaq	60.89 N 46.56 W	96% Ethanol	64	2.54	1.88	0.2255	0.3766	5	not collected	not collected	not collected
+NAR2008_034	Gadus morhua	not applicable	7	male	fin clips	2008-02-03	Greenland: Narsaq	60.89 N 46.56 W	96% Ethanol	78	4.52	3.82	0.2059	0.269	5	not collected	not collected	not collected
+NAR2008_035	Gadus morhua	not applicable	5	female	fin clips	2008-02-08	Greenland: Bredefjord, Narsaq	not collected	96% Ethanol	49	0.9	0.84	0.0271	0.0048	2	not collected	not collected	not collected
+NAR2008_036	Gadus morhua	not applicable	6	male	fin clips	2008-02-03	Greenland: Narsaq	60.89 N 46.56 W	96% Ethanol	68	3.48	2.84	0.1821	0.3155	5	not collected	not collected	not collected
+NAR2008_042	Gadus morhua	not applicable	5	female	fin clips	2008-02-08	Greenland: Bredefjord, Narsaq	not collected	96% Ethanol	54	1.32	1.24	0.0258	0.0042	2	not collected	not collected	not collected
+NAR2008_043	Gadus morhua	not applicable	5	female	fin clips	2008-02-08	Greenland: Bredefjord, Narsaq	not collected	96% Ethanol	60	1.48	1.36	0.0331	0.0082	2	not collected	not collected	not collected
+NAR2008_044	Gadus morhua	not applicable	6	female	fin clips	2008-02-08	Greenland: Bredefjord, Narsaq	not collected	96% Ethanol	67	2.56	2.08	0.1834	0.1772	3	not collected	not collected	not collected
+NAR2008_047	Gadus morhua	not applicable	5	female	fin clips	2008-02-08	Greenland: Bredefjord, Narsaq	not collected	96% Ethanol	56	1.42	1.32	0.043	0.0322	2	not collected	not collected	not collected
+NAR2008_050	Gadus morhua	not applicable	7	female	fin clips	2008-02-08	Greenland: Bredefjord, Narsaq	not collected	96% Ethanol	79	4.44	3.96	not collected	0.0945	3	not collected	not collected	not collected
+NAR2008_051	Gadus morhua	not applicable	6	female	fin clips	2008-02-08	Greenland: Bredefjord, Narsaq	not collected	96% Ethanol	73	3.86	3.3	0.2614	0.118	3	not collected	not collected	not collected
+PAA2011_708	Gadus morhua	not applicable	not collected	female	fin clips	2011-04-29	Greenland: 1E, Kangerdluarssukasik	61.94 N 49.53 W	not collected	58	1.508	1.334	0.054	0.01	3	AJ	2	5
+PAA2011_728	Gadus morhua	not applicable	not collected	female	fin clips	2011-04-29	Greenland: 1E, Kangerdluarssukasik	61.94 N 49.53 W	not collected	61	1.754	1.554	0.05	0.01	3	AJ	2	5
+PAA2011_786	Gadus morhua	not applicable	not collected	female	fin clips	2011-04-29	Greenland: 1E, Nerutussoq	62.15 N 49.65 W	not collected	62	2.046	1.802	0.064	0.012	3	AJ	2	6
+PAA2011_824	Gadus morhua	not applicable	not collected	female	fin clips	2011-04-29	Greenland: 1E, Nerutussoq	62.15 N 49.65 W	not collected	58	1.744	1.556	0.042	0.01	3	AJ	2	6
+PAA2011_826	Gadus morhua	not applicable	not collected	female	fin clips	2011-04-29	Greenland: 1E, Nerutussoq	62.15 N 49.65 W	not collected	50	0.926	0.826	0.018	0.004	3	AJ	2	6
+PAA2011_854	Gadus morhua	not applicable	not collected	female	fin clips	2011-04-29	Greenland: 1E, Qagssit	62.29 N 49.55 W	not collected	113	16.25	9.75	0.41	4.905	6	AJ	2	8
+PAA2011_856	Gadus morhua	not applicable	not collected	male	fin clips	2011-04-29	Greenland: 1E, Qagssit	62.29 N 49.55 W	not collected	53	1.255	1.01	0.02	0.155	5	AJ	2	8
+PAA2011_858	Gadus morhua	not applicable	not collected	male	fin clips	2011-04-29	Greenland: 1E, Qagssit	62.29 N 49.55 W	not collected	59	1.845	1.59	0.04	0.135	5	AJ	2	8
+QQL2011_828	Gadus morhua	not applicable	not collected	female	fin clips	2011-05-17	Greenland: 1B, Qeqertalik	66.83 N 52.68 W	not collected	64	2.974	1.924	0.132	0.744	6	AJ	4	11
+QQL2011_832	Gadus morhua	not applicable	not collected	female	fin clips	2011-05-17	Greenland: 1B, Qeqertalik	66.83 N 52.68 W	not collected	60	2.608	1.768	0.132	0.55	6	AJ	4	11
+QQL2011_836	Gadus morhua	not applicable	not collected	female	fin clips	2011-05-17	Greenland: 1B, Qeqertalik	66.83 N 52.68 W	not collected	56	2.224	1.422	0.092	0.332	6	AJ	4	11
+QQL2011_838	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-17	Greenland: 1B, Qeqertalik	66.83 N 52.68 W	not collected	54	1.612	1.326	0.048	0.076	6	AJ	4	11
+QQL2011_840	Gadus morhua	not applicable	not collected	female	fin clips	2011-05-17	Greenland: 1B, Qeqertalik	66.83 N 52.68 W	not collected	50	1.446	0.91	0.052	0.214	6	AJ	4	11
+QQL2011_842	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-17	Greenland: 1B, Qeqertalik	66.83 N 52.68 W	not collected	54	1.678	1.318	0.068	0.188	6	AJ	4	11
+QQL2011_844	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-17	Greenland: 1B, Qeqertalik	66.83 N 52.68 W	not collected	55	1.478	1.16	0.034	0.094	6	AJ	4	11
+QQL2011_846	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-17	Greenland: 1B, Qeqertalik	66.83 N 52.68 W	not collected	75	4.26	3.496	0.114	0.396	6	AJ	4	11
+QQL2011_852	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-17	Greenland: 1B, Qeqertalik	66.83 N 52.68 W	not collected	57	1.96	1.47	0.082	0.124	6	AJ	4	11
+QQL2011_860	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-17	Greenland: 1B, Qeqertalik	66.83 N 52.68 W	not collected	55	1.674	1.34	0.078	0.128	6	AJ	4	11
+QQL2011_864	Gadus morhua	not applicable	not collected	female	fin clips	2011-05-17	Greenland: 1B, Qeqertalik	66.83 N 52.66 W	not collected	58	2.652	1.602	0.13	0.418	6	AJ	4	12
+QQL2011_876	Gadus morhua	not applicable	not collected	female	fin clips	2011-05-17	Greenland: 1B, Qeqertalik	66.83 N 52.66 W	not collected	55	1.784	1.374	0.062	0.23	6	AJ	4	12
+QQL2011_878	Gadus morhua	not applicable	not collected	female	fin clips	2011-05-17	Greenland: 1B, Qeqertalik	66.83 N 52.66 W	not collected	64	3.226	2.18	0.218	0.508	6	AJ	4	12
+QQL2011_884	Gadus morhua	not applicable	not collected	female	fin clips	2011-05-17	Greenland: 1B, Qeqertalik	66.83 N 52.66 W	not collected	55	1.994	1.434	0.13	0.298	6	AJ	4	12
+QQL2011_886	Gadus morhua	not applicable	not collected	female	fin clips	2011-05-17	Greenland: 1B, Qeqertalik	66.83 N 52.66 W	not collected	53	1.772	1.314	0.086	0.294	6	AJ	4	12
+QQL2011_888	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-17	Greenland: 1B, Qeqertalik	66.83 N 52.66 W	not collected	57	1.896	1.51	0.084	0.118	6	AJ	4	12
+QQL2011_892	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-17	Greenland: 1B, Qeqertalik	66.83 N 52.66 W	not collected	52	1.712	1.31	0.072	0.124	6	AJ	4	12
+QQL2011_894	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-17	Greenland: 1B, Qeqertalik	66.83 N 52.66 W	not collected	50	1.314	1.06	0.048	0.134	6	AJ	4	12
+QQL2011_896	Gadus morhua	not applicable	not collected	male	fin clips	2011-05-17	Greenland: 1B, Qeqertalik	66.83 N 52.66 W	not collected	57	1.702	1.29	0.068	0.168	6	AJ	4	12
+UUM2010_001	Gadus morhua	not applicable	not collected	female	fin clips	2010-05-12	Greenland: Uummannaq	not collected	not collected	110	17	13.2	1.417	0.1465	8	not collected	not collected	not collected
+UUM2010_003	Gadus morhua	not applicable	not collected	female	fin clips	2010-05-12	Greenland: Uummannaq	not collected	not collected	76	4.42	not collected	0.367	0.0593	8	not collected	not collected	not collected
+UUM2010_011	Gadus morhua	not applicable	not collected	male	fin clips	2010-05-12	Greenland: Uummannaq	not collected	not collected	83	5.54	4.78	0.2734	0.0946	7	not collected	not collected	not collected
+UUM2010_023	Gadus morhua	not applicable	not collected	female	fin clips	2010-05-12	Greenland: Uummannaq	not collected	not collected	73	4	3.24	0.4014	0.068	8	not collected	not collected	not collected
+UUM2010_026	Gadus morhua	not applicable	not collected	male	fin clips	2010-05-12	Greenland: Uummannaq	not collected	not collected	81	4.9	4.32	0.3373	0.0579	8	not collected	not collected	not collected
+UUM2010_030	Gadus morhua	not applicable	not collected	female	fin clips	2010-05-12	Greenland: Uummannaq	not collected	not collected	76	3.5	2.97	0.2804	0.0685	8	not collected	not collected	not collected
+UUM2010_036	Gadus morhua	not applicable	not collected	male	fin clips	2010-05-12	Greenland: Uummannaq	not collected	not collected	75	4.31	3.35	0.3227	0.039	8	not collected	not collected	not collected
+UUM2010_038	Gadus morhua	not applicable	not collected	male	fin clips	2010-05-12	Greenland: Uummannaq	not collected	not collected	71	3.46	2.9	0.262	0.0677	7	not collected	not collected	not collected
+UUM2010_044	Gadus morhua	not applicable	not collected	male	fin clips	2010-05-12	Greenland: Uummannaq	not collected	not collected	73	4.31	3.58	0.406	0.0299	8	not collected	not collected	not collected
+UUM2010_048	Gadus morhua	not applicable	not collected	female	fin clips	2010-05-12	Greenland: Uummannaq	not collected	not collected	73	3.85	3.39	0.1785	0.0658	8	not collected	not collected	not collected
+UUM2010_054	Gadus morhua	not applicable	not collected	female	fin clips	2010-05-12	Greenland: Uummannaq	not collected	not collected	75	3.55	2.99	0.254	0.0625	7	not collected	not collected	not collected
+UUM2010_055	Gadus morhua	not applicable	not collected	male	fin clips	2010-05-12	Greenland: Uummannaq	not collected	not collected	74	3.77	3.09	0.3528	0.0553	8	not collected	not collected	not collected
+UUM2010_064	Gadus morhua	not applicable	not collected	male	fin clips	2010-05-12	Greenland: Uummannaq	not collected	not collected	73	3.8	3.14	0.2668	0.053900000000000003	8	not collected	not collected	not collected
+UUM2010_068	Gadus morhua	not applicable	not collected	male	fin clips	2010-05-12	Greenland: Uummannaq	not collected	not collected	78	4.62	3.89	0.444	0.061	7	not collected	not collected	not collected
+UUM2010_069	Gadus morhua	not applicable	not collected	female	fin clips	2010-05-12	Greenland: Uummannaq	not collected	not collected	81	4.35	3.9	0.2166	0.0838	8	not collected	not collected	not collected
+UUM2010_073	Gadus morhua	not applicable	not collected	female	fin clips	2010-05-12	Greenland: Uummannaq	not collected	not collected	81	5.1	4.16	0.54	0.0992	8	not collected	not collected	not collected
+UUM2010_075	Gadus morhua	not applicable	not collected	female	fin clips	2010-05-12	Greenland: Uummannaq	not collected	not collected	76	3.72	2.95	0.314	0.0883	8	not collected	not collected	not collected
+UUM2010_080	Gadus morhua	not applicable	not collected	male	fin clips	2010-05-12	Greenland: Uummannaq	not collected	not collected	75	4.53	3.92	0.2447	0.035	8	not collected	not collected	not collected
+UUM2010_084	Gadus morhua	not applicable	not collected	male	fin clips	2010-05-12	Greenland: Uummannaq	not collected	not collected	71	3.79	3.29	0.148	0.0428	7	not collected	not collected	not collected
+UUM2010_085	Gadus morhua	not applicable	not collected	female	fin clips	2010-05-12	Greenland: Uummannaq	not collected	not collected	76	4.3	3.6	0.38	0.0734	8	not collected	not collected	not collected
+UUM2010_087	Gadus morhua	not applicable	not collected	female	fin clips	2010-05-12	Greenland: Uummannaq	not collected	not collected	79	5.24	4.23	0.416	0.0934	8	not collected	not collected	not collected
+UUM2010_095	Gadus morhua	not applicable	not collected	female	fin clips	2010-05-12	Greenland: Uummannaq	not collected	not collected	72	3.69	3.08	0.214	0.0892	7	not collected	not collected	not collected
+UUM2010_096	Gadus morhua	not applicable	not collected	male	fin clips	2010-05-12	Greenland: Uummannaq	not collected	not collected	77	4.3	3.44	0.264	0.0799	7	not collected	not collected	not collected
+UUM2010_098	Gadus morhua	not applicable	not collected	male	fin clips	2010-05-12	Greenland: Uummannaq	not collected	not collected	78	4.95	4.27	0.41	0.055	8	not collected	not collected	not collected

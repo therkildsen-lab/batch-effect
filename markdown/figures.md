@@ -196,6 +196,125 @@ plot_grid(het_plot, pca_plot, fst_plot, labels = c('A', 'B', 'C'), label_size = 
 
 ![](figures_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
+## Cover image
+
+#### Option 1
+
+``` r
+panel_a <- het_gg %>%
+  filter(population_new %in% str_c("pop ", 2)) %>%
+  ggplot(aes(x="", y=het*10^3)) +
+  geom_boxplot(outlier.alpha = 0, color="black", size=0.2, width=0.2) +
+  geom_jitter(aes(color=batch), height = 0, width = 0.1, size=2) +
+  scale_color_viridis_d(begin=0.25, end=0.75) +
+  ylab(expression(paste("heterozygosity (in ", 10^-3, ")"))) +
+  facet_grid(type~population_new, scales = "free_y") +
+  xlab(" ") +
+  coord_flip() +
+  theme_cowplot() +
+  theme(panel.background=element_rect(colour="black", size=0.8),
+        legend.position = c(0.52, 0.93),
+        legend.key.size = unit(0.5, 'lines'),
+        strip.text.y = element_text(face = "bold", size=20),
+        strip.text.x = element_text(size=18),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        legend.key = element_rect(fill = "white", colour = "black"),
+        legend.title = element_blank())
+panel_b <- pca_combined %>%
+  left_join(rename_pop) %>%
+  filter(population_new %in% str_c("pop ", 2)) %>%
+  ggplot(aes(x=PC1, y=PC2)) +
+  geom_point(data=pca_combined, color="grey", size=0.5) +
+  geom_point(aes(color=batch), size=2) +
+  scale_color_viridis_d(begin=0.25, end=0.75) +
+  facet_grid(type~population_new) +
+  theme_cowplot() +
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        panel.border = element_rect(colour="black",size=0.8),
+        legend.position = c(0.52, 0.93),
+        legend.key.size = unit(0.5, 'lines'),
+        strip.text.y = element_text(face = "bold", size=20),
+        strip.text.x = element_text(size=18),
+        legend.key = element_rect(fill = "white", colour = "black"),
+        legend.title = element_blank())
+panel_c <- fst_combined %>%
+  filter(lg=="LG06") %>%
+  ggplot(aes(x=position/10^6, y=fst, color=lg)) +
+  geom_point(size = 0.5) +
+  scale_color_manual(values = rep(c("black", "darkgrey"), 12)) +
+  facet_grid(type~lg, scales = "free_x", space = "free_x") +
+  xlab("position (in Mb)") +
+  ylab(expression(F[ST]~between~batches)) +
+  ylim(c(0, 0.85)) +
+  theme_cowplot() +
+  theme(panel.spacing = unit(0.5, "lines")) +
+  theme(panel.border = element_rect(colour="black",size=0.8),
+        legend.position = "none",
+        strip.text.x = element_text(size=18),
+        strip.text.y = element_text(face = "bold", size=20))
+plot_grid(panel_b, nrow = 2, rel_heights = c(1, 0.06)) %>%
+  plot_grid(panel_a, ., labels = c('A', 'B'), label_size = 20, nrow = 1, rel_widths = c(1, 1)) %>%
+  plot_grid(panel_c, labels=c(NA, 'C'), label_size = 20, nrow = 2, rel_heights = c(1.5, 1))
+```
+
+    ## Warning: Removed 1 rows containing missing values (geom_text).
+
+![](figures_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
+#### Option B
+
+``` r
+panel_a <- het_gg %>%
+  filter(population_new %in% str_c("pop ", 1:3)) %>%
+  ggplot(aes(x="", y=het*10^3)) +
+  geom_boxplot(outlier.alpha = 0, color="black", size=0.2, width=0.2) +
+  geom_jitter(aes(color=batch), height = 0, width = 0.1, size=2) +
+  scale_color_viridis_d(begin=0.25, end=0.75) +
+  ylab(expression(paste("heterozygosity (in ", 10^-3, ")"))) +
+  facet_grid(type~population_new, scales = "free_y") +
+  xlab(" ") +
+  coord_flip() +
+  theme_cowplot() +
+  theme(panel.background=element_rect(colour="black", size=0.8),
+        legend.position = c(0.78, 0.09),
+        legend.key.size = unit(0.8, 'lines'),
+        strip.text.y = element_text(face = "bold", size=20),
+        strip.text.x = element_text(size=18),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        legend.key = element_rect(fill = "white", colour = "black"),
+        legend.title = element_blank())
+panel_b <- pca_combined %>%
+  left_join(rename_pop) %>%
+  filter(population_new %in% str_c("pop ", 1:3)) %>%
+  ggplot(aes(x=PC1, y=PC2)) +
+  geom_point(data=pca_combined, color="grey", size=0.5) +
+  geom_point(aes(color=batch), size=2) +
+  scale_color_viridis_d(begin=0.25, end=0.75) +
+  facet_grid(type~population_new) +
+  theme_cowplot() +
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        panel.border = element_rect(colour="black",size=0.8),
+        legend.position = c(0.78, 0.42),
+        legend.key.size = unit(0.8, 'lines'),
+        strip.text.y = element_text(face = "bold", size=20),
+        strip.text.x = element_text(size=18),
+        legend.key = element_rect(fill = "white", colour = "black"),
+        legend.title = element_blank())
+
+cover_image <- plot_grid(panel_a, panel_b, labels = c('A', 'B'), label_size = 20, nrow = 2, rel_heights = c(4.2, 3.8))
+cover_image
+```
+
+![](figures_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+
+``` r
+ggsave("../misc/cover_image.pdf", plot=cover_image, width = 8, height = 8, units = "in")
+```
+
 ## Figure S3
 
 This is a sequential visualization of estimated heterozygosity after
@@ -269,7 +388,7 @@ het_plot <- het_gg %>%
 het_plot
 ```
 
-![](figures_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](figures_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
 ## Figure S4
 
@@ -342,7 +461,7 @@ bqsr_plot <- bqsr_gg %>%
 bqsr_plot
 ```
 
-![](figures_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+![](figures_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
 ## Figure S5
 
@@ -379,4 +498,4 @@ pca_plot <- bind_rows(pca_combined, mutate(pca_combined, population="all pops"))
 pca_plot
 ```
 
-![](figures_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+![](figures_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->

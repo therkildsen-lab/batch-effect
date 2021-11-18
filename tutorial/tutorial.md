@@ -334,6 +334,7 @@ for (i in seq_len(nrow(sample_table))){
   }
 }
 ## Plot
+set.seed(42)
 het_final %>%
   mutate(batch=ifelse(data_type=="pe", "NextSeq-150PE", "HiSeq-125SE")) %>%
   mutate(trimming=ifelse(trimming=="poly_g_trimming", "Poly-G trimming", "Sliding window trimming")) %>%
@@ -445,6 +446,7 @@ for (i in seq_len(nrow(sample_table))){
   }
 }
 ## Plot
+set.seed(42)
 het_final %>%
   mutate(data_type=ifelse(data_type=="pe", "NextSeq-150PE (more miscalibration in base quality scores)", "HiSeq-125SE (less miscalibration in base quality scores)")) %>%
   mutate(filter=ifelse(minq==20, "relaxed base quality filter (minQ = 20)", "stringent base quality filter (minQ = 33)")) %>%
@@ -629,7 +631,8 @@ depth_joined <- left_join(depth_minmapq20, depth_minmapq0) %>%
 ## Join fst with depth ratio
 fst_depth_ratio <- fst %>%
   left_join(depth_joined) %>%
-  mutate(fst_outlier=fst>0.2)
+  mutate(type=ifelse(fst>0.2, "Fst outliers", "all other SNPs"),
+         type=fct_relevel(type, c("Fst outliers", "all other SNPs")))
 ## Fst vs. depth ratio
 fst_depth_ratio %>%
   ggplot(aes(x=depth_ratio, y=fst)) +
@@ -642,21 +645,21 @@ fst_depth_ratio %>%
 ``` r
 ## Get test stats
 fst_depth_ratio %>%
-  ggbetweenstats(y=depth_ratio, x=fst_outlier, output="subtitle", bf.message = FALSE)
+  ggbetweenstats(y=depth_ratio, x=type, output="subtitle", bf.message = FALSE)
 ```
 
-    ## paste(italic("t")["Welch"], "(", "18.08", ") = ", "-11.17", ", ", 
+    ## paste(italic("t")["Welch"], "(", "18.08", ") = ", "11.17", ", ", 
     ##     italic("p"), " = ", "1.51e-09", ", ", widehat(italic("g"))["Hedges"], 
-    ##     " = ", "-2.75", ", CI"["95%"], " [", "-3.76", ", ", "-1.73", 
+    ##     " = ", "2.75", ", CI"["95%"], " [", "1.73", ", ", "3.76", 
     ##     "], ", italic("n")["obs"], " = ", "5,202")
 
 ``` r
 fst_depth_ratio_stats <- fst_depth_ratio %>%
-  centrality_description(fst_outlier, depth_ratio)
+  centrality_description(type, depth_ratio)
 ## Distrution of depth ratio in Fst outliers (those with Fst > 0.2) vs. all other SNPs
 fst_depth_ratio %>%
   ggplot(aes(x=depth_ratio)) +
-  geom_density(mapping = aes(fill=fst_outlier), alpha=0.3) +
+  geom_density(mapping = aes(fill=type), alpha=0.3) +
   geom_vline(data=fst_depth_ratio_stats, aes(xintercept = depth_ratio)) +
   geom_label(data=fst_depth_ratio_stats, aes(label=expression), y=4, parse=TRUE) +
   scale_fill_viridis_d() +
@@ -904,6 +907,7 @@ for (i in seq_len(nrow(sample_table))){
   }
 }
 ## Plot
+set.seed(42)
 het_final %>%
   pivot_wider(names_from = notrans, values_from = het) %>%
   mutate(delta=`1`-`0`) %>%

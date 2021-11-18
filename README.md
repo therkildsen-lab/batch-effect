@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/308741089.svg)](https://zenodo.org/badge/latestdoi/308741089)
+
 ## Batch effects in population genomic studies with low-coverage whole genome sequencing data: causes, detection, and mitigation
 
 This is a GitHub repo accompanying the paper [Batch effects in population genomic studies with low-coverage whole genome sequencing data: causes, detection, and mitigation](https://doi.org/10.22541/au.162791857.78788821/v2) by R. Nicolas Lou and Nina Overgaard Therkildsen. 

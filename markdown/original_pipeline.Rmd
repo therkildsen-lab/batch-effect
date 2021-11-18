@@ -60,6 +60,8 @@ nohup bash /workdir/data-processing/scripts/count_fastq.sh /workdir/cod/greenlan
 
 #### first rename the chromosomes in the gadMor3 genome
 
+The reference genome (`gadMor3.fasta`) was downloaded from the NCBI (https://www.ncbi.nlm.nih.gov/assembly/GCF_902167405.1/), but here we altered its chromosome names to match those of the gadMor2 genome. E.g., the first chromosome, which is named `NC_044048.1 Gadus morhua chromosome 1, gadMor3.0, whole genome shotgun sequence` in gadMor3, was renamed as `LG01`, and so on.
+
 ```{r eval=FALSE, include=TRUE}
 library(tidyverse)
 gadmor3 <- read_lines("/workdir/cod/reference_seqs/gadMor3.fna")

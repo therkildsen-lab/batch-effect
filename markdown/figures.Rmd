@@ -185,7 +185,12 @@ fst_plot
 #### Combine the plots
 
 ```{r fig.width=15, fig.height=11.8}
-plot_grid(het_plot, pca_plot, fst_plot, labels = c('A', 'B', 'C'), label_size = 20, nrow = 3, rel_heights = c(4, 3.8, 4))
+figure_1 <- plot_grid(het_plot, pca_plot, fst_plot, labels = c('A', 'B', 'C'), label_size = 20, nrow = 3, rel_heights = c(4, 3.8, 4))
+figure_1
+```
+
+```{r save_figure_1, eval=FALSE}
+ggsave("../figures/figure_1.png", figure_1, width = 15, height=11.8, unit="in", dpi="retina")
 ```
 
 ## Cover image
@@ -295,6 +300,9 @@ panel_b <- pca_combined %>%
 
 cover_image <- plot_grid(panel_a, panel_b, labels = c('A', 'B'), label_size = 20, nrow = 2, rel_heights = c(4.2, 3.8))
 cover_image
+```
+
+```{r save_cover_image, eval=FALSE}
 ggsave("../misc/cover_image.pdf", plot=cover_image, width = 8, height = 8, units = "in")
 ```
 

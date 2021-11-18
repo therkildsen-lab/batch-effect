@@ -191,10 +191,15 @@ fst_plot
 #### Combine the plots
 
 ``` r
-plot_grid(het_plot, pca_plot, fst_plot, labels = c('A', 'B', 'C'), label_size = 20, nrow = 3, rel_heights = c(4, 3.8, 4))
+figure_1 <- plot_grid(het_plot, pca_plot, fst_plot, labels = c('A', 'B', 'C'), label_size = 20, nrow = 3, rel_heights = c(4, 3.8, 4))
+figure_1
 ```
 
 ![](figures_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+
+``` r
+ggsave("../figures/figure_1.png", figure_1, width = 15, height=11.8, unit="in", dpi="retina")
+```
 
 ## Cover image
 

@@ -182,7 +182,12 @@ p3
 ### Assemble plots for batch effect paper
 
 ```{r, fig.width=10, fig.height=6, eval=TRUE}
-cowplot::plot_grid(p1, p2, p3, ncol = 1, rel_heights = c(1.2, 1, 1), labels=c("A", "B", "C"), label_y=c(0.8, 1, 1))
+figure_6 <- cowplot::plot_grid(p1, p2, p3, ncol = 1, rel_heights = c(1.2, 1, 1), labels=c("A", "B", "C"), label_y=c(0.8, 1, 1))
+figure_6
+```
+
+```{r ggsave_figure, eval=FALSE}
+ggsave("../figures/figure_6.pdf", figure_6, width=10, height=6, units = "in")
 ```
 
 ## Test PCAngsd with real cod data using the filtered SNP list

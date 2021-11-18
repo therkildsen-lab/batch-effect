@@ -293,10 +293,15 @@ plot_grid(top, seq_content_p, labels = c('A', 'B'), label_size = 15, nrow = 2, r
 ![](polyg_files/figure-gfm/unnamed-chunk-13-1.svg)<!-- -->
 
 ``` r
-plot_grid(NULL, top2, NULL, seq_content_p, labels = c(NA, 'A', NA, 'B'), label_size = 15, ncol = 1, rel_heights = c(0.1, 2, 0.4, 4.5), label_y=c(NA, 1.08, NA, 1.02))
+figure_2 <- plot_grid(NULL, top2, NULL, seq_content_p, labels = c(NA, 'A', NA, 'B'), label_size = 15, ncol = 1, rel_heights = c(0.1, 2, 0.4, 4.5), label_y=c(NA, 1.08, NA, 1.02))
+figure_2
 ```
 
 ![](polyg_files/figure-gfm/unnamed-chunk-14-1.svg)<!-- -->
+
+``` r
+ggsave("../figures/figure_2.pdf", figure_2, width=10, height=7, unit="in")
+```
 
 #### Persistence of poly-G tails in bam files
 
@@ -360,6 +365,12 @@ exist for the HiSeq batch.
 
 All subsequent steps are run with NextSeq and HiSeq combined, because
 intermediate files were deleted for the HiSeq batch.
+
+Note that the reference genome (`gadMor3.fasta`) was downloaded from the
+NCBI (<https://www.ncbi.nlm.nih.gov/assembly/GCF_902167405.1/>), but we
+altered its chromosome names to match those of the `gadMor2` genome. See
+[here](https://github.com/therkildsen-lab/batch-effect/blob/main/markdown/original_pipeline.md#first-rename-the-chromosomes-in-the-gadmor3-genome)
+for we did the renaming.
 
 ``` bash
 nohup bash /workdir/data-processing/scripts/low_coverage_mapping.sh \

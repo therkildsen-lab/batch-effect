@@ -290,5 +290,9 @@ print(figure)
 
 ![](base_quality_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
+``` r
+ggsave("../figures/figure_3.pdf", figure, width = 12, height = 5, unit="in")
+```
+
 A more stringent filter decreases heterozygosity estimate of PE samples
 but increases that of the the SE samples (very slightly).

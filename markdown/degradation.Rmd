@@ -479,3 +479,7 @@ p_d
 figure <- cowplot::plot_grid(p_c, p_d, p_b, p_a, nrow = 4, labels = c("A", "B", "C", "D"), rel_heights = c(3.9, 3.6, 3.6, 6.5))
 print(figure)
 ```
+
+```{r ggsave_figure_5, eval=FALSE}
+ggsave("../figures/figure_5.pdf", figure, width=7, height=17.6, unit="in")
+```

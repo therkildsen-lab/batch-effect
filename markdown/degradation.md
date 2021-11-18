@@ -530,3 +530,7 @@ print(figure)
 ```
 
 ![](degradation_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+
+``` r
+ggsave("../figures/figure_5.pdf", figure, width=7, height=17.6, unit="in")
+```

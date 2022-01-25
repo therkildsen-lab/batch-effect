@@ -2,7 +2,7 @@
 
 ## Batch effects in population genomic studies with low-coverage whole genome sequencing data: causes, detection, and mitigation
 
-This is a GitHub repo accompanying the paper [Batch effects in population genomic studies with low-coverage whole genome sequencing data: causes, detection, and mitigation](https://doi.org/10.22541/au.162791857.78788821/v2) by R. Nicolas Lou and Nina Overgaard Therkildsen. 
+This is a GitHub repo accompanying the paper [Batch effects in population genomic studies with low-coverage whole genome sequencing data: causes, detection, and mitigation]( https://doi.org/10.1111/1755-0998.13559) by R. Nicolas Lou and Nina Overgaard Therkildsen. 
 
 In this repo, we provide our entire bioinformatic pipeline for data processing and analysis used in our paper. In addition, we put together a tutorial based on a small subset of the data used in our paper, which give researchers an opportunity to go through some of the key bioinformatic methods that we proposed to detect and mitigate batch effects in lcWGS data. We also include some instructions on how the entirety of our raw data can be downloaded from the NCBI SRA.
 

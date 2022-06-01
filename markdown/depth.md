@@ -44,11 +44,11 @@ I will just include the visualization script below.
 ``` r
 i=1
 for (sample_size in c(5,10,20,40,80)){
-  pop_label <- read_lines(paste0("/workdir/lcwgs-simulation/spatial_pop_sim/rep_1/sample_lists/bam_list_",sample_size,"_uneven_coverage.txt")) %>%
+  pop_label <- read_lines(paste0("/fs/cbsubscb16/storage/lcwgs-simulation/spatial_pop_sim/rep_1/sample_lists/bam_list_",sample_size,"_uneven_coverage.txt")) %>%
     str_extract('p[1-9]')
   coverage <- ifelse(1:(sample_size*9) %% 2 == 1,0.125, 4)
   ## Read covariance matrix
-  cov_matrix <- npyLoad(paste0("/workdir/lcwgs-simulation/spatial_pop_sim/rep_1/angsd/pcagnsd_bam_list_",sample_size,"_uneven_coverage.cov.npy")) %>%
+  cov_matrix <- npyLoad(paste0("/fs/cbsubscb16/storage/lcwgs-simulation/spatial_pop_sim/rep_1/angsd/pcagnsd_bam_list_",sample_size,"_uneven_coverage.cov.npy")) %>%
     as.matrix()
   ## Perform eigen decomposition
   e <- eigen(cov_matrix)
@@ -97,16 +97,34 @@ p1
 
 ![](depth_files/figure-gfm/unnamed-chunk-2-2.png)<!-- -->
 
+``` r
+for_poster_1 <- pca_table_final %>%
+  mutate(method="PCAngsd") %>%
+  filter(sample_size==10) %>% 
+  ggplot(aes(x=PC1, y=PC2, color=as.character(coverage), shape=population)) +
+  geom_point() +
+  facet_wrap(~method, scales="free") +
+  scale_color_viridis_d(name = "coverage", option = "cividis", begin = 0.95, end = 0.4) +
+  scale_shape_manual(values = 21:29-4, guide="none") +
+  theme_cowplot() +
+  theme(panel.border = element_rect(size = 1, color = "black"),
+        text = element_text(size=11), 
+        axis.text = element_blank(),
+        axis.ticks = element_blank(), 
+        legend.position = "none",
+        legend.justification = "center")
+```
+
 ### PCA with covMat
 
 ``` r
 i=1
 for (sample_size in c(5,10,20,40,80)){
-  pop_label <- read_lines(paste0("/workdir/lcwgs-simulation/spatial_pop_sim/rep_1/sample_lists/bam_list_",sample_size,"_uneven_coverage.txt")) %>%
+  pop_label <- read_lines(paste0("/fs/cbsubscb16/storage/lcwgs-simulation/spatial_pop_sim/rep_1/sample_lists/bam_list_",sample_size,"_uneven_coverage.txt")) %>%
     str_extract('p[1-9]')
   coverage <- ifelse(1:(sample_size*9) %% 2 == 1,0.125, 4)
   ## Read covariance matrix
-  cov_matrix <- read_tsv(paste0("/workdir/lcwgs-simulation/spatial_pop_sim/rep_1/angsd/bam_list_",sample_size,"_uneven_coverage.covMat"), col_names = F) %>%
+  cov_matrix <- read_tsv(paste0("/fs/cbsubscb16/storage/lcwgs-simulation/spatial_pop_sim/rep_1/angsd/bam_list_",sample_size,"_uneven_coverage.covMat"), col_names = F) %>%
     as.matrix() %>%
     .[,-(sample_size*9+1)]
   cov_matrix[is.na(cov_matrix)]<- median(cov_matrix, na.rm = T)
@@ -156,16 +174,34 @@ p2
 
 ![](depth_files/figure-gfm/unnamed-chunk-3-2.png)<!-- -->
 
+``` r
+for_poster_2 <- pca_table_final %>%
+  mutate(method="ANGSD (-doCov 1)") %>%
+  filter(sample_size==10) %>% 
+  ggplot(aes(x=PC1, y=PC2, color=as.character(coverage), shape=population)) +
+  geom_point() +
+  facet_wrap(~method, scales="free") +
+  scale_color_viridis_d(name = "coverage", option = "cividis", begin = 0.95, end = 0.4) +
+  scale_shape_manual(values = 21:29-4, guide="none") +
+  theme_cowplot() +
+  theme(panel.border = element_rect(size = 1, color = "black"),
+        text = element_text(size=11), 
+        axis.text = element_blank(),
+        axis.ticks = element_blank(), 
+        legend.position = "none",
+        legend.justification = "center")
+```
+
 ### PCoA with ibsMat
 
 ``` r
 i=1
 for (sample_size in c(5,10,20,40,80)){
-  pop_label <- read_lines(paste0("/workdir/lcwgs-simulation/spatial_pop_sim/rep_1/sample_lists/bam_list_",sample_size,"_uneven_coverage.txt")) %>%
+  pop_label <- read_lines(paste0("/fs/cbsubscb16/storage/lcwgs-simulation/spatial_pop_sim/rep_1/sample_lists/bam_list_",sample_size,"_uneven_coverage.txt")) %>%
     str_extract('p[1-9]')
   coverage <- ifelse(1:(sample_size*9) %% 2 == 1,0.125, 4)
   ## Read covariance matrix
-  dist_matrix <- read_tsv(paste0("/workdir/lcwgs-simulation/spatial_pop_sim/rep_1/angsd/bam_list_",sample_size,"_uneven_coverage.ibsMat"), col_names = F) %>%
+  dist_matrix <- read_tsv(paste0("/fs/cbsubscb16/storage/lcwgs-simulation/spatial_pop_sim/rep_1/angsd/bam_list_",sample_size,"_uneven_coverage.ibsMat"), col_names = F) %>%
     as.matrix() %>%
     .[,-(sample_size*9+1)]
   dist_matrix[is.na(dist_matrix)] <- mean(dist_matrix, na.rm = T)
@@ -214,6 +250,23 @@ p3
 
 ![](depth_files/figure-gfm/unnamed-chunk-4-2.png)<!-- -->
 
+``` r
+for_poster_3 <- mds_table_final %>%
+  mutate(method="ANGSD (-doIBS 2)") %>%
+  filter(sample_size==10) %>%
+  ggplot(aes(x=PCo1, y=PCo2, color=as.character(coverage), shape=population)) +
+  geom_point() +
+  facet_wrap(~method, scales="free") +
+  scale_color_viridis_d(name = "sequencing\ndepth", option = "cividis", begin = 0.95, end = 0.4) +
+  scale_shape_manual(values = 21:29-4, guide="none") +
+  theme_cowplot() +
+  theme(panel.border = element_rect(size = 1, color = "black"),
+        text = element_text(size=11), 
+        axis.text = element_blank(),
+        axis.ticks = element_blank(), 
+        legend.position = "right")
+```
+
 ### Assemble plots for batch effect paper
 
 ``` r
@@ -226,6 +279,15 @@ figure_6
 ``` r
 ggsave("../figures/figure_6.pdf", figure_6, width=10, height=6, units = "in")
 ```
+
+### Assemble plots for batch effect poster
+
+``` r
+depth_figure_poster <- cowplot::plot_grid(for_poster_1, for_poster_2, for_poster_3, ncol = 3, rel_widths = c(1.8, 1.8, 2.7))
+depth_figure_poster
+```
+
+![](depth_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
 ## Test PCAngsd with real cod data using the filtered SNP list
 
@@ -270,4 +332,4 @@ pca_plot <- bind_rows(pca_combined, mutate(pca_combined, population="all pops"))
 pca_plot
 ```
 
-![](depth_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+![](depth_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
